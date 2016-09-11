@@ -1,5 +1,5 @@
-set nocompatible
-filetype off
+set nocompatible 
+filetype off 
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -15,14 +15,14 @@ filetype plugin indent on
 " for some plugin like pug
 execute pathogen#infect()
 
-" set up ide
+" set up ide 
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set smarttab
 set expandtab
+set number
 
-
-"color scheme
+"color scheme 
 syntax on
-colorscheme janah
+colorscheme janah 
