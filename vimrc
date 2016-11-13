@@ -9,7 +9,6 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'maksimr/vim-jsbeautify'
 Plugin 'whatyouhide/vim-gotham'
 Plugin 'ervandew/supertab'
-
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 
@@ -29,6 +28,7 @@ set cursorcolumn
 set expandtab
 set number                     " Show current line number
 set relativenumber             " Show relative line numbers
+set pastetoggle=<F2> " stop the stupid identation for vim when pasting from other source 
 
 " setup auto close 
 ino " ""<left>
@@ -41,6 +41,7 @@ ino {<CR> {<CR>}<ESC>O
 " for javascript configuration
 autocmd BufNewFile,BufRead *.js,*.es6,*.jsx set filetype=javascript.jsx
 autocmd Filetype javascript.jsx setlocal ts=2 sw=2 sts=0 expandtab
+autocmd FileType javascript.jsx set colorcolumn=160
 
 " powerline settings 
 set rtp+=$HOME/Library/Python/2.7/lib/python/site-packages/powerline/bindings/vim
