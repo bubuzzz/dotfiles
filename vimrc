@@ -30,8 +30,17 @@ set expandtab
 set number                     " Show current line number
 set relativenumber             " Show relative line numbers
 
+" setup auto close 
+ino " ""<left>
+ino ' ''<left>
+ino ( ()<left>
+ino [ []<left>
+ino { {}<left>
+ino {<CR> {<CR>}<ESC>O
+
 " for javascript configuration
-autocmd Filetype javascript setlocal ts=2 sw=2 sts=0 expandtab
+autocmd BufNewFile,BufRead *.js,*.es6,*.jsx set filetype=javascript.jsx
+autocmd Filetype javascript.jsx setlocal ts=2 sw=2 sts=0 expandtab
 
 " powerline settings 
 set rtp+=$HOME/Library/Python/2.7/lib/python/site-packages/powerline/bindings/vim
