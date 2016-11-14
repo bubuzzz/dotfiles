@@ -36,6 +36,8 @@ set cursorcolumn
 set expandtab
 set number                     " Show current line number
 set relativenumber             " Show relative line numbers
+set listchars+=space:␣          " show space as ."
+set list
 set t_Co=256
 
 " remove the underline of the hightlight "
@@ -123,3 +125,12 @@ endif
 "
 set background=dark
 colorscheme deep-space
+
+
+
+" Map NERDTree "
+silent! nmap <C-p> :NERDTreeToggle<CR>
+silent! map <F3> :NERDTreeFind<CR>
+
+let g:NERDTreeMapActivateNode="<F3>"
+let g:NERDTreeMapPreview="<F4>"
