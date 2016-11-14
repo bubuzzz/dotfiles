@@ -13,12 +13,16 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdtree'
+Plugin 'tpope/vim-surround'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'easymotion/vim-easymotion'
 
 call vundle#end()
 filetype plugin indent on
 
 " for some plugin like pug
 execute pathogen#infect()
+
 
 " set up ide 
 set tabstop=4
@@ -69,6 +73,8 @@ let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
+" Git Guter
+let g:gitgutter_enabled = 1 
 
 "color scheme 
 syntax on
