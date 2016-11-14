@@ -11,6 +11,7 @@ Plugin 'whatyouhide/vim-gotham'
 Plugin 'ervandew/supertab'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
+Plugin 'tpope/vim-fugitive'
 
 call vundle#end()
 filetype plugin indent on
