@@ -7,7 +7,6 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'maksimr/vim-jsbeautify'
-Plugin 'whatyouhide/vim-gotham'
 Plugin 'ervandew/supertab'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
@@ -20,6 +19,7 @@ Plugin 'wincent/command-t'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'rakr/vim-one'
 Plugin 'tyrannicaltoucan/vim-deep-space'
+Plugin 'haya14busa/incsearch.vim'
 
 call vundle#end()
 filetype plugin indent on
@@ -81,13 +81,18 @@ autocmd FileType javascript.jsx set colorcolumn=160
 set rtp+=$HOME/Library/Python/2.7/lib/python/site-packages/powerline/bindings/vim
 set rtp+=/usr/local/opt/fzf
 set laststatus=2
-" "set t_Co=256
+
 " set up for the command T"
 let g:CommandTWildIgnore="*/node_modules"
 " ultisnipts 
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" set up for incremental search "
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
 
 " Git Guter
 let g:gitgutter_enabled = 1 
