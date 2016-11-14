@@ -35,8 +35,20 @@ set cursorcolumn
 set expandtab
 set number                     " Show current line number
 set relativenumber             " Show relative line numbers
+set foldcolumn=0
+set t_Co=256
 
-" set the clipboard "
+" remove the underline of the hightlight "
+function s:SetCursorLine()
+    set cursorline
+    hi cursorline cterm=none ctermbg=darkblue ctermfg=white
+endfunction
+autocmd VimEnter * call s:SetCursorLine()
+
+
+" set copy/paste from clipboard. from now one, visual mode yy will copy
+" directly to clipboard. This need vim compiled with clipboard (vim --version
+" | grep clipboard) "
 set clipboard=unnamed
 
 " Stop the stupid identation for vim when pasting from other source 
@@ -103,4 +115,3 @@ endif
 
 set background=dark " for the dark version
 colorscheme one
-
