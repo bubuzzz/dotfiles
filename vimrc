@@ -1,5 +1,5 @@
-set nocompatible 
-filetype off 
+set nocompatible
+filetype off
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -27,7 +27,7 @@ filetype plugin indent on
 " for some plugin like pug
 execute pathogen#infect()
 
-" set up ide 
+" set up ide
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
@@ -39,6 +39,9 @@ set relativenumber             " Show relative line numbers
 set listchars+=space:␣          " show space as ."
 set list
 set t_Co=256
+
+" trim space when saving "
+autocmd BufWritePre * %s/\s\+$//e
 
 " remove the underline of the hightlight "
 function s:SetCursorLine()
@@ -53,7 +56,7 @@ autocmd VimEnter * call s:SetCursorLine()
 " | grep clipboard) "
 set clipboard=unnamed
 
-" Stop the stupid identation for vim when pasting from other source 
+" Stop the stupid identation for vim when pasting from other source
 " Thank to https://coderwall.com/p/if9mda/automatically-set-paste-mode-in-vim-when-pasting-in-insert-mode
 let &t_SI .= "\<Esc>[?2004h"
 let &t_EI .= "\<Esc>[?2004l"
@@ -65,8 +68,8 @@ function! XTermPasteBegin()
     set paste
     return ""
 endfunction
-      
-" setup auto close 
+
+" setup auto close
 ino " ""<left>
 ino ' ''<left>
 ino ( ()<left>
@@ -79,14 +82,14 @@ autocmd BufNewFile,BufRead *.js,*.es6,*.jsx set filetype=javascript.jsx
 autocmd Filetype javascript.jsx setlocal ts=2 sw=2 sts=0 expandtab
 autocmd FileType javascript.jsx set colorcolumn=160
 
-" powerline settings 
+" powerline settings
 set rtp+=$HOME/Library/Python/2.7/lib/python/site-packages/powerline/bindings/vim
 set rtp+=/usr/local/opt/fzf
 set laststatus=2
 
 " set up for the command T"
 let g:CommandTWildIgnore="*/node_modules"
-" ultisnipts 
+" ultisnipts
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
@@ -97,13 +100,13 @@ map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
 
 " Git Guter
-let g:gitgutter_enabled = 1 
+let g:gitgutter_enabled = 1
 
-"color scheme 
+"color scheme
 syntax on
-" colorscheme janah 
+" colorscheme janah
 
-"" this is for the dark theme 
+"" this is for the dark theme
 "Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
 "If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
 "(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
