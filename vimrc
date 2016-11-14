@@ -19,6 +19,7 @@ Plugin 'easymotion/vim-easymotion'
 Plugin 'wincent/command-t'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'rakr/vim-one'
+Plugin 'tyrannicaltoucan/vim-deep-space'
 
 call vundle#end()
 filetype plugin indent on
@@ -35,7 +36,6 @@ set cursorcolumn
 set expandtab
 set number                     " Show current line number
 set relativenumber             " Show relative line numbers
-set foldcolumn=0
 set t_Co=256
 
 " remove the underline of the hightlight "
@@ -113,5 +113,8 @@ if (empty($TMUX))
     endif
 endif
 
-set background=dark " for the dark version
-colorscheme one
+" set background=dark " for the dark version
+" colorscheme one
+"
+set background=dark
+colorscheme deep-space
