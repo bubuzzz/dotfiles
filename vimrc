@@ -125,7 +125,6 @@ endif
 
 " set background=dark " for the dark version
 " colorscheme one
-"
 
 set background=dark
 colorscheme deep-space
