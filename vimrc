@@ -20,6 +20,7 @@ Plugin 'terryma/vim-multiple-cursors'
 Plugin 'rakr/vim-one'
 Plugin 'tyrannicaltoucan/vim-deep-space'
 Plugin 'haya14busa/incsearch.vim'
+Plugin 'alessandroyorba/sierra'
 
 call vundle#end()
 filetype plugin indent on
@@ -123,13 +124,14 @@ if (empty($TMUX))
     endif
 endif
 
-" set background=dark " for the dark version
-" colorscheme one
+set background=dark " for the dark version
+colorscheme one
 "
-set background=dark
-colorscheme deep-space
 
+" set background=dark
+" colorscheme deep-space
 
+" colorscheme sierra
 
 " Map NERDTree "
 silent! nmap <C-p> :NERDTreeToggle<CR>
