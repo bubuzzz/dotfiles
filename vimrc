@@ -16,11 +16,11 @@ Plugin 'tpope/vim-surround'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'wincent/command-t'
 Plugin 'terryma/vim-multiple-cursors'
-Plugin 'rakr/vim-one'
 Plugin 'tyrannicaltoucan/vim-deep-space'
 Plugin 'haya14busa/incsearch.vim'
 Plugin 'alessandroyorba/sierra'
 Plugin 'jelera/vim-javascript-syntax'
+Plugin 'rakr/vim-one'
 
 call vundle#end()
 filetype plugin indent on
@@ -37,7 +37,7 @@ set cursorcolumn
 set expandtab
 set number                     " Show current line number
 set relativenumber             " Show relative line numbers
-set listchars+=space:␣          " show space as ."
+" set listchars+=space:␣
 " set list
 set t_Co=256
 
