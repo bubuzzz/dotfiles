@@ -19,8 +19,8 @@ Plugin 'terryma/vim-multiple-cursors'
 Plugin 'tyrannicaltoucan/vim-deep-space'
 Plugin 'haya14busa/incsearch.vim'
 Plugin 'alessandroyorba/sierra'
-Plugin 'jelera/vim-javascript-syntax'
 Plugin 'rakr/vim-one'
+Plugin 'pangloss/vim-javascript'
 
 call vundle#end()
 filetype plugin indent on
