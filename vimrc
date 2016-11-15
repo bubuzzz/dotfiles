@@ -14,12 +14,12 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-surround'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'easymotion/vim-easymotion'
 Plugin 'wincent/command-t'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'rakr/vim-one'
 Plugin 'tyrannicaltoucan/vim-deep-space'
 Plugin 'haya14busa/incsearch.vim'
+Plugin 'alessandroyorba/sierra'
 
 call vundle#end()
 filetype plugin indent on
@@ -37,7 +37,7 @@ set expandtab
 set number                     " Show current line number
 set relativenumber             " Show relative line numbers
 set listchars+=space:␣          " show space as ."
-set list
+" set list
 set t_Co=256
 
 " trim space when saving "
@@ -80,7 +80,6 @@ ino {<CR> {<CR>}<ESC>O
 " for javascript configuration
 autocmd BufNewFile,BufRead *.js,*.es6,*.jsx set filetype=javascript.jsx
 autocmd Filetype javascript.jsx setlocal ts=2 sw=2 sts=0 expandtab
-autocmd FileType javascript.jsx set colorcolumn=160
 
 " powerline settings
 set rtp+=$HOME/Library/Python/2.7/lib/python/site-packages/powerline/bindings/vim
@@ -126,10 +125,11 @@ endif
 " set background=dark " for the dark version
 " colorscheme one
 "
+
 set background=dark
 colorscheme deep-space
 
-
+" colorscheme sierra
 
 " Map NERDTree "
 silent! nmap <C-p> :NERDTreeToggle<CR>
