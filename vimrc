@@ -20,6 +20,7 @@ Plugin 'rakr/vim-one'
 Plugin 'tyrannicaltoucan/vim-deep-space'
 Plugin 'haya14busa/incsearch.vim'
 Plugin 'alessandroyorba/sierra'
+Plugin 'jelera/vim-javascript-syntax'
 
 call vundle#end()
 filetype plugin indent on
