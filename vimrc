@@ -47,7 +47,7 @@ autocmd BufWritePre * %s/\s\+$//e
 " remove the underline of the hightlight "
 function s:SetCursorLine()
     set cursorline
-    hi cursorline cterm=none ctermbg=darkblue ctermfg=white
+    hi cursorline term=bold gui=bold guifg=Yellow
 endfunction
 autocmd VimEnter * call s:SetCursorLine()
 
