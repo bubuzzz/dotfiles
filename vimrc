@@ -21,6 +21,7 @@ Plugin 'haya14busa/incsearch.vim'
 Plugin 'alessandroyorba/sierra'
 Plugin 'rakr/vim-one'
 Plugin 'pangloss/vim-javascript'
+Plugin 'mhinz/vim-startify'
 
 call vundle#end()
 filetype plugin indent on
@@ -47,7 +48,7 @@ autocmd BufWritePre * %s/\s\+$//e
 " remove the underline of the hightlight "
 function s:SetCursorLine()
     set cursorline
-    hi cursorline term=bold gui=bold guifg=Yellow
+    hi cursorline term=none cterm=none
 endfunction
 autocmd VimEnter * call s:SetCursorLine()
 
