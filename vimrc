@@ -22,6 +22,7 @@ Plugin 'alessandroyorba/sierra'
 Plugin 'rakr/vim-one'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mhinz/vim-startify'
+Plugin 'scrooloose/nerdcommenter'
 
 call vundle#end()
 filetype plugin indent on
