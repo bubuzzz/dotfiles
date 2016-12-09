@@ -26,6 +26,7 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'jceb/vim-orgmode'
 Plugin 'tpope/vim-speeddating'
+Plugin 'editorconfig/editorconfig-vim'
 
 call vundle#end()
 filetype plugin indent on

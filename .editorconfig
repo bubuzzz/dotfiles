@@ -10,13 +10,10 @@ trim_trailing_whitespace = false
 [**.js]
 indent_size = 2
 indent_style = space
-indent_level = 0
-indent_with_tabs = false
 preserve_newlines = true
-max_preserve_newlines = 10
-jslint_happy = false
+space_in_paren = true
+keep_array_indentation = true
 brace_style = collapse-preserve-inline
-space_before_conditional = true
 
 [**.json]
 indent_style = space
