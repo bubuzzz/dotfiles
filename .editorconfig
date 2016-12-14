@@ -23,6 +23,10 @@ indent_size = 2
 e4x = true
 indent_style = space
 indent_size = 2
+preserve_newlines = true
+space_in_paren = true
+keep_array_indentation = true
+brace_style = collapse-preserve-inline
 
 [**.css]
 indent_style = space
