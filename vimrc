@@ -8,7 +8,6 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'maksimr/vim-jsbeautify'
 Plugin 'ervandew/supertab'
-Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdtree'
@@ -28,6 +27,8 @@ Plugin 'jceb/vim-orgmode'
 Plugin 'tpope/vim-speeddating'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'benmills/vimux'
+Plugin 'joshdick/onedark.vim'
+Plugin 'vim-airline/vim-airline'
 
 call vundle#end()
 filetype plugin indent on
@@ -89,13 +90,9 @@ ino {<CR> {<CR>}<ESC>O
 autocmd BufNewFile,BufRead *.js,*.es6,*.jsx set filetype=javascript.jsx
 autocmd Filetype javascript.jsx setlocal ts=2 sw=2 sts=0 expandtab
 
-" powerline settings
-set rtp+=$HOME/Library/Python/2.7/lib/python/site-packages/powerline/bindings/vim
-set rtp+=/usr/local/opt/fzf
-set laststatus=2
-
 " set up for the command T"
 let g:CommandTWildIgnore="*/node_modules"
+
 " ultisnipts
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
@@ -133,8 +130,9 @@ endif
 " set background=dark " for the dark version
 " colorscheme one
 
-set background=dark
-colorscheme deep-space
+colorscheme onedark
+
+" colorscheme deep-space
 
 " colorscheme sierra
 
