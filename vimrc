@@ -144,6 +144,21 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 nnoremap H gT
 nnoremap L gt
 
+" Zoom / Restore window.
+function! s:ZoomToggle() abort
+    if exists('t:zoomed') && t:zoomed
+        execute t:zoom_winrestcmd
+        let t:zoomed = 0
+    else
+        let t:zoom_winrestcmd = winrestcmd()
+        resize
+        vertical resize
+        let t:zoomed = 1
+    endif
+endfunction
+command! ZoomToggle call s:ZoomToggle()
+nnoremap <silent> <c-o> :ZoomToggle<CR>
+
 " save session , making vim become a freaking SublimeText "
 function! MakeSession()
   let b:filename = getcwd() . '/session.vim'
@@ -161,7 +176,9 @@ endfunction
 
 " Adding automatons for when entering or leaving Vim
 au VimEnter * nested :call LoadSession()
-au VimLeave * :call MakeSession()
+" au VimLeave * :call MakeSession()
+
+map <c-s> :call MakeSession() <cr>
 
 "----------------------  Color schem  ----------------------"
 syntax on
