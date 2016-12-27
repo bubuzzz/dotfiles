@@ -49,7 +49,6 @@ set number                     " Show current line number
 set relativenumber             " Show relative line numbers
 " set listchars+=space:␣
 " set list
-set t_Co=256
 
 " trim space when saving "
 autocmd BufWritePre * %s/\s\+$//e
