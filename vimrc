@@ -31,7 +31,7 @@ Plugin 'SirVer/ultisnips'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'chriskempson/tomorrow-theme'
-
+Plugin 'mxw/vim-jsx'
 call vundle#end()
 filetype plugin indent on
 
@@ -124,7 +124,7 @@ autocmd InsertLeave * set iminsert=0
 
 " JSBeautifier
 autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
-autocmd FileType javascript noremap <buffer> <c-f> :call JsBeautify()<cr>
+autocmd FileType javascript noremap <buffer> <c-f> :call JsxBeautify()<cr>
 autocmd FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
 autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
 
@@ -164,6 +164,12 @@ function! MakeSession()
   exe "mksession! " . b:filename
 endfunction
 
+function! AutoSaveSession()
+  let b:filename = getcwd() . '/session.vim'
+  if (filereadable(b:filename))
+    exe "mksession! " . b:filename
+endfunction
+
 function! LoadSession()
   let b:sessionfile = getcwd() . "/session.vim"
   if (filereadable(b:sessionfile))
@@ -175,8 +181,7 @@ endfunction
 
 " Adding automatons for when entering or leaving Vim
 au VimEnter * nested :call LoadSession()
-" au VimLeave * :call MakeSession()
-
+au VimLeave * :call AutoSaveSession()
 map <c-s> :call MakeSession() <cr>
 
 "----------------------  Color schem  ----------------------"
