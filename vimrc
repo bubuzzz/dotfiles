@@ -32,6 +32,8 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'chriskempson/tomorrow-theme'
 Plugin 'mxw/vim-jsx'
+Plugin 'eshion/vim-sync'
+
 call vundle#end()
 filetype plugin indent on
 
@@ -43,7 +45,6 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set smarttab
-set cursorcolumn
 set expandtab
 set number                     " Show current line number
 set relativenumber             " Show relative line numbers
@@ -52,13 +53,6 @@ set relativenumber             " Show relative line numbers
 
 " trim space when saving "
 autocmd BufWritePre * %s/\s\+$//e
-
-" remove the underline of the hightlight "
-function s:SetCursorLine()
-    set cursorline
-    hi cursorline term=none cterm=none
-endfunction
-autocmd VimEnter * call s:SetCursorLine()
 
 
 " set copy/paste from clipboard. from now one, visual mode yy will copy
@@ -139,10 +133,6 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
-" to move around the tab
-nnoremap H gT
-nnoremap L gt
-
 " Zoom / Restore window.
 function! s:ZoomToggle() abort
     if exists('t:zoomed') && t:zoomed
@@ -186,7 +176,7 @@ map <c-s> :call MakeSession() <cr>
 
 "----------------------  Color schem  ----------------------"
 syntax on
-"colorscheme janah
+" colorscheme janah
 
 " set background=dark
 " colorscheme Tomorrow-Night
@@ -194,10 +184,8 @@ syntax on
 set background=dark
 colorscheme one
 
-"colorscheme onedark
-
+" colorscheme onedark
 " colorscheme deep-space
-
 " colorscheme sierra
 
 "----------------------/ Color schem  ----------------------"
