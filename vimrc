@@ -22,6 +22,7 @@ Plugin 'rakr/vim-one'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mhinz/vim-startify'
 Plugin 'scrooloose/nerdcommenter'
+Plugin 'tpope/vim-commentary'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'jceb/vim-orgmode'
 Plugin 'editorconfig/editorconfig-vim'
@@ -33,8 +34,10 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'chriskempson/tomorrow-theme'
 Plugin 'mxw/vim-jsx'
 Plugin 'eshion/vim-sync'
+Plugin 'banga/powerline-shell'
+Plugin 'kristijanhusak/vim-hybrid-material'
+Plugin 'jdkanani/vim-material-theme'
 
-call vundle#end()
 filetype plugin indent on
 
 " for some plugin like pug
@@ -124,6 +127,9 @@ autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
 
 autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
 
+"map shift enter to esc"
+imap <S-CR> <ESC>
+
 " airline
 let g:airline_powerline_fonts = 0
 let g:airline_left_sep = ''
@@ -176,6 +182,9 @@ map <c-s> :call MakeSession() <cr>
 
 "----------------------  Color schem  ----------------------"
 syntax on
+
+" set background=dark
+" colorscheme material-theme
 " colorscheme janah
 
 " set background=dark
