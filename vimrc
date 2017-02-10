@@ -54,6 +54,9 @@ set relativenumber             " Show relative line numbers
 " set listchars+=space:␣
 " set list
 
+set cursorline
+set cursorcolumn
+
 " trim space when saving "
 autocmd BufWritePre * %s/\s\+$//e
 
@@ -211,3 +214,5 @@ colorscheme one
 "----------------------/ Color schem  ----------------------"
 
 let g:neocomplcache_enable_at_startup = 1
+
+
