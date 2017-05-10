@@ -1,1 +1,0 @@
-/Users/bubuzzz/.vim/vimrc
