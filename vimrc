@@ -211,6 +211,10 @@ colorscheme one
 
 "----------------------/ Color schem  ----------------------"
 
+"---------------------- Python Syntax ----------------------"
+let python_highlight_all = 1
+"----------------------/ Python Syntax ----------------------"
+
 let g:neocomplcache_enable_at_startup = 1
 
 let g:tmuxify_custom_command = 'tmux split-window -d'
