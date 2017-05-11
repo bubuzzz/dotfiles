@@ -233,4 +233,5 @@ let g:syntastic_mode_map = { "mode": "passive" }
 let g:syntastic_javascript_checkers = ['eslint']
 map <C-l> :SyntasticCheck<cr>
 
-
+set backupdir=$HOME/.vim_backup//
+set directory=$HOME/.vim_backup//
