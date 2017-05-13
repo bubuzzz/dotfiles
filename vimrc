@@ -45,6 +45,7 @@ Plugin 'millermedeiros/vim-esformatter'
 Plugin 'jebaum/vim-tmuxify'
 Plugin 'hdima/python-syntax'
 Plugin 'basepi/vim-conque'
+Plugin 'wavded/vim-stylus'
 
 filetype plugin indent on
 
