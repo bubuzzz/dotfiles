@@ -45,6 +45,7 @@ Plugin 'millermedeiros/vim-esformatter'
 Plugin 'jebaum/vim-tmuxify'
 Plugin 'hdima/python-syntax'
 Plugin 'basepi/vim-conque'
+Plugin 'colepeters/spacemacs-theme.vim'
 
 filetype plugin indent on
 
@@ -61,9 +62,6 @@ set number                     " Show current line number
 set relativenumber             " Show relative line numbers
 " set listchars+=space:␣
 " set list
-
-set cursorline
-set cursorcolumn
 
 " trim space when saving "
 autocmd BufWritePre * %s/\s\+$//e
@@ -141,6 +139,7 @@ autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
 imap <S-CR> <ESC>
 
 " airline
+set laststatus=2
 let g:airline_powerline_fonts = 0
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
@@ -201,13 +200,17 @@ syntax on
 " set background=dark
 " colorscheme Tomorrow-Night
 
-set background=dark
-colorscheme one
+" set background=light
+" colorscheme one
 
 " colorscheme onedark
 " colorscheme deep-space
 " colorscheme sierra
-" colorscheme spring-night
+colorscheme spring-night
+
+set cursorcolumn
+" set cursorline
+" hi CursorLine term=bold cterm=bold guibg=NONE ctermbg=NONe
 
 "----------------------/ Color schem  ----------------------"
 
@@ -235,3 +238,5 @@ map <C-l> :SyntasticCheck<cr>
 
 set backupdir=$HOME/.vim_backup//
 set directory=$HOME/.vim_backup//
+
+set backspace=indent,eol,start
