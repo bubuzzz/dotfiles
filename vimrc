@@ -24,7 +24,6 @@ Plugin 'mhinz/vim-startify'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-commentary'
 Plugin 'junegunn/vim-easy-align'
-Plugin 'jceb/vim-orgmode'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'benmills/vimux'
 Plugin 'joshdick/onedark.vim'
@@ -39,14 +38,12 @@ Plugin 'kristijanhusak/vim-hybrid-material'
 Plugin 'jdkanani/vim-material-theme'
 Plugin 'Shougo/neocomplcache.vim'
 Plugin 'nvie/vim-flake8'
-Plugin 'rhysd/vim-color-spring-night'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'millermedeiros/vim-esformatter'
 Plugin 'jebaum/vim-tmuxify'
 Plugin 'hdima/python-syntax'
-Plugin 'basepi/vim-conque'
-Plugin 'colepeters/spacemacs-theme.vim'
 Plugin 'wavded/vim-stylus'
+Plugin 'tyrannicaltoucan/vim-quantum'
 
 filetype plugin indent on
 
@@ -202,12 +199,12 @@ syntax on
 " colorscheme Tomorrow-Night
 
 " set background=light
-" colorscheme one
+colorscheme one
 
 " colorscheme onedark
 " colorscheme deep-space
 " colorscheme sierra
-colorscheme spring-night
+" colorscheme spring-night
 
 set cursorcolumn
 " set cursorline
