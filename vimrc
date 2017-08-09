@@ -34,8 +34,6 @@ Plugin 'chriskempson/tomorrow-theme'
 Plugin 'mxw/vim-jsx'
 Plugin 'eshion/vim-sync'
 Plugin 'banga/powerline-shell'
-Plugin 'kristijanhusak/vim-hybrid-material'
-Plugin 'jdkanani/vim-material-theme'
 Plugin 'Shougo/neocomplcache.vim'
 Plugin 'nvie/vim-flake8'
 Plugin 'vim-syntastic/syntastic'
@@ -44,6 +42,7 @@ Plugin 'jebaum/vim-tmuxify'
 Plugin 'hdima/python-syntax'
 Plugin 'wavded/vim-stylus'
 Plugin 'tyrannicaltoucan/vim-quantum'
+Plugin 'ajmwagar/vim-deus'
 
 filetype plugin indent on
 
@@ -111,10 +110,6 @@ map g/ <Plug>(incsearch-stay)
 " Git Guter
 let g:gitgutter_enabled = 1
 
-if (has("termguicolors"))
-    set termguicolors
-endif
-
 " Map NERDTree "
 silent! nmap <C-p> :NERDTreeToggle<CR>
 silent! map <F3> :NERDTreeFind<CR>
@@ -145,7 +140,7 @@ let g:airline_right_sep = ''
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
-
+let g:airline_theme='bubblegum'
 " Zoom / Restore window.
 function! s:ZoomToggle() abort
     if exists('t:zoomed') && t:zoomed
@@ -187,19 +182,22 @@ au VimEnter * nested :call LoadSession()
 au VimLeave * :call AutoSaveSession()
 map <c-s> :call MakeSession() <cr>
 
+hi NonText guifg=bg
 "----------------------  Color schem  ----------------------"
 syntax on
 
-" set background=dark
-" colorscheme material-theme
 
+" set background=light
 " colorscheme janah
+
+set background=dark
+colorscheme deus
 
 " set background=dark
 " colorscheme Tomorrow-Night
 
-" set background=light
-colorscheme one
+" set background=dark
+" colorscheme one
 
 " colorscheme onedark
 " colorscheme deep-space
@@ -238,3 +236,4 @@ set backupdir=$HOME/.vim_backup//
 set directory=$HOME/.vim_backup//
 
 set backspace=indent,eol,start
+
