@@ -15,10 +15,7 @@ Plugin 'tpope/vim-surround'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'wincent/command-t'
 Plugin 'terryma/vim-multiple-cursors'
-Plugin 'tyrannicaltoucan/vim-deep-space'
 Plugin 'haya14busa/incsearch.vim'
-Plugin 'alessandroyorba/sierra'
-Plugin 'rakr/vim-one'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mhinz/vim-startify'
 Plugin 'scrooloose/nerdcommenter'
@@ -26,11 +23,9 @@ Plugin 'tpope/vim-commentary'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'benmills/vimux'
-Plugin 'joshdick/onedark.vim'
 Plugin 'SirVer/ultisnips'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'chriskempson/tomorrow-theme'
 Plugin 'mxw/vim-jsx'
 Plugin 'eshion/vim-sync'
 Plugin 'banga/powerline-shell'
@@ -41,8 +36,6 @@ Plugin 'millermedeiros/vim-esformatter'
 Plugin 'jebaum/vim-tmuxify'
 Plugin 'hdima/python-syntax'
 Plugin 'wavded/vim-stylus'
-Plugin 'tyrannicaltoucan/vim-quantum'
-Plugin 'ajmwagar/vim-deus'
 
 filetype plugin indent on
 
@@ -186,27 +179,11 @@ hi NonText guifg=bg
 "----------------------  Color schem  ----------------------"
 syntax on
 
-
-" set background=light
-" colorscheme janah
-
 set background=dark
-colorscheme deus
-
-" set background=dark
-" colorscheme Tomorrow-Night
-
-" set background=dark
-" colorscheme one
-
-" colorscheme onedark
-" colorscheme deep-space
-" colorscheme sierra
-" colorscheme spring-night
-
+colorscheme janah
 set cursorcolumn
-" set cursorline
-" hi CursorLine term=bold cterm=bold guibg=NONE ctermbg=NONe
+set cursorline
+hi CursorLine term=bold cterm=bold guibg=NONE ctermbg=NONe
 
 "----------------------/ Color schem  ----------------------"
 
