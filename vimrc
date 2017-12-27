@@ -27,7 +27,6 @@ Plugin 'SirVer/ultisnips'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'mxw/vim-jsx'
-Plugin 'eshion/vim-sync'
 Plugin 'banga/powerline-shell'
 Plugin 'Shougo/neocomplcache.vim'
 Plugin 'nvie/vim-flake8'
@@ -36,6 +35,9 @@ Plugin 'millermedeiros/vim-esformatter'
 Plugin 'jebaum/vim-tmuxify'
 Plugin 'hdima/python-syntax'
 Plugin 'wavded/vim-stylus'
+
+" themes
+Plugin 'KeitaNakamura/neodark.vim'
 
 filetype plugin indent on
 
@@ -154,6 +156,8 @@ syntax on
 
 set background=dark
 colorscheme janah
+colorscheme neodark
+
 set cursorcolumn
 set cursorline
 hi CursorLine term=bold cterm=bold guibg=NONE ctermbg=NONe
