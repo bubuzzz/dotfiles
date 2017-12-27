@@ -56,7 +56,6 @@ set relativenumber             " Show relative line numbers
 " trim space when saving "
 autocmd BufWritePre * %s/\s\+$//e
 
-
 " set copy/paste from clipboard. from now one, visual mode yy will copy
 " directly to clipboard. This need vim compiled with clipboard (vim --version
 " | grep clipboard) "
@@ -148,32 +147,6 @@ function! s:ZoomToggle() abort
 endfunction
 command! ZoomToggle call s:ZoomToggle()
 nnoremap <silent> <c-o> :ZoomToggle<CR>
-
-" save session , making vim become a freaking SublimeText "
-function! MakeSession()
-  let b:filename = getcwd() . '/session.vim'
-  exe "mksession! " . b:filename
-endfunction
-
-function! AutoSaveSession()
-  let b:filename = getcwd() . '/session.vim'
-  if (filereadable(b:filename))
-    exe "mksession! " . b:filename
-endfunction
-
-function! LoadSession()
-  let b:sessionfile = getcwd() . "/session.vim"
-  if (filereadable(b:sessionfile))
-    exe 'source ' b:sessionfile
-  else
-    echo "No session loaded."
-  endif
-endfunction
-
-" Adding automatons for when entering or leaving Vim
-au VimEnter * nested :call LoadSession()
-au VimLeave * :call AutoSaveSession()
-map <c-s> :call MakeSession() <cr>
 
 hi NonText guifg=bg
 "----------------------  Color schem  ----------------------"
