@@ -38,6 +38,7 @@ Plugin 'wavded/vim-stylus'
 
 " themes
 Plugin 'KeitaNakamura/neodark.vim'
+Plugin 'tyrannicaltoucan/vim-deep-space'
 
 filetype plugin indent on
 
@@ -154,9 +155,13 @@ hi NonText guifg=bg
 "----------------------  Color schem  ----------------------"
 syntax on
 
-set background=dark
-colorscheme janah
-colorscheme neodark
+" set background=dark
+" colorscheme janah
+" colorscheme neodark
+
+" set background=dark
+set termguicolors
+colorscheme deep-space
 
 set cursorcolumn
 set cursorline
