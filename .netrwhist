@@ -1,9 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/Users/bubuzzz/Projects/js/sails/ketban/views/user'
-let g:netrw_dirhist_2='/Users/bubuzzz/Projects/js/meteor/blur-admin/gulp'
-let g:netrw_dirhist_3='/Users/bubuzzz/Projects/js/meteor/blur-admin/src/sass/theme/conf/colorScheme'
-let g:netrw_dirhist_4='/Users/bubuzzz/Projects/js/meteor/react-webpack-skeleton/src'
-let g:netrw_dirhist_5='/Users/bubuzzz/Projects/js/meteor/clearbridge/clearbridge-tools/cb-reporting-v2/imports/ui/home/containers/Home.jsx'
-let g:netrw_dirhist_6='/Users/bubuzzz/Projects/js/meteor/clearbridge/clearbridge-tools/cb-reporting-v2/imports/ui/layout/components'
-let g:netrw_dirhist_7='/Users/bubuzzz'
