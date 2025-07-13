@@ -30,7 +30,7 @@ return {
     config = function()
       require("nvim-tree").setup {}
       
-      vim.api.nvim_create_user_command("Ntt", "NvimTreeToggle", {})
+      vim.api.nvim_create_user_command("Tt", "NvimTreeToggle", {})
     end,
   },
  
