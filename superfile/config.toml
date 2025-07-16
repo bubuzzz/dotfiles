@@ -19,7 +19,7 @@ cd_on_quit = false
 default_open_file_preview = false
 #
 # Whether to show image preview
-show_image_preview = true
+show_image_preview = false
 # 
 #
 # Whether to hide additional footer info for file panel.
@@ -66,16 +66,27 @@ sidebar_width = 20
 #
 # Border style
 # Make sure to add strings exactly one character wide. Use ' ' for borderless 
-border_top = '═'
-border_bottom = '═'
-border_left = '║'
-border_right = '║'
-border_top_left = '╔'
-border_top_right = '╗'
-border_bottom_left = '╚'
-border_bottom_right = '╝'
-border_middle_left = '╠'
-border_middle_right = '╣'
+# border_top = '═'
+# border_bottom = '═'
+# border_left = '║'
+# border_right = '║'
+# border_top_left = '╔'
+# border_top_right = '╗'
+# border_bottom_left = '╚'
+# border_bottom_right = '╝'
+# border_middle_left = '╠'
+# border_middle_right = '╣'
+#
+border_top = "━"
+border_bottom = "━"
+border_left = "┃"
+border_right = "┃"
+border_top_left = "┏"
+border_top_right = "┓"
+border_bottom_left = "┗"
+border_bottom_right = "┛"
+border_middle_left = "┣"
+border_middle_right = "┫"
 # 
 # ==========PLUGINS========== #
 # 
