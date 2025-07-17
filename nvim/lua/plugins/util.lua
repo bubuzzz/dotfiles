@@ -10,8 +10,8 @@ return {
           row = 0.0,
           col = 0.0,
           border = "rounded",
+	  preview= 'hidden',
         },
-        preview_opts = 'hidden',
       }
 
       -- Create alias :Ff to run :FzfLua files
