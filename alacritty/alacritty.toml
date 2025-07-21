@@ -1,0 +1,16 @@
+[general]
+import = [
+  "~/.config/alacritty/themes/gruvbox_dark.toml",
+]
+
+[font]
+size = 15.0
+
+[font.normal]
+family = "Agave Nerd Font"
+style = "Regular"
+
+
+[window.padding]
+x = 5
+y = 5
