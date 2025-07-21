@@ -1,4 +1,5 @@
 require("config.lazy")
 require("config.theme")
 require("config.shortcut")
+require("customs.tterm")
 require('lualine').setup()
