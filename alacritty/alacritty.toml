@@ -13,4 +13,8 @@ style = "Regular"
 
 [window.padding]
 x = 5
-y = 5
+y = 2
+
+[window.dimensions]
+columns = 130
+lines = 40
