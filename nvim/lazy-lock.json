@@ -1,5 +1,6 @@
 {
-  "fzf-lua": { "branch": "main", "commit": "35e27b8369dfe440e75268f95918f9581bfa92b5" },
+  "bufferline.nvim": { "branch": "main", "commit": "655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3" },
+  "fzf-lua": { "branch": "main", "commit": "3b45f14ac0f3f76782c107f13180eb87e96122fc" },
   "gruvbox-material": { "branch": "master", "commit": "66cfeb7050e081a746a62dd0400446433e802368" },
   "gruvbox.nvim": { "branch": "main", "commit": "58a2cda2e953a99e2f87c12b7fb4602da4e0709c" },
   "lazy.nvim": { "branch": "main", "commit": "6c3bda4aca61a13a9c63f1c1d1b16b9d3be90d7a" },
@@ -7,7 +8,7 @@
   "nvim-tree.lua": { "branch": "master", "commit": "6b5b36659688767fb9f133bb83024ab1466fe5cd" },
   "nvim-treesitter": { "branch": "master", "commit": "42fc28ba918343ebfd5565147a42a26580579482" },
   "nvim-web-devicons": { "branch": "master", "commit": "0422a19d9aa3aad2c7e5cca167e5407b13407a9d" },
-  "render-markdown.nvim": { "branch": "main", "commit": "3254863eb91fed3d9a7433b54327716528f1eacc" },
+  "render-markdown.nvim": { "branch": "main", "commit": "b540997fbf7ccf3a39ce21162ce8957be2f67e37" },
   "toggleterm.nvim": { "branch": "main", "commit": "50ea089fc548917cc3cc16b46a8211833b9e3c7c" },
   "vim-startify": { "branch": "master", "commit": "4e089dffdad46f3f5593f34362d530e8fe823dcf" }
 }
