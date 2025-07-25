@@ -28,7 +28,11 @@ return {
       "nvim-tree/nvim-web-devicons",
     },
     config = function()
-      require("nvim-tree").setup {}
+      require("nvim-tree").setup {
+        filters = {
+          dotfiles = true,
+        }
+      }
       
       vim.api.nvim_create_user_command("Tt", "NvimTreeToggle", {})
     end,
