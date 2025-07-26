@@ -3,17 +3,17 @@ return {
   { "williamboman/mason.nvim", config = true },
   { "williamboman/mason-lspconfig.nvim" },
 
-{
+  {
   "neovim/nvim-lspconfig",
-  dependencies = {
-    "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
-    "hrsh7th/cmp-nvim-lsp",
+    dependencies = {
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+      "hrsh7th/cmp-nvim-lsp",
+    },
+    config = function()
+      require("config.lsp").setup()
+    end,
   },
-  config = function()
-    require("config.lsp").setup()
-  end,
-},
 
   -- Completion
   { "hrsh7th/nvim-cmp" },
@@ -44,6 +44,8 @@ return {
       require("config.dap").setup()
     end,
   },
+
+  { "mfussenegger/nvim-dap-python" }, 
 
   { "jay-babu/mason-nvim-dap.nvim" },
 

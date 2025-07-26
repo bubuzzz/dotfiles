@@ -1,39 +1,3 @@
--- -- lua/config/lsp.lua
--- local M = {}
---
--- function M.setup()
---   -- Mason core
---   require("mason").setup()
---
---   -- Mason LSP config
---   local mason_lspconfig = require("mason-lspconfig")
---   mason_lspconfig.setup({
---     ensure_installed = { "omnisharp" },
---     automatic_installation = true,
---   })
---
---   -- Capabilities for nvim-cmp
---   local capabilities = require("cmp_nvim_lsp").default_capabilities()
---
---   -- LSP setup
---   local lspconfig = require("lspconfig")
---
---   -- Setup OmniSharp (C#)
---   lspconfig.omnisharp.setup({
---     capabilities = capabilities,
---     enable_editorconfig_support = true,
---     enable_roslyn_analyzers = true,
---     organize_imports_on_format = true,
---     enable_import_completion = true,
---     handlers = {
---       ["textDocument/semanticTokens/full"] = function() end,
---     },
---   })
--- end
---
--- return M
---
-
 -- lua/config/lsp.lua
 local M = {}
 
@@ -86,32 +50,75 @@ function M.setup()
 
   local mason_lspconfig = require("mason-lspconfig")
   mason_lspconfig.setup({
-    ensure_installed = { "omnisharp" },
+    -- add pyright here
+    ensure_installed = { "omnisharp", "pyright" },
     automatic_installation = true,
   })
 
   local capabilities = require("cmp_nvim_lsp").default_capabilities()
   local lspconfig = require("lspconfig")
 
-  -- Find OmniSharp binary
+  ---------------------------------------------------------------------------
+  -- C# (OmniSharp)
+  ---------------------------------------------------------------------------
   local omnisharp_bin = find_omnisharp()
   if not omnisharp_bin then
     vim.notify("[OmniSharp] Could not find binary. Run :Mason and install omnisharp.", vim.log.levels.WARN)
-    return
+  else
+    local pid = vim.fn.getpid()
+    lspconfig.omnisharp.setup({
+      cmd = { omnisharp_bin, "--languageserver", "--hostPID", tostring(pid) },
+      capabilities = capabilities,
+      enable_editorconfig_support = true,
+      enable_roslyn_analyzers = true,
+      organize_imports_on_format = true,
+      enable_import_completion = true,
+      handlers = {
+        ["textDocument/semanticTokens/full"] = function() end,
+      },
+    })
   end
 
-  -- Setup OmniSharp
-  local pid = vim.fn.getpid()
-  lspconfig.omnisharp.setup({
-    cmd = { omnisharp_bin, "--languageserver", "--hostPID", tostring(pid) },
-    capabilities = capabilities,
-    enable_editorconfig_support = true,
-    enable_roslyn_analyzers = true,
-    organize_imports_on_format = true,
-    enable_import_completion = true,
-    handlers = {
-      ["textDocument/semanticTokens/full"] = function() end,
-    },
+  ---------------------------------------------------------------------------
+  -- Python (Pyright)
+  ---------------------------------------------------------------------------
+  if lspconfig.pyright then
+    lspconfig.pyright.setup({
+      capabilities = capabilities,
+      settings = {
+        python = {
+          analysis = {
+            typeCheckingMode = "basic", -- or "strict"
+            autoImportCompletions = true,
+          },
+        },
+      },
+    })
+  end
+
+  ---------------------------------------------------------------------------
+  -- Per-filetype indentation tweaks (optional)
+  ---------------------------------------------------------------------------
+  -- C#: 4 spaces
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = "cs",
+    callback = function()
+      vim.bo.shiftwidth = 4
+      vim.bo.tabstop = 4
+      vim.bo.softtabstop = 4
+      vim.bo.expandtab = true
+    end,
+  })
+
+  -- Python: 4 spaces
+  vim.api.nvim_create_autocmd("FileType", {
+    pattern = "python",
+    callback = function()
+      vim.bo.shiftwidth = 4
+      vim.bo.tabstop = 4
+      vim.bo.softtabstop = 4
+      vim.bo.expandtab = true
+    end,
   })
 end
 
