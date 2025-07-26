@@ -51,7 +51,7 @@ function M.setup()
   local mason_lspconfig = require("mason-lspconfig")
   mason_lspconfig.setup({
     -- add pyright here
-    ensure_installed = { "omnisharp", "pyright" },
+    ensure_installed = { "omnisharp", "pyright", "ruff" },
     automatic_installation = true,
   })
 
@@ -96,30 +96,6 @@ function M.setup()
     })
   end
 
-  ---------------------------------------------------------------------------
-  -- Per-filetype indentation tweaks (optional)
-  ---------------------------------------------------------------------------
-  -- C#: 4 spaces
-  vim.api.nvim_create_autocmd("FileType", {
-    pattern = "cs",
-    callback = function()
-      vim.bo.shiftwidth = 4
-      vim.bo.tabstop = 4
-      vim.bo.softtabstop = 4
-      vim.bo.expandtab = true
-    end,
-  })
-
-  -- Python: 4 spaces
-  vim.api.nvim_create_autocmd("FileType", {
-    pattern = "python",
-    callback = function()
-      vim.bo.shiftwidth = 4
-      vim.bo.tabstop = 4
-      vim.bo.softtabstop = 4
-      vim.bo.expandtab = true
-    end,
-  })
 end
 
 return M
