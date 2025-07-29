@@ -4,10 +4,26 @@ import libqtile.resources
 from libqtile import bar, layout, qtile, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
+from libqtile import hook
+import subprocess
+
 
 mod = "mod4"
 alt = "mod1"
 terminal = "xfce4-terminal"
+
+
+def minimize_all_windows(qtile):
+    group = qtile.current_group
+    for window in group.windows:
+        window.toggle_minimize()
+
+
+@hook.subscribe.startup_once
+def autostart():
+    home = os.path.expanduser("~/.config/qtile/autostart.sh")
+    subprocess.call(home)
+
 
 keys = [
     # A list of available commands that can be bound to keys can be found
@@ -71,6 +87,12 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     Key([mod], "d", lazy.spawn("rofi -show drun"), desc="Launch Rofi app launcher"),
+    Key(
+        [],
+        "F11",
+        lazy.function(minimize_all_windows),
+        desc="Minimize all windows (show desktop)",
+    ),
 ]
 
 # Add key bindings to switch VTs in Wayland.
@@ -157,7 +179,7 @@ extension_defaults = widget_defaults.copy()
 
 logo = os.path.join(os.path.dirname(libqtile.resources.__file__), "logo.png")
 colors = {
-    "bg": "#282828",
+    "bg": "#28282800",
     "fg": "#ebdbb2",
     "active": "#d79921",
     "inactive": "#928374",
@@ -224,7 +246,7 @@ screens = [
                     padding=10,
                 ),
             ],
-            24,
+            32,
             background=colors["bg"],
             margin=[0, 0, 0, 0],
         )
