@@ -98,7 +98,7 @@ keys = [
 # Add key bindings to switch VTs in Wayland.
 # We can't check qtile.core.name in default config as it is loaded before qtile is started
 # We therefore defer the check until the key binding is run by using .when(func=...)
-for vt in range(1, 8):
+for vt in range(1, 4):
     keys.append(
         Key(
             ["control", "mod1"],
@@ -135,26 +135,10 @@ for i in groups:
         ]
     )
 
-# layouts = [
-#     layout.Columns(border_focus_stack=["#d75f5f", "#8f3d3d"], border_width=4),
-#     layout.Max(),
-#     # Try more layouts by unleashing below layouts.
-#     # layout.Stack(num_stacks=2),
-#     # layout.Bsp(),
-#     # layout.Matrix(),
-#     # layout.MonadTall()k
-#     # layout.MonadWide(),
-#     # layout.RatioTile(),
-#     # layout.Tile(),
-#     # layout.TreeTab(),
-#     # layout.VerticalTile(),
-#     # layout.Zoomy(),
-# ]
-
 layout_conf = {
-    "border_focus": "#98971a",
-    "border_normal": "#ebdbb2",
-    "border_width": 7,
+    "border_focus": "#83a59880",  # "#98971a80",
+    "border_normal": "#ebdbb280",
+    "border_width": 5,
     "margin": 4,
     "border_on_single": True,
 }
@@ -162,9 +146,9 @@ layout_conf = {
 layouts = [
     layout.Columns(**layout_conf),
     layout.Max(
-        border_focus="#ebdbb2",
-        border_normal="#ebdbb2",
-        border_width=7,
+        border_focus="#83a59880",
+        border_normal="#83a59880",
+        border_width=5,
         margin=4,
         border_on_single=True,  # <-- Enable border in Max layout too
     ),
