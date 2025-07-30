@@ -5,7 +5,7 @@ require("config.shortcut")
 require("config.cmp")
 -- require("config.dap")
 require("config.formatting")
--- require("config.lsp")
+require("config.http")
 
 require("customs.tterm")
 require('lualine').setup()
