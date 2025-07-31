@@ -10,7 +10,7 @@ import subprocess
 
 mod = "mod4"
 alt = "mod1"
-terminal = "xfce4-terminal"
+terminal = "xfce4-terminal -e tmux"
 
 
 def minimize_all_windows(qtile):
@@ -86,7 +86,12 @@ keys = [
     Key([mod, "control"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
-    Key([mod], "d", lazy.spawn("rofi -show drun"), desc="Launch Rofi app launcher"),
+    Key(
+        [mod],
+        "d",
+        lazy.spawn("/home/bubuzzz/.config/rofi/scripts/launcher_t4"),
+        desc="Launch Rofi app launcher",
+    ),
     Key(
         [],
         "F11",
@@ -109,7 +114,7 @@ for vt in range(1, 4):
     )
 
 
-groups = [Group(i) for i in "123456789"]
+groups = [Group(i) for i in "1234"]
 
 for i in groups:
     keys.extend(
@@ -139,7 +144,7 @@ layout_conf = {
     "border_focus": "#83a59880",  # "#98971a80",
     "border_normal": "#ebdbb280",
     "border_width": 5,
-    "margin": 4,
+    "margin": 3,
     "border_on_single": True,
 }
 
@@ -149,7 +154,7 @@ layouts = [
         border_focus="#83a59880",
         border_normal="#83a59880",
         border_width=5,
-        margin=4,
+        margin=3,
         border_on_single=True,  # <-- Enable border in Max layout too
     ),
 ]
