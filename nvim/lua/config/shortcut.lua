@@ -12,6 +12,10 @@ vim.keymap.set("n", "<leader>p", '"+p', { desc = "Paste from system clipboard" }
 vim.keymap.set("n", "<leader>te", "<cmd>Tterm<CR>", { noremap = true, silent = true })
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>:TtermClose<CR>", { noremap = true, silent = true })
 
+-- Show error or lsp info
+vim.keymap.set("n", "<leader>dd", ":FzfLua diagnostics_document<CR>", { desc = "Show the diagnostic on the current document" })
+vim.keymap.set("n", "<leader>dw", ":FzfLua diagnostics_workspace<CR>", { desc = "Show the diagnostic on the current workspace" })
+
 -- LSP buffer-local keymaps
 local lsp_grp = vim.api.nvim_create_augroup("LspKeymaps", { clear = true })
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -37,3 +41,4 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
   end,
 })
+
