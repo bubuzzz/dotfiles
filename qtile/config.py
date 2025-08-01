@@ -144,7 +144,7 @@ layout_conf = {
     "border_focus": "#83a59880",  # "#98971a80",
     "border_normal": "#ebdbb280",
     "border_width": 5,
-    "margin": 3,
+    "margin": 4,
     "border_on_single": True,
 }
 
@@ -154,7 +154,7 @@ layouts = [
         border_focus="#83a59880",
         border_normal="#83a59880",
         border_width=5,
-        margin=3,
+        margin=4,
         border_on_single=True,  # <-- Enable border in Max layout too
     ),
 ]
@@ -188,12 +188,12 @@ screens = [
                     foreground=colors["active"],
                     background=colors["bg"],
                     fontsize=16,
-                    padding=10,
+                    padding=8,
                 ),
                 widget.CurrentLayout(
                     foreground=colors["fg"],
                     background=colors["bg"],
-                    padding=5,
+                    padding=3,
                 ),
                 widget.GroupBox(
                     active=colors["fg"],
@@ -215,27 +215,40 @@ screens = [
                     foreground=colors["fg"],
                     background=colors["bg"],
                     max_chars=50,
-                    padding=10,
+                    padding=8,
+                ),
+                widget.CPU(
+                    format="  {load_percent}%",
+                    foreground=colors["green"],
+                    background=colors["bg"],
+                    padding=3,
+                ),
+                widget.Memory(
+                    format=" {MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}",
+                    measure_mem="M",
+                    foreground=colors["blue"],
+                    background=colors["bg"],
+                    padding=3,
                 ),
                 widget.Systray(
                     background=colors["bg"],
-                    padding=5,
+                    padding=3,
                 ),
                 widget.Clock(
                     format="%Y-%m-%d %a %I:%M %p",
                     foreground=colors["fg"],
                     background=colors["bg"],
-                    padding=10,
+                    padding=8,
                 ),
                 widget.QuickExit(
                     default_text=" ⏻ ",
                     countdown_format="[{}]",
                     foreground=colors["urgent"],
                     background=colors["bg"],
-                    padding=10,
+                    padding=8,
                 ),
             ],
-            32,
+            36,
             background=colors["bg"],
             margin=[0, 0, 0, 0],
         )
