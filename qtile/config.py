@@ -235,7 +235,7 @@ screens = [
                     padding=3,
                 ),
                 widget.Clock(
-                    format="%Y-%m-%d %a %I:%M %p",
+                    format="%Y-%m-%d %I:%M %p",
                     foreground=colors["fg"],
                     background=colors["bg"],
                     padding=8,
