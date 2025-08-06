@@ -42,3 +42,39 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
+
+
+-- ========= Filetype-aware Build (Shift+F5) =========
+local utils = require("config.utils")
+
+-- Run a shell command from the project root
+local function run_in_root(cmd, bufnr)
+  local root = utils.get_project_root(bufnr)
+  local esc_root = vim.fn.shellescape(root)
+  vim.cmd("write") -- save first
+  vim.cmd("!" .. "cd " .. esc_root .. " && " .. cmd)
+end
+
+-- Registry of build commands per filetype (easy to extend later)
+local build_cmd_by_ft = {
+  cs   = "dotnet build",
+  -- rust = "cargo build",   -- <--- reserve for future enhancement
+}
+
+-- Create buffer-local Shift+F5 mapping per filetype
+local grp = vim.api.nvim_create_augroup("BuildKeymaps", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  group = grp,
+  pattern = { "cs" }, -- add "rust" later when you’re ready
+  callback = function(ev)
+    local ft = vim.bo[ev.buf].filetype
+    local build_cmd = build_cmd_by_ft[ft]
+    if not build_cmd then return end
+
+    vim.keymap.set("n", "<leader>bu", function()
+      run_in_root(build_cmd, ev.buf)
+    end, { buffer = ev.buf, desc = "Build project (<leader>bu)" })
+  end,
+})
+
+-- ===== End filetype-aware build =====
