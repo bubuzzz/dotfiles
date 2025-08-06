@@ -160,7 +160,7 @@ layouts = [
 ]
 
 widget_defaults = dict(
-    font="sans",
+    font="JetBrainsMono Nerd Font",
     fontsize=12,
     padding=3,
 )
@@ -214,11 +214,18 @@ screens = [
                 widget.WindowName(
                     foreground=colors["fg"],
                     background=colors["bg"],
-                    max_chars=50,
+                    max_chars=255,
                     padding=8,
                 ),
+                widget.Net(
+                    interface="enp2s0",
+                    format=" {down} ↓↑ {up} ",
+                    foreground=colors["highlight"],
+                    background=colors["bg"],
+                    padding=5,
+                ),
                 widget.CPU(
-                    format="  {load_percent}%",
+                    format=" {load_percent}%",
                     foreground=colors["green"],
                     background=colors["bg"],
                     padding=3,
