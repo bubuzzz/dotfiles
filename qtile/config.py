@@ -218,7 +218,7 @@ screens = [
                     padding=8,
                 ),
                 widget.Net(
-                    interface="enp2s0",
+                    interface="wlp4s0",
                     format=" {down} ↓↑ {up} ",
                     foreground=colors["highlight"],
                     background=colors["bg"],
