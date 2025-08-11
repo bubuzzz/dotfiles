@@ -312,6 +312,7 @@ mouse = [
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
 
+
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: list
 follow_mouse_focus = True
@@ -319,6 +320,9 @@ bring_front_click = False
 floats_kept_above = True
 cursor_warp = False
 floating_layout = layout.Floating(
+    border_focus="#8ec07c",  # Active/focused floating border (Gruvbox yellow)
+    border_normal="#ebdbb2",  # Inactive floating border (Gruvbox light)
+    border_width=4,  # Match your main border border_width
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
         *layout.Floating.default_float_rules,
@@ -328,7 +332,7 @@ floating_layout = layout.Floating(
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
-    ]
+    ],
 )
 auto_fullscreen = True
 focus_on_window_activation = "smart"
