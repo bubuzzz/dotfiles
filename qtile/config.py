@@ -2,7 +2,7 @@ import os
 
 import libqtile.resources
 from libqtile import bar, layout, qtile, widget
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile.config import Click, Drag, Group, Key, Match, Screen, Rule
 from libqtile.lazy import lazy
 from libqtile import hook
 import subprocess
@@ -97,6 +97,22 @@ keys = [
         "F11",
         lazy.function(minimize_all_windows),
         desc="Minimize all windows (show desktop)",
+    ),
+    Key(
+        [],
+        "XF86AudioRaiseVolume",
+        lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%"),
+    ),
+    Key(
+        [],
+        "XF86AudioLowerVolume",
+        lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%"),
+    ),
+    Key([], "XF86AudioMute", lazy.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle")),
+    Key(
+        [],
+        "XF86AudioMicMute",
+        lazy.spawn("pactl set-source-mute @DEFAULT_SOURCE@ toggle"),
     ),
 ]
 
@@ -237,6 +253,26 @@ screens = [
                     background=colors["bg"],
                     padding=3,
                 ),
+                widget.PulseVolume(
+                    step=5,
+                    limit_max_volume=True,
+                    fmt=" {}%",
+                    foreground=colors["highlight"],
+                    background=colors["bg"],
+                    padding=6,
+                    mouse_callbacks={
+                        "Button1": lazy.spawn("pavucontrol"),
+                        "Button3": lazy.spawn(
+                            "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+                        ),
+                        "Button4": lazy.spawn(
+                            "pactl set-sink-volume @DEFAULT_SINK@ +5%"
+                        ),
+                        "Button5": lazy.spawn(
+                            "pactl set-sink-volume @DEFAULT_SINK@ -5%"
+                        ),
+                    },
+                ),
                 widget.Systray(
                     background=colors["bg"],
                     padding=3,
@@ -314,7 +350,10 @@ mouse = [
 
 
 dgroups_key_binder = None
-dgroups_app_rules = []  # type: list
+dgroups_app_rules = [
+    Rule(Match(wm_class="firefox"), group="2", intrusive=True),
+]
+
 follow_mouse_focus = True
 bring_front_click = False
 floats_kept_above = True
