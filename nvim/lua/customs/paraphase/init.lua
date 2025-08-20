@@ -1,118 +1,110 @@
 local cfg = require("customs.paraphase.config")
 
+-- utils
 local function split_lines(s)
-  local t = {}
-  for line in (s .. "\n"):gmatch("([^\n]*)\n") do
-    table.insert(t, line)
-  end
-  if #t > 0 and t[#t] == "" then table.remove(t, #t) end
-  return t
+  local out = {}
+  for line in (s .. "\n"):gmatch("([^\n]*)\n") do table.insert(out, line) end
+  if #out > 0 and out[#out] == "" then table.remove(out) end
+  return out
 end
 
--- Read the *last* visual selection by using marks '< and '>
 local function get_visual_text_and_range()
-  local bufnr = 0
-  -- getpos returns {bufnum, lnum, col, off}; convert to 0-based row/col
   local s = vim.fn.getpos("'<")
   local e = vim.fn.getpos("'>")
-  local s_row, s_col = s[2] - 1, s[3] - 1
-  local e_row, e_col = e[2] - 1, e[3] - 1
-
-  -- normalize order if needed
+  local s_row, s_col = s[2]-1, s[3]-1
+  local e_row, e_col = e[2]-1, e[3]-1
   if (e_row < s_row) or (e_row == s_row and e_col < s_col) then
-    s_row, e_row = e_row, s_row
-    s_col, e_col = e_col, s_col
+    s_row, e_row = e_row, s_row; s_col, e_col = e_col, s_col
   end
-
-  -- include the last character in the slice
-  local lines = vim.api.nvim_buf_get_text(bufnr, s_row, s_col, e_row, e_col + 1, {})
-  local text = table.concat(lines, "\n")
-  return text, s_row, s_col, e_row, e_col
+  local lines = vim.api.nvim_buf_get_text(0, s_row, s_col, e_row, e_col+1, {})
+  return table.concat(lines, "\n"), s_row, s_col, e_row, e_col
 end
 
 local function append_below(row, lines)
   vim.api.nvim_buf_set_lines(0, row + 1, row + 1, false, lines)
 end
 
-local function notify_err(msg)
-  vim.notify("[Paraphase] " .. msg, vim.log.levels.ERROR)
-end
-
-local function enhance_selected_async()
+local function curl_post_json(url, body_tbl, cb)
   local ok_curl, curl = pcall(require, "plenary.curl")
   if not ok_curl then
     vim.notify("[Paraphase] plenary.nvim is required.", vim.log.levels.ERROR)
     return
   end
+  curl.post(url, {
+    headers = { ["Content-Type"] = "application/json" },
+    body = vim.fn.json_encode(body_tbl),
+    timeout = 30000,
+    callback = function(res) vim.schedule(function() cb(res) end) end,
+  })
+end
 
+local function run_on_selection(action, header, sys_prompt, user_prefix)
   local text, _, _, e_row = get_visual_text_and_range()
   if not text or text == "" then
     vim.notify("[Paraphase] No visual selection found.", vim.log.levels.WARN)
     return
   end
 
-  local body_tbl = {
+  local msg_user = user_prefix .. text
+  if action == "summary" and cfg.summary_max_words then
+    msg_user = ("Summarize in at most %d words.\n\n%s"):format(cfg.summary_max_words, msg_user)
+  end
+
+  local body = {
     model = cfg.model,
-    stream = false,  -- simpler; switch to true if you want token streaming
+    stream = false,
     messages = {
-      { role = "system", content = cfg.system_prompt },
-      { role = "user",   content = ("Improve the following text:\n\n%s"):format(text) },
+      { role = "system", content = sys_prompt },
+      { role = "user",   content = msg_user },
     },
-    options = cfg.options,  -- optional; see config.lua
+    options = cfg.options,
   }
 
-  local notif = vim.notify("[Paraphase] Improving selection…", vim.log.levels.INFO, { title = "Paraphase" })
+  local notif = vim.notify("[Paraphase] Working…", vim.log.levels.INFO, { title = "Paraphase" })
 
-  curl.post(cfg.endpoint, {
-    headers = { ["Content-Type"] = "application/json" },  -- no auth header for local Ollama
-    body = vim.fn.json_encode(body_tbl),
-    timeout = 30000,
-    callback = function(res)
-      vim.schedule(function()
-        if notif then pcall(vim.notify, "", vim.log.levels.INFO, { replace = notif }) end
+  curl_post_json(cfg.endpoint, body, function(res)
+    if notif then pcall(vim.notify, "", vim.log.levels.INFO, { replace = notif }) end
 
-        if not res or (res.status ~= 200 and res.status ~= 201) then
-          local msg = res and (res.body or ("HTTP " .. tostring(res.status))) or "no response"
-          vim.notify("[Paraphase] API error: " .. tostring(msg), vim.log.levels.ERROR)
-          return
-        end
+    if not res or (res.status ~= 200 and res.status ~= 201) then
+      local msg = res and (res.body or ("HTTP " .. tostring(res.status))) or "no response"
+      vim.notify("[Paraphase] API error: " .. tostring(msg), vim.log.levels.ERROR)
+      return
+    end
 
-        local ok, decoded = pcall(vim.fn.json_decode, res.body)
-        if not ok or not decoded or not decoded.message or not decoded.message.content then
-          vim.notify("[Paraphase] Unexpected response from Ollama.", vim.log.levels.ERROR)
-          return
-        end
+    local ok, decoded = pcall(vim.fn.json_decode, res.body)
+    local content = ok and decoded and decoded.message and decoded.message.content or nil
+    if not content or content == "" then
+      vim.notify("[Paraphase] Unexpected/empty response.", vim.log.levels.ERROR)
+      return
+    end
 
-        local content = decoded.message.content
-        local lines = { "", "— Enhanced —" }
-        for line in (content .. "\n"):gmatch("([^\n]*)\n") do
-          if line ~= "" or #lines > 0 then table.insert(lines, line) end
-        end
-        -- trim trailing empty line
-        if lines[#lines] == "" then table.remove(lines) end
-
-        vim.api.nvim_buf_set_lines(0, e_row + 1, e_row + 1, false, lines)
-        vim.notify("[Paraphase] Appended enhanced text.", vim.log.levels.INFO)
-      end)
-    end,
-  })
+    local lines = { "", header }
+    for _, l in ipairs(split_lines(content)) do table.insert(lines, l) end
+    append_below(e_row, lines)
+    vim.notify("[Paraphase] Appended result.", vim.log.levels.INFO)
+  end)
 end
 
+-- public
 local M = {}
 
 function M.setup(opts)
   if opts then cfg.setup(opts) end
 
-  -- User command: works even if ':' exited Visual; uses the last visual marks
+  -- commands use the *last* visual selection (marks persist even after <Esc>)
   vim.api.nvim_create_user_command("Enh", function()
-    -- leave visual mode if still in it; marks remain
     vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
-    enhance_selected_async()
+    run_on_selection("enhance", "=== Enhanced ===", cfg.enhance_system_prompt, cfg.enhance_user_prefix)
   end, { desc = "Enhance last Visual selection", range = true })
 
-  -- Optional: Visual-mode mapping so you can just type 'Enh' after selecting
-  -- Put a mapping in your shortcuts if you prefer:
+  vim.api.nvim_create_user_command("Sum", function()
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
+    run_on_selection("summary", "=== Summary ===", cfg.summary_system_prompt, cfg.summary_user_prefix)
+  end, { desc = "Summarize last Visual selection (bullets)", range = true })
+
+  -- Optional visual-mode mappings (type Enh/Sym while still in Visual)
   -- vim.keymap.set("x", "Enh", ":<C-u>Enh<CR>", { desc = "Enhance selection" })
+  -- vim.keymap.set("x", "Sym", ":<C-u>Sym<CR>", { desc = "Summarize selection" })
 end
 
 return M
