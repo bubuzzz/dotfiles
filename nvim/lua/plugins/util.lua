@@ -10,14 +10,11 @@ return {
           row = 0.0,
           col = 0.0,
           border = "rounded",
-	  preview= 'hidden',
+          preview = {
+            hidden = true
+          }
         },
       }
-
-      -- Create alias :Ff to run :FzfLua files
-      vim.api.nvim_create_user_command("Ff", function()
-        require("fzf-lua").files()
-      end, {})
     end,
   },
 

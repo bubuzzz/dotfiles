@@ -30,27 +30,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("n", "gr", vim.lsp.buf.references, "List references")
     map("n", "gD", vim.lsp.buf.declaration, "Go to declaration")
     map("n", "gt", vim.lsp.buf.type_definition, "Type definition")
-    
     map("n", "K",  vim.lsp.buf.hover, "Hover docs")
-    map("n", "gK", function()
-      -- if plugin is there, use it; else fallback to builtin
-      local ok, sig = pcall(require, "lsp_signature")
-      if ok then sig.toggle_float_win() else vim.lsp.buf.signature_help() end
-    end, "Show function overloads")
-
-    -- (optional) dedicated keys to cycle when using lsp_signature.nvim
-    map("n", "]s", function()
-      local ok, sig = pcall(require, "lsp_signature")
-      if ok then sig.select_signature(1) end
-    end, "Next overload")
-    map("n", "[s", function()
-      local ok, sig = pcall(require, "lsp_signature")
-      if ok then sig.select_signature(-1) end
-    end, "Prev overload")
-
     map("n", "<leader>rn", vim.lsp.buf.rename, "Rename symbol")
-
-
     -- map("n", "<leader>ca", vim.lsp.buf.code_action, "Code action")
     -- map("n", "[d", vim.diagnostic.goto_prev, "Prev diagnostic")
     -- map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
