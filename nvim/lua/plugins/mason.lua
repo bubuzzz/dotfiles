@@ -45,11 +45,30 @@ return {
     end,
   },
 
-  { "mfussenegger/nvim-dap-python" }, 
+
+  -- {
+  --     "mfussenegger/nvim-dap-python",
+  --     ft = "python",
+  --     dependencies = {
+  --       "mfussenegger/nvim-dap",
+  --     },
+  --     config = function(_, opts)
+  --       require("dap-python").setup(opts)
+  --       -- Further configuration if needed
+  --     end,
+  -- },
 
   { "jay-babu/mason-nvim-dap.nvim" },
 
   -- Testing (optional)
   { "nvim-neotest/neotest" },
   { "Issafalcon/neotest-dotnet" },
+  {
+    "akinsho/flutter-tools.nvim",
+    lazy = false,
+    dependencies = { "nvim-lua/plenary.nvim", "stevearc/dressing.nvim", "nvim-telescope/telescope.nvim", "mfussenegger/nvim-dap" },
+    config = function()
+      require("config.flutter")  -- your lua/config/flutter.lua
+    end,
+  }
 }

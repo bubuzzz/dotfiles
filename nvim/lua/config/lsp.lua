@@ -106,6 +106,9 @@ function M.setup()
             analysis = {
               typeCheckingMode = "basic", -- or "strict"
               autoImportCompletions = true,
+              diagnosticMode = "workspace",
+              useLibraryCodeForTypes = true,
+              autoSearchPaths = true,
             },
           },
         },
