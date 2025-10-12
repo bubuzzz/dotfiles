@@ -60,7 +60,6 @@ return {
 
   { "jay-babu/mason-nvim-dap.nvim" },
 
-  -- Testing (optional)
   { "nvim-neotest/neotest" },
   { "Issafalcon/neotest-dotnet" },
   {
@@ -68,7 +67,7 @@ return {
     lazy = false,
     dependencies = { "nvim-lua/plenary.nvim", "stevearc/dressing.nvim", "nvim-telescope/telescope.nvim", "mfussenegger/nvim-dap" },
     config = function()
-      require("config.flutter")  -- your lua/config/flutter.lua
+      require("config.flutter") 
     end,
   }
 }

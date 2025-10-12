@@ -5,12 +5,16 @@ if has_flutter then
   flutter_tools.setup({
     fvm = true,                 -- <— use per-project FVM SDK automatically
     -- flutter_path = "fvm",    -- optional; auto when fvm=true
-    widget_guides = { enabled = true },
+    widget_guides = { enabled = false },
     closing_tags = { enabled = true, prefix = "</", highlight = "Comment" },
     dev_log = { enabled = true, open_cmd = "tabedit" },
+    
 
     lsp = {
       color = { enabled = true },
+      flags = {
+        allow_incremental_sync = false, -- <= important
+      }, 
       capabilities = require("cmp_nvim_lsp").default_capabilities(),
       on_attach = function(client, bufnr)
         local map = function(mode, lhs, rhs)
@@ -18,7 +22,7 @@ if has_flutter then
         end
         map("n", "K", vim.lsp.buf.hover)
         map("n", "gd", vim.lsp.buf.definition)
-        map("n", "gr", require("telescope.builtin").lsp_references)
+        -- map("n", "gr", require("telescope.builtin").lsp_references)
         map("n", "<leader>rn", vim.lsp.buf.rename)
         map("n", "<leader>ca", vim.lsp.buf.code_action)
         map({ "n", "v" }, "<leader>f", function() vim.lsp.buf.format({ async = true }) end)
