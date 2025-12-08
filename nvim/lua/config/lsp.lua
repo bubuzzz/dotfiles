@@ -53,9 +53,10 @@ function M.setup()
 
   -- Auto-install LSP servers via Mason
   require("mason-lspconfig").setup({
-    ensure_installed = { "omnisharp", "pyright", "ruff" },
+    ensure_installed = { "omnisharp", "pyright", "ruff", "svelte", "ts_ls" },
     automatic_installation = true,
   })
+
 
   local capabilities = require("cmp_nvim_lsp").default_capabilities()
 

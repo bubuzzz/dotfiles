@@ -69,5 +69,7 @@ return {
     config = function()
       require("config.flutter") 
     end,
-  }
+  }, 
+ -- Svelte support
+  { "evanleck/vim-svelte", ft = "svelte" },  -- syntax if needed
 }
