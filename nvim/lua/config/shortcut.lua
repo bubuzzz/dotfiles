@@ -37,3 +37,21 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- map("n", "]d", vim.diagnostic.goto_next, "Next diagnostic")
   end,
 })
+
+-- copy error to clipboard 
+-- vim.keymap.set("n", "<leader>cp", function()
+--   local diags = vim.diagnostic.get(0, { lnum = vim.fn.line('.') - 1 })
+--   if diags and diags[1] then
+--     vim.fn.setreg("+", diags[1].message)
+--     vim.notify("Diagnostic copied to clipboard")
+--   else
+--     vim.notify("No diagnostic on this line", vim.log.levels.WARN)
+--   end
+-- end, { desc = "Copy diagnostic message" })
+--
+
+
+local diag_panel = require("customs.error_panel")
+vim.keymap.set("n", "<leader>cc", function()
+  diag_panel.show_current_line(true)
+end, { desc = "Show + copy diagnostic" })
