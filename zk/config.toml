@@ -1,0 +1,15 @@
+[note]
+language = "en"
+default-title = ""
+filename = "{{id}}-{{slug title}}"
+extension = "md"
+
+[group.daily]
+paths = ["daily"]
+
+[group.notes]
+paths = ["."]
+
+[tool]
+editor = "nvim"
+
