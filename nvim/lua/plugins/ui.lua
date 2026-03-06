@@ -31,7 +31,14 @@ return {
       require("nvim-tree").setup {
         filters = {
           dotfiles = true,
-        }
+          custom = {
+            "__pycache__",
+            ".pytest_cache",
+            ".mypy_cache",
+            ".ruff_cache",
+          },
+        },
+        
       }
       
       vim.api.nvim_create_user_command("Tt", "NvimTreeToggle", {})

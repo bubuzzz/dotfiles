@@ -1,6 +1,16 @@
 
 vim.g.mapleader = " "
 
+local notes = require("config.notes")
+
+vim.keymap.set("n", "<leader>nn", notes.new_note, { desc = "New zk note" })
+vim.keymap.set("n", "<leader>ns", notes.scratchpad, { desc = "Open daily scratchpad" })
+
+vim.keymap.set("n", "<leader>no", "<cmd>ZkNotes<CR>")
+vim.keymap.set("n", "<leader>nb", "<cmd>ZkBacklinks<CR>")
+vim.keymap.set("n", "<leader>zl", "<cmd>ZkLinks<CR>")
+vim.keymap.set("n", "<leader>nt", "<cmd>ZkTags<CR>")
+
 vim.keymap.set('n', '<leader>tt', ':NvimTreeToggle<CR>')
 vim.keymap.set('n', '<leader>ff', ':FzfLua files<CR>')
 vim.keymap.set('n', '<leader>fe', ':FzfLua live_grep<CR>')
