@@ -83,4 +83,15 @@ function M.scratchpad()
   vim.cmd("edit " .. path)
 end
 
+function M.daily_task()
+  local date = os.date("%Y-%m-%d")
+  local task_dir = notes_dir .. "task/"
+  local path = task_dir .. date .. "-tasks.md"
+  if vim.fn.filereadable(path) == 1 then
+    vim.cmd("edit " .. path)
+  else
+    require("zk").new({ dir = "task", title = "Tasks " .. date })
+  end
+end
+
 return M

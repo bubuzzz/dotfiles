@@ -4,6 +4,7 @@ vim.g.mapleader = " "
 local notes = require("config.notes")
 
 vim.keymap.set("n", "<leader>nn", notes.new_note, { desc = "New zk note" })
+vim.keymap.set("n", "<leader>na", notes.daily_task, { desc = "Open daily task" })
 vim.keymap.set("n", "<leader>ns", notes.scratchpad, { desc = "Open daily scratchpad" })
 
 vim.keymap.set("n", "<leader>no", "<cmd>ZkNotes<CR>")
