@@ -38,6 +38,15 @@ local function curl_post_json(url, body_tbl, cb)
   })
 end
 
+local function say(word)
+  if vim.fn.has("mac") == 1 then
+    vim.fn.jobstart({ "say", word })
+  elseif vim.fn.has("unix") == 1 then
+    vim.fn.jobstart({ "espeak", word })
+  end
+end
+
+
 local function run_on_selection(action, header, sys_prompt, user_prefix)
   local text, _, _, e_row = get_visual_text_and_range()
   if not text or text == "" then
@@ -102,9 +111,22 @@ function M.setup(opts)
     run_on_selection("summary", "=== Summary ===", cfg.summary_system_prompt, cfg.summary_user_prefix)
   end, { desc = "Summarize last Visual selection (bullets)", range = true })
 
-  -- Optional visual-mode mappings (type Enh/Sym while still in Visual)
-  -- vim.keymap.set("x", "Enh", ":<C-u>Enh<CR>", { desc = "Enhance selection" })
-  -- vim.keymap.set("x", "Sym", ":<C-u>Sym<CR>", { desc = "Summarize selection" })
+  vim.api.nvim_create_user_command("Exp", function()
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
+    run_on_selection("explain", "=== Explain ===", cfg.explain_system_prompt, cfg.explain_user_prefix)
+  end, { desc = "Explain last visual selected words", range = true })
+
+  vim.api.nvim_create_user_command("Say", function()
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
+    local text = get_visual_text_and_range()
+    if not text or text == "" then
+      vim.notify("[Paraphase] No visual selection found.", vim.log.levels.WARN)
+      return
+    end
+    say(text)
+  end, { desc = "Pronounce last visual selected word", range = true })
+
+
 end
 
 return M

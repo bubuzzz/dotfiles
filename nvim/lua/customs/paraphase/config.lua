@@ -9,6 +9,11 @@ local M = {
   summary_system_prompt = "You are a world-class summarizer.",
   summary_user_prefix   = "Summarize the following text into clear, concise bullet points. Use '*' bullets, no intro line:\n\n",
   summary_max_words     = 120,
+
+  explain_system_prompt = "You are a world-class English teacher.",
+  explain_user_prefix   = "Explain the following words into a clear, simple English sentence to a 5 years old little girl who does not know English very well:\n\n",
+  explain_max_words     = 120,
+
 }
 
 function M.setup(opts)
