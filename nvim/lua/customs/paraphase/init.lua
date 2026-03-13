@@ -47,10 +47,16 @@ local function say(word)
 end
 
 
-local function run_on_selection(action, header, sys_prompt, user_prefix)
-  local text, _, _, e_row = get_visual_text_and_range()
+local function run_on_selection(action, header, sys_prompt, user_prefix, override_text)
+  local text, e_row
+  if override_text then
+    text = override_text
+    e_row = vim.fn.line('.') - 1
+  else
+    text, _, _, e_row = get_visual_text_and_range()
+  end
   if not text or text == "" then
-    vim.notify("[Paraphase] No visual selection found.", vim.log.levels.WARN)
+    vim.notify("[Paraphase] No text found.", vim.log.levels.WARN)
     return
   end
 
@@ -111,21 +117,33 @@ function M.setup(opts)
     run_on_selection("summary", "=== Summary ===", cfg.summary_system_prompt, cfg.summary_user_prefix)
   end, { desc = "Summarize last Visual selection (bullets)", range = true })
 
-  vim.api.nvim_create_user_command("Exp", function()
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
-    run_on_selection("explain", "=== Explain ===", cfg.explain_system_prompt, cfg.explain_user_prefix)
-  end, { desc = "Explain last visual selected words", range = true })
+  vim.api.nvim_create_user_command("Exp", function(opts)
+    local override
+    if opts.range > 0 then
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
+    else
+      override = vim.fn.expand("<cword>")
+    end
+    run_on_selection("explain", "=== Explain ===", cfg.explain_system_prompt, cfg.explain_user_prefix, override)
+  end, { desc = "Explain word under cursor or visual selection", range = true })
 
-  vim.api.nvim_create_user_command("Say", function()
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
-    local text = get_visual_text_and_range()
+  vim.api.nvim_create_user_command("Say", function(opts)
+    local text
+    if opts.range > 0 then
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
+      text = get_visual_text_and_range()
+    else
+      text = vim.fn.expand("<cword>")
+    end
     if not text or text == "" then
-      vim.notify("[Paraphase] No visual selection found.", vim.log.levels.WARN)
+      vim.notify("[Paraphase] No word found.", vim.log.levels.WARN)
       return
     end
     say(text)
-  end, { desc = "Pronounce last visual selected word", range = true })
+  end, { desc = "Pronounce word under cursor or visual selection", range = true })
 
+  vim.keymap.set("n", "<leader>sa", "<cmd>Say<CR>", { desc = "Say word under cursor" })
+  vim.keymap.set("v", "<leader>sa", "<cmd>Say<CR>", { desc = "Say selected word(s)" })
 
 end
 
