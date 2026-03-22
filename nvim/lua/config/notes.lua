@@ -94,4 +94,53 @@ function M.daily_task()
   end
 end
 
+function M.browse_by_date()
+  local days = {}
+  local today = os.time()
+
+  -- Generate last 7 days
+  for i = 0, 6 do
+    local day = today - (i * 86400) -- 86400 seconds in a day
+    local formatted = os.date("%Y-%m-%d", day)
+    local display = os.date("%A, %B %d, %Y", day) -- e.g., "Monday, March 22, 2026"
+    table.insert(days, { date = formatted, display = display })
+  end
+
+  vim.ui.select(days, {
+    prompt = "Select date:",
+    format_item = function(item)
+      return item.display
+    end
+  }, function(choice)
+    if not choice then return end
+
+    -- Query zk for notes created on the selected date
+    local cmd = string.format("zk list --created %s --format json", choice.date)
+    local output = vim.fn.system(cmd)
+
+    if vim.v.shell_error ~= 0 then
+      vim.notify("Error querying notes for " .. choice.date, vim.log.levels.ERROR)
+      return
+    end
+
+    local ok, notes = pcall(vim.json.decode, output)
+    if not ok or not notes or #notes == 0 then
+      vim.notify("No notes found for " .. choice.date, vim.log.levels.INFO)
+      return
+    end
+
+    -- Show notes in picker
+    vim.ui.select(notes, {
+      prompt = string.format("Notes from %s (%d found):", choice.display, #notes),
+      format_item = function(note)
+        return note.title or note.path
+      end
+    }, function(selected)
+      if selected and selected.absPath then
+        vim.cmd("edit " .. selected.absPath)
+      end
+    end)
+  end)
+end
+
 return M
