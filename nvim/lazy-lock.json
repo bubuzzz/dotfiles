@@ -31,6 +31,8 @@
   "plenary.nvim": { "branch": "master", "commit": "74b06c6c75e4eeb3108ec01852001636d85a932b" },
   "telescope.nvim": { "branch": "master", "commit": "f04ab730b8f9c6bf3f54a206d0dcddfd70c52d59" },
   "toggleterm.nvim": { "branch": "main", "commit": "50ea089fc548917cc3cc16b46a8211833b9e3c7c" },
+  "tree-sitter-norg": { "branch": "main", "commit": "d89d95af13d409f30a6c7676387bde311ec4a2c8" },
+  "tree-sitter-norg-meta": { "branch": "main", "commit": "729d4e54fb881ba0ddf0f925ec78401354c7c6db" },
   "vim-startify": { "branch": "master", "commit": "4e089dffdad46f3f5593f34362d530e8fe823dcf" },
   "vim-svelte": { "branch": "main", "commit": "f6df955ad86583e9751487eb7550fae9e53d2d6b" },
   "zk-nvim": { "branch": "main", "commit": "dea1ee6cd6d07568c92ea8353063d4d85c58a964" }
