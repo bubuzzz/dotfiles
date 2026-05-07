@@ -11,12 +11,15 @@ if has_flutter then
     
 
     lsp = {
-      color = { enabled = true },
       flags = {
         allow_incremental_sync = false, -- <= important
-      }, 
+      },
       capabilities = require("cmp_nvim_lsp").default_capabilities(),
       on_attach = function(client, bufnr)
+        if vim.lsp.document_color and vim.lsp.document_color.enable then
+          vim.lsp.document_color.enable(true, bufnr)
+        end
+
         local map = function(mode, lhs, rhs)
           vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, silent = true })
         end

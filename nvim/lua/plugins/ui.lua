@@ -29,6 +29,9 @@ return {
     },
     config = function()
       require("nvim-tree").setup {
+        view = {
+          side = "right",
+        },
         filters = {
           dotfiles = true,
           custom = {
@@ -38,7 +41,7 @@ return {
             ".ruff_cache",
           },
         },
-        
+
       }
       
       vim.api.nvim_create_user_command("Tt", "NvimTreeToggle", {})

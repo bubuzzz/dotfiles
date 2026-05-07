@@ -26,9 +26,6 @@ return {
   -- Formatting
   { "stevearc/conform.nvim" },
 
-  -- Treesitter
-  { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
-
   -- Debugging
   { "mfussenegger/nvim-dap" },
 
