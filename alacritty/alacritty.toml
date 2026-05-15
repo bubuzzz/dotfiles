@@ -3,10 +3,6 @@ import = [
   "~/.config/alacritty/themes/gruvbox_dark.toml",
 ]
 
-[terminal.shell]
-program = "/bin/bash"
-args = ["-l", "-c", "tmux attach -t main || tmux new -s main"]
-
 [font]
 size = 16.0
 
@@ -14,60 +10,7 @@ size = 16.0
 family = "Agave Nerd Font"
 style = "Regular"
 
-[window.dimensions]
-columns = 130
-lines = 40
 
-# [window]
-# option_as_alt = "OnlyLeft"
-#
-# Alt+Number -> send Esc+Number (Meta-number) so tmux sees M-<num>
-[[keyboard.bindings]]
-key = "Key0"
-mods = "Super"
-chars = "\u001b0"
-
-[[keyboard.bindings]]
-key = "Key1"
-mods = "Super"
-chars = "\u001b1"
-
-[[keyboard.bindings]]
-key = "Key2"
-mods = "Super"
-chars = "\u001b2"
-
-[[keyboard.bindings]]
-key = "Key3"
-mods = "Super"
-chars = "\u001b3"
-
-[[keyboard.bindings]]
-key = "Key4"
-mods = "Super"
-chars = "\u001b4"
-
-[[keyboard.bindings]]
-key = "Key5"
-mods = "Super"
-chars = "\u001b5"
-
-[[keyboard.bindings]]
-key = "Key6"
-mods = "Super"
-chars = "\u001b6"
-
-[[keyboard.bindings]]
-key = "Key7"
-mods = "Super"
-chars = "\u001b7"
-
-[[keyboard.bindings]]
-key = "Key8"
-mods = "Super"
-chars = "\u001b8"
-
-[[keyboard.bindings]]
-key = "Key9"
-mods = "Super"
-chars = "\u001b9"
+[window.padding]
+x = 3
+y = 3
