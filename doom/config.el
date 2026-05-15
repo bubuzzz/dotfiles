@@ -46,6 +46,11 @@
 (setq org-directory "~/org/")
 
 (setq treemacs-position 'right)
+(setq doom-themes-treemacs-theme "doom-colors")
+
+(custom-set-faces!
+  '(nerd-icons-dblue :foreground "#4B8BBE")
+  '(nerd-icons-dyellow :foreground "#FFD43B"))
 
 (use-package! xclip
   :unless (display-graphic-p)
