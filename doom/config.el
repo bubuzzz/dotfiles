@@ -72,6 +72,8 @@
   :quit t
   :ttl nil
   :modeline nil)
+;; set eat term to xterm otherwise mac will use eat-truecolors
+(setq eat-term-name "xterm-256color")
 
 (defun +eat/toggle ()
   "Toggle an EAT terminal in a bottom popup."
