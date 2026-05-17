@@ -56,6 +56,39 @@
   :unless (display-graphic-p)
   :config (xclip-mode +1))
 
+(use-package! eat
+  :commands (eat eat-project +eat/toggle)
+  :config
+  (setq eat-kill-buffer-on-exit t
+        eat-enable-mouse t)
+  (add-hook 'eshell-load-hook #'eat-eshell-mode)
+  (add-hook 'eshell-load-hook #'eat-eshell-visual-command-mode))
+
+;; Open EAT as a bottom popup, like Doom's vterm popup.
+(set-popup-rule! "^\\*eat\\*"
+  :side 'bottom
+  :size 0.3
+  :select t
+  :quit t
+  :ttl nil
+  :modeline nil)
+
+(defun +eat/toggle ()
+  "Toggle an EAT terminal in a bottom popup."
+  (interactive)
+  (require 'eat)
+  (let* ((buf (get-buffer "*eat*"))
+         (win (and buf (get-buffer-window buf))))
+    (cond
+     (win (delete-window win))
+     (buf (pop-to-buffer buf))
+     (t   (eat)))))
+
+(map! :leader
+      (:prefix-map ("o" . "open")
+       :desc "Toggle EAT popup"        "t" #'+eat/toggle
+       :desc "EAT terminal in project" "T" #'eat-project))
+
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `with-eval-after-load' block, otherwise Doom's defaults may override your
