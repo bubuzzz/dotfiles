@@ -55,6 +55,14 @@
 
 (package! xclip)
 
+;; macOS GUI Emacs doesn't inherit the shell's PATH; this fixes that so
+;; tools like jupyter, uv, ipython, lsp servers are discoverable.
+(package! exec-path-from-shell)
+
+;; Auto-activate the project's uv-managed .venv when opening files under
+;; a pyproject.toml root. Needed for jupyter to find the right kernel.
+(package! pyvenv-auto)
+
 (package! eat
   :recipe (:host codeberg
            :repo "akib/emacs-eat"
