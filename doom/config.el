@@ -80,10 +80,10 @@
   (add-hook 'eshell-load-hook #'eat-eshell-mode)
   (add-hook 'eshell-load-hook #'eat-eshell-visual-command-mode))
 
-;; Open EAT as a bottom popup, like Doom's vterm popup.
+;; Open EAT as a right-side popup, same side as treemacs.
 (set-popup-rule! "^\\*eat\\*"
-  :side 'bottom
-  :size 0.3
+  :side 'right
+  :size 0.4
   :select t
   :quit t
   :ttl nil
