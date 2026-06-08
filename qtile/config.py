@@ -89,9 +89,9 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     Key(
-        [mod],
+        [alt],
         "d",
-        lazy.spawn("/home/bubuzzz/.config/rofi/scripts/launcher_t4"),
+        lazy.spawn("/home/bubuzzz/.config/rofi/scripts/launcher_simple"),
         desc="Launch Rofi app launcher",
     ),
     Key(
@@ -132,7 +132,15 @@ for vt in range(1, 4):
     )
 
 
-groups = [Group(i) for i in "1234"]
+# Icon labels per workspace (Nerd Font glyphs). The group *name* stays a
+# number so the Super+1..4 keybindings keep working; only the label changes.
+group_config = [
+    ("1", ""),  # terminal
+    ("2", ""),  # browser (Firefox auto-assigns here)
+    ("3", ""),  # code / IDE
+    ("4", ""),  # files
+]
+groups = [Group(name, label=label) for name, label in group_config]
 
 for i in groups:
     keys.extend(
@@ -161,25 +169,30 @@ for i in groups:
 layout_conf = {
     "border_focus": "#83a59840",  # "#98971a80",
     "border_normal": "#ebdbb280",
-    "border_width": 5,
-    "margin": 4,
+    "border_width": 4,
+    "margin": [0, 3, 3, 3],  # [top, right, bottom, left] - no gap against the top bar
     "border_on_single": True,
 }
 
 layouts = [
-    layout.Columns(**layout_conf),
+    # First entry is the default layout for every workspace.
     layout.Max(
         border_focus="#83a59840",
         border_normal="#83a59880",
         border_width=5,
-        margin=4,
+        margin=[0, 4, 4, 4],  # [top, right, bottom, left] - no gap against the top bar
         border_on_single=True,  # <-- Enable border in Max layout too
     ),
+    layout.Columns(**layout_conf),
 ]
+
+# Icon/label widgets (logo, GroupBox, power) use the larger size;
+# general bar text uses the smaller widget_defaults size.
+BAR_FONTSIZE = 16
 
 widget_defaults = dict(
     font="JetBrainsMono Nerd Font",
-    fontsize=12,
+    fontsize=14,
     padding=3,
 )
 extension_defaults = widget_defaults.copy()
@@ -220,25 +233,27 @@ screens = [
                     text="   ",
                     foreground=colors["active"],
                     background=colors["bg"],
-                    fontsize=16,
+                    fontsize=BAR_FONTSIZE,
                     padding=8,
                 ),
-                widget.CurrentLayout(
-                    foreground=colors["fg"],
-                    background=colors["bg"],
-                    padding=3,
-                ),
                 widget.GroupBox(
-                    active=colors["fg"],
+                    font="JetBrainsMono Nerd Font Mono",
+                    fontsize=BAR_FONTSIZE,
+                    active=colors["inactive"],
                     inactive=colors["inactive"],
                     highlight_method="block",
-                    highlight_color=[colors["bg"], colors["bg"]],
-                    this_current_screen_border="#83a59880",
+                    block_highlight_text_color=colors["fg"],
+                    this_current_screen_border=colors["blue"],
                     this_screen_border=colors["blue"],
                     other_current_screen_border=colors["green"],
                     other_screen_border=colors["gray"],
                     rounded=True,
                     disable_drag=True,
+                    borderwidth=0,
+                    margin_x=4,    # gap between blocks
+                    margin_y=5,    # vertical inset -> block height (bar 36 - 2*5 = 26)
+                    padding_x=9,   # horizontal inset -> widen block toward a square
+                    padding_y=0,
                 ),
                 widget.Prompt(
                     foreground=colors["fg"],
@@ -308,12 +323,17 @@ screens = [
                     background=colors["bg"],
                     padding=8,
                 ),
-                widget.QuickExit(
-                    default_text=" ⏻ ",
-                    countdown_format="[{}]",
+                widget.TextBox(
+                    text=" ⏻ ",
                     foreground=colors["urgent"],
                     background=colors["bg"],
+                    fontsize=BAR_FONTSIZE,
                     padding=8,
+                    mouse_callbacks={
+                        "Button1": lazy.spawn(
+                            "/home/bubuzzz/.config/rofi/scripts/power"
+                        ),
+                    },
                 ),
             ],
             36,
@@ -377,6 +397,9 @@ mouse = [
 dgroups_key_binder = None
 dgroups_app_rules = [
     Rule(Match(wm_class="firefox"), group="2", intrusive=True),
+    # Editors -> workspace 3
+    Rule(Match(wm_class="Emacs"), group="3", intrusive=True),
+    Rule(Match(wm_class="dev.zed.Zed"), group="3", intrusive=True),
 ]
 
 follow_mouse_focus = True

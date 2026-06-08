@@ -1,0 +1,76 @@
+/* Simple Gruvbox rofi launcher theme */
+
+* {
+    /* Gruvbox palette (matches qtile config) */
+    bg:        #282828E6;  /* 90% opaque (10% transparent) - needs picom */
+    bg-alt:    #3c3836E6;
+    fg:        #ebdbb2;
+    gray:      #928374;
+    accent:    #98971a;
+    urgent:    #cc241d;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font:             "JetBrainsMono Nerd Font 12";
+}
+
+window {
+    background-color: @bg;
+    border:           2px;
+    border-color:     @accent;
+    border-radius:    2px;
+    width:            520px;
+    padding:          12px;
+}
+
+mainbox {
+    spacing:  10px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    background-color: @bg-alt;
+    border-radius:    2px;
+    padding:          8px 12px;
+    spacing:          8px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color: @accent;
+}
+
+entry {
+    placeholder:       "Search...";
+    placeholder-color: @gray;
+}
+
+listview {
+    lines:        8;
+    scrollbar:    false;
+    fixed-height: false;
+}
+
+element {
+    padding:       7px 10px;
+    border-radius: 2px;
+    spacing:       8px;
+}
+
+element normal.normal {
+    text-color: @fg;
+}
+
+element selected.normal {
+    background-color: @accent;
+    text-color:       @bg;
+}
+
+element-icon {
+    size:             1.1em;
+    vertical-align:   0.5;
+}
+
+element-text {
+    vertical-align: 0.5;
+}
