@@ -1,5 +1,6 @@
 import os
 
+
 import libqtile.resources
 from libqtile import bar, layout, qtile, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen, Rule
@@ -179,8 +180,8 @@ layouts = [
     layout.Max(
         border_focus="#83a59840",
         border_normal="#83a59880",
-        border_width=5,
-        margin=[0, 4, 4, 4],  # [top, right, bottom, left] - no gap against the top bar
+        border_width=4,
+        margin=[0, 3, 3, 3],  # [top, right, bottom, left] - no gap against the top bar
         border_on_single=True,  # <-- Enable border in Max layout too
     ),
     layout.Columns(**layout_conf),
@@ -250,9 +251,9 @@ screens = [
                     rounded=True,
                     disable_drag=True,
                     borderwidth=0,
-                    margin_x=4,    # gap between blocks
-                    margin_y=5,    # vertical inset -> block height (bar 36 - 2*5 = 26)
-                    padding_x=9,   # horizontal inset -> widen block toward a square
+                    margin_x=4,  # gap between blocks
+                    margin_y=5,  # vertical inset -> block height (bar 36 - 2*5 = 26)
+                    padding_x=9,  # horizontal inset -> widen block toward a square
                     padding_y=0,
                 ),
                 widget.Prompt(
@@ -409,7 +410,7 @@ cursor_warp = False
 floating_layout = layout.Floating(
     border_focus="#8ec07c",  # Active/focused floating border (Gruvbox yellow)
     border_normal="#ebdbb2",  # Inactive floating border (Gruvbox light)
-    border_width=4,  # Match your main border border_width
+    border_width=3,  # Match your main border border_width
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
         *layout.Floating.default_float_rules,

@@ -11,13 +11,13 @@
 
     background-color: transparent;
     text-color:       @fg;
-    font:             "JetBrainsMono Nerd Font 12";
+    font:             "JetBrainsMono Nerd Font 10";
 }
 
 window {
     background-color: @bg;
-    border:           2px;
-    border-color:     @accent;
+    border:           4px;
+    border-color:     #83a59880;
     border-radius:    2px;
     width:            520px;
     padding:          12px;
