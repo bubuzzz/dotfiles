@@ -4,6 +4,8 @@ import libqtile.resources
 from libqtile import bar, layout, qtile, widget
 from libqtile.config import Click, Drag, Group, Key, Match, Screen, Rule
 from libqtile.lazy import lazy
+from qtile_extras import widget as ewidget
+from qtile_extras.widget.decorations import RectDecoration
 from libqtile import hook
 import subprocess
 
@@ -157,7 +159,7 @@ for i in groups:
     )
 
 layout_conf = {
-    "border_focus": "#83a59880",  # "#98971a80",
+    "border_focus": "#83a59840",  # "#98971a80",
     "border_normal": "#ebdbb280",
     "border_width": 5,
     "margin": 4,
@@ -167,7 +169,7 @@ layout_conf = {
 layouts = [
     layout.Columns(**layout_conf),
     layout.Max(
-        border_focus="#83a59880",
+        border_focus="#83a59840",
         border_normal="#83a59880",
         border_width=5,
         margin=4,
@@ -195,9 +197,24 @@ colors = {
     "green": "#98971a",
 }
 
+
+def block_decor(colour):
+    """Rounded pill, inset from the top/bottom of the bar."""
+    return [
+        RectDecoration(
+            colour=colour,
+            radius=2,
+            filled=True,
+            padding_x=0,
+            padding_y=4,
+            group=True,
+        )
+    ]
+
+
 screens = [
     Screen(
-        bottom=bar.Bar(
+        top=bar.Bar(
             [
                 widget.TextBox(
                     text="   ",
@@ -214,9 +231,9 @@ screens = [
                 widget.GroupBox(
                     active=colors["fg"],
                     inactive=colors["inactive"],
-                    highlight_method="line",
+                    highlight_method="block",
                     highlight_color=[colors["bg"], colors["bg"]],
-                    this_current_screen_border=colors["active"],
+                    this_current_screen_border="#83a59880",
                     this_screen_border=colors["blue"],
                     other_current_screen_border=colors["green"],
                     other_screen_border=colors["gray"],
@@ -227,52 +244,60 @@ screens = [
                     foreground=colors["fg"],
                     background=colors["bg"],
                 ),
+                widget.Spacer(background=colors["bg"]),
                 widget.WindowName(
                     foreground=colors["fg"],
                     background=colors["bg"],
                     max_chars=255,
                     padding=8,
+                    width=bar.CALCULATED,
                 ),
-                widget.Net(
+                widget.Spacer(background=colors["bg"]),
+                ewidget.Net(
                     interface="wlp4s0",
                     format=" {down} ↓↑ {up} ",
-                    foreground=colors["highlight"],
+                    foreground=colors["fg"],
                     background=colors["bg"],
-                    padding=5,
+                    padding=10,
+                    decorations=block_decor(colors["highlight"]),
                 ),
-                widget.CPU(
+                widget.Spacer(length=5, background=colors["bg"]),
+                ewidget.CPU(
                     format=" {load_percent}%",
-                    foreground=colors["green"],
+                    foreground=colors["fg"],
                     background=colors["bg"],
-                    padding=3,
+                    padding=10,
+                    decorations=block_decor(colors["green"]),
                 ),
-                widget.Memory(
+                widget.Spacer(length=5, background=colors["bg"]),
+                ewidget.Memory(
                     format=" {MemUsed:.0f}{mm}/{MemTotal:.0f}{mm}",
                     measure_mem="M",
-                    foreground=colors["blue"],
+                    foreground=colors["fg"],
                     background=colors["bg"],
-                    padding=3,
+                    padding=10,
+                    decorations=block_decor(colors["blue"]),
                 ),
-                widget.PulseVolume(
-                    step=5,
-                    limit_max_volume=True,
-                    fmt=" {}%",
-                    foreground=colors["highlight"],
-                    background=colors["bg"],
-                    padding=6,
-                    mouse_callbacks={
-                        "Button1": lazy.spawn("pavucontrol"),
-                        "Button3": lazy.spawn(
-                            "pactl set-sink-mute @DEFAULT_SINK@ toggle"
-                        ),
-                        "Button4": lazy.spawn(
-                            "pactl set-sink-volume @DEFAULT_SINK@ +5%"
-                        ),
-                        "Button5": lazy.spawn(
-                            "pactl set-sink-volume @DEFAULT_SINK@ -5%"
-                        ),
-                    },
-                ),
+                # widget.PulseVolume(
+                #     step=5,
+                #     limit_max_volume=True,
+                #     fmt=" {}%",
+                #     foreground=colors["highlight"],
+                #     background=colors["bg"],
+                #     padding=6,
+                #     mouse_callbacks={
+                #         "Button1": lazy.spawn("pavucontrol"),
+                #         "Button3": lazy.spawn(
+                #             "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+                #         ),
+                #         "Button4": lazy.spawn(
+                #             "pactl set-sink-volume @DEFAULT_SINK@ +5%"
+                #         ),
+                #         "Button5": lazy.spawn(
+                #             "pactl set-sink-volume @DEFAULT_SINK@ -5%"
+                #         ),
+                #     },
+                # ),
                 widget.Systray(
                     background=colors["bg"],
                     padding=3,
