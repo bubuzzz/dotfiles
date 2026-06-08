@@ -54,7 +54,7 @@ mainbox {
     border-radius:               0px;
     border-color:                @selected;
     background-color:            transparent;
-    background-image:            url("~/.config/rofi/images/power.png", width);
+    background-image:            url("~/.config/rofi/images/power-bg.jpg", width);
     children:                    [ "inputbar", "listview", "message"];
 }
 
@@ -133,8 +133,8 @@ element-text {
     horizontal-align:            0.5;
 }
 element selected.normal {
-    background-color:            @selected;
-    text-color:                  var(background);
+    background-color:            #282738CC;
+    text-color:                  @foreground;
 }
 
 /*---------------------------------*\
