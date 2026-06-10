@@ -23,8 +23,8 @@
 ;;
 ;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
-(setq doom-font (font-spec :family "JetBrains Mono" :size 15)
-      doom-big-font (font-spec :family "JetBrains Mono" :size 20))
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 15)
+      doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 20))
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
@@ -38,7 +38,7 @@
 ;; (setq doom-theme 'doom-badger)
 ;; (setq doom-theme 'doom-moonlight)
 (setq doom-theme 'doom-homage-black)
-
+;; (setq doom-theme 'doom-gruvbox)
 ;; GUI Emacs.app on macOS launches without the shell's PATH, so binaries from
 ;; homebrew, uv-managed venvs, and ~/.local/bin aren't visible. Pull PATH from
 ;; an interactive shell once at startup so `jupyter', `uv', `ipython', lsp
@@ -59,7 +59,30 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+(setq org-directory "~/Projects/org-notes/")
+
+;; Central task scratchpad. `SPC X' (capture) drops a quick TODO under
+;; * Inbox; `SPC n t' jumps straight to the file for longer notes that
+;; include src blocks. Both flows file into the same place so nothing
+;; gets stranded in a project-local notes file.
+(setq +tasks-file (expand-file-name "tasks.org" org-directory))
+
+(after! org
+  (setq org-capture-templates
+        (append
+         (or (bound-and-true-p org-capture-templates) '())
+         `(("t" "Task note (Inbox)" entry
+            (file+headline ,+tasks-file "Inbox")
+            "* TODO %?\n  :PROPERTIES:\n  :CAPTURED: %U\n  :FROM:     %a\n  :END:\n"
+            :empty-lines 1)))))
+
+(defun +tasks/visit ()
+  "Open the central tasks.org for longer notes / src blocks."
+  (interactive)
+  (find-file +tasks-file))
+
+(map! :leader
+      :desc "Jump to tasks.org" "n t" #'+tasks/visit)
 
 (setq treemacs-position 'right)
 (setq doom-themes-treemacs-theme "doom-colors")
@@ -72,40 +95,58 @@
   :unless (display-graphic-p)
   :config (xclip-mode +1))
 
-(use-package! eat
-  :commands (eat eat-project +eat/toggle)
-  :config
-  (setq eat-kill-buffer-on-exit t
-        eat-enable-mouse t)
-  (add-hook 'eshell-load-hook #'eat-eshell-mode)
-  (add-hook 'eshell-load-hook #'eat-eshell-visual-command-mode))
-
-;; Open EAT as a right-side popup, same side as treemacs.
-(set-popup-rule! "^\\*eat\\*"
+;; Right-side popup, 40% of frame width, same side as treemacs.
+;; Doom's built-in `+vterm/toggle' uses display-buffer-in-side-window with
+;; a hardcoded bottom side, ignoring `set-popup-rule!'. We use our own
+;; toggle that honors the rule below.
+(set-popup-rule! "^\\*v?term\\*"
   :side 'right
   :size 0.4
   :select t
   :quit t
   :ttl nil
   :modeline nil)
-;; set eat term to xterm otherwise mac will use eat-truecolors
-(setq eat-term-name "xterm-256color")
 
-(defun +eat/toggle ()
-  "Toggle an EAT terminal in a bottom popup."
+(defun +vterm/toggle-right ()
+  "Toggle a vterm buffer in a right-side popup."
   (interactive)
-  (require 'eat)
-  (let* ((buf (get-buffer "*eat*"))
+  (require 'vterm)
+  (let* ((buf (get-buffer "*vterm*"))
          (win (and buf (get-buffer-window buf))))
     (cond
      (win (delete-window win))
      (buf (pop-to-buffer buf))
-     (t   (eat)))))
+     (t   (vterm)))))
 
 (map! :leader
       (:prefix-map ("o" . "open")
-       :desc "Toggle EAT popup"        "t" #'+eat/toggle
-       :desc "EAT terminal in project" "T" #'eat-project))
+       :desc "Toggle vterm popup"        "t" #'+vterm/toggle-right
+       :desc "vterm in project"          "T" #'+vterm/here))
+
+;; Force-load dired up front. Without this, invoking `dired-jump' from the
+;; dashboard (before any project/file has been opened) fails with
+;; "Symbol's function definition is void: dired-read-dir-and-switches"
+;; because dired.el hasn't been required yet.
+(require 'dired)
+
+;; Unified create in dired: trailing `/' makes a directory, otherwise an
+;; empty file. Nested paths (a/b/c.txt) get parent dirs created automatically.
+(defun +dired/create (name)
+  "Create file or directory in current dired dir.
+Trailing `/' means directory; otherwise empty file."
+  (interactive (list (read-string "Create (end with / for dir): ")))
+  (require 'dired)
+  (let ((path (expand-file-name name (dired-current-directory))))
+    (if (directory-name-p name)
+        (make-directory path t)
+      (make-directory (file-name-directory path) t)
+      (write-region "" nil path))
+    (revert-buffer)
+    (dired-goto-file (directory-file-name path))))
+
+(map! :after dired
+      :map dired-mode-map
+      :n "+" #'+dired/create)
 
 
 ;; ---------------------------------------------------------------------------

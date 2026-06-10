@@ -63,11 +63,3 @@
 ;; a pyproject.toml root. Needed for jupyter to find the right kernel.
 (package! pyvenv-auto)
 
-(package! eat
-  :recipe (:host codeberg
-           :repo "akib/emacs-eat"
-           :files ("*.el" ("term" "term/*")
-                   "*.texi" "*.ti" ("terminfo/e" "terminfo/e/*")
-                   ("terminfo/65" "terminfo/65/*")
-                   ("integration" "integration/*")
-                   (:exclude ".dir-locals.el" "test/"))))
