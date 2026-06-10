@@ -9,36 +9,11 @@
 ;; (setq user-full-name "John Doe"
 ;;       user-mail-address "john@doe.com")
 
-;; Doom exposes five (optional) variables for controlling fonts in Doom:
-;;
-;; - `doom-font' -- the primary font to use
-;; - `doom-variable-pitch-font' -- a non-monospace font (where applicable)
-;; - `doom-big-font' -- used for `doom-big-font-mode'; use this for
-;;   presentations or streaming.
-;; - `doom-symbol-font' -- for symbols
-;; - `doom-serif-font' -- for the `fixed-pitch-serif' face
-;;
-;; See 'C-h v doom-font' for documentation and more examples of what they
-;; accept. For example:
-;;
-;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
-;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
-(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 15)
-      doom-big-font (font-spec :family "JetBrainsMono Nerd Font" :size 20))
-;;
-;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
-;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
-;; refresh your font settings. If Emacs still can't find your font, it likely
-;; wasn't installed correctly. Font issues are rarely Doom issues!
+;; Fonts, theme, treemacs icon variant, nerd-icons colors, and the TTY
+;; background hack all live in theme.el — pulled out to keep this file focused
+;; on behavior rather than appearance.
+(load! "theme")
 
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. This is the default:
-;; (setq doom-theme 'doom-one)
-;; (setq doom-theme 'doom-badger)
-;; (setq doom-theme 'doom-moonlight)
-(setq doom-theme 'doom-homage-black)
-;; (setq doom-theme 'doom-gruvbox)
 ;; GUI Emacs.app on macOS launches without the shell's PATH, so binaries from
 ;; homebrew, uv-managed venvs, and ~/.local/bin aren't visible. Pull PATH from
 ;; an interactive shell once at startup so `jupyter', `uv', `ipython', lsp
@@ -84,22 +59,12 @@
 (map! :leader
       :desc "Jump to tasks.org" "n t" #'+tasks/visit)
 
-(setq treemacs-position 'right)
-(setq doom-themes-treemacs-theme "doom-colors")
-
-(custom-set-faces!
-  '(nerd-icons-dblue :foreground "#4B8BBE")
-  '(nerd-icons-dyellow :foreground "#FFD43B"))
-
 (use-package! xclip
   :unless (display-graphic-p)
   :config (xclip-mode +1))
 
 (after! vterm
   (set-popup-rule! "*doom:vterm-popup:main" :size 0.4 :vslot -4 :select t :quit nil :ttl 0 :side 'right))
-
-(unless (display-graphic-p)
-  (set-face-attribute 'default nil :background "#1e1e1e"))
 
 ;; Force-load dired up front. Without this, invoking `dired-jump' from the
 ;; dashboard (before any project/file has been opened) fails with
