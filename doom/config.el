@@ -95,33 +95,11 @@
   :unless (display-graphic-p)
   :config (xclip-mode +1))
 
-;; Right-side popup, 40% of frame width, same side as treemacs.
-;; Doom's built-in `+vterm/toggle' uses display-buffer-in-side-window with
-;; a hardcoded bottom side, ignoring `set-popup-rule!'. We use our own
-;; toggle that honors the rule below.
-(set-popup-rule! "^\\*v?term\\*"
-  :side 'right
-  :size 0.4
-  :select t
-  :quit t
-  :ttl nil
-  :modeline nil)
+(after! vterm
+  (set-popup-rule! "*doom:vterm-popup:main" :size 0.4 :vslot -4 :select t :quit nil :ttl 0 :side 'right))
 
-(defun +vterm/toggle-right ()
-  "Toggle a vterm buffer in a right-side popup."
-  (interactive)
-  (require 'vterm)
-  (let* ((buf (get-buffer "*vterm*"))
-         (win (and buf (get-buffer-window buf))))
-    (cond
-     (win (delete-window win))
-     (buf (pop-to-buffer buf))
-     (t   (vterm)))))
-
-(map! :leader
-      (:prefix-map ("o" . "open")
-       :desc "Toggle vterm popup"        "t" #'+vterm/toggle-right
-       :desc "vterm in project"          "T" #'+vterm/here))
+(unless (display-graphic-p)
+  (set-face-attribute 'default nil :background "#1e1e1e"))
 
 ;; Force-load dired up front. Without this, invoking `dired-jump' from the
 ;; dashboard (before any project/file has been opened) fails with
