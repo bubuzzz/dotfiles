@@ -90,7 +90,7 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     Key(
-        [alt],
+        [mod],
         "d",
         lazy.spawn("/home/bubuzzz/.config/rofi/scripts/launcher_simple"),
         desc="Launch Rofi app launcher",
@@ -231,7 +231,7 @@ screens = [
         top=bar.Bar(
             [
                 widget.TextBox(
-                    text="   ",
+                    text="  ",
                     foreground=colors["active"],
                     background=colors["bg"],
                     fontsize=BAR_FONTSIZE,
@@ -239,9 +239,9 @@ screens = [
                 ),
                 widget.GroupBox(
                     font="JetBrainsMono Nerd Font Mono",
-                    fontsize=BAR_FONTSIZE,
-                    active=colors["inactive"],
-                    inactive=colors["inactive"],
+                    fontsize=21,
+                    active=color["fg"],
+                    inactive=color["fg"],
                     highlight_method="block",
                     block_highlight_text_color=colors["fg"],
                     this_current_screen_border=colors["blue"],
@@ -294,6 +294,9 @@ screens = [
                     padding=10,
                     decorations=block_decor(colors["blue"]),
                 ),
+                widget.Spacer(length=5, background=colors["bg"]),
+
+
                 # widget.PulseVolume(
                 #     step=5,
                 #     limit_max_volume=True,
@@ -318,12 +321,14 @@ screens = [
                     background=colors["bg"],
                     padding=3,
                 ),
-                widget.Clock(
-                    format="%Y-%m-%d %I:%M %p",
+                ewidget.Clock(
+                    format=" %Y-%m-%d %I:%M %p",
                     foreground=colors["fg"],
-                    background=colors["bg"],
-                    padding=8,
+                    # background=colors["bg"],
+                    padding=10,
+                    # decorations=block_decor(colors["active"]),
                 ),
+                # widget.Spacer(length=5, background=colors["bg"]),
                 widget.TextBox(
                     text=" ⏻ ",
                     foreground=colors["urgent"],
