@@ -13,6 +13,7 @@
 ;; background hack all live in theme.el — pulled out to keep this file focused
 ;; on behavior rather than appearance.
 (load! "theme")
+(load! "notebook")
 
 ;; GUI Emacs.app on macOS launches without the shell's PATH, so binaries from
 ;; homebrew, uv-managed venvs, and ~/.local/bin aren't visible. Pull PATH from
@@ -224,3 +225,83 @@ Trailing `/' means directory; otherwise empty file."
 ;; they are implemented.
 
 
+
+;; GUI Emacs.app on macOS launches without the shell's PATH, so binaries from
+;; homebrew, uv-managed venvs, and ~/.local/bin aren't visible. Pull PATH from
+;; an interactive shell once at startup so `jupyter', `uv', `ipython', lsp
+;; servers, etc. are discoverable. Skip in TTY (we already have shell env).
+(use-package! exec-path-from-shell
+  :when (memq window-system '(mac ns x))
+  :config
+  (setq exec-path-from-shell-variables '("PATH" "MANPATH" "VIRTUAL_ENV"))
+  (exec-path-from-shell-initialize))
+
+;; This determines the style of line numbers in effect. If set to `nil', line
+;; numbers are disabled. For relative line numbers, set this to `relative'.
+(setq display-line-numbers-type t)
+
+;; Soft-wrap long lines at word boundaries in every buffer. File contents are
+;; unchanged — just visual. Toggle per-buffer with `SPC t w'.
+(+global-word-wrap-mode +1)
+
+;; If you use `org' and don't want your org files in the default location below,
+;; change `org-directory'. It must be set before org loads!
+(setq org-directory "~/Projects/org-notes/")
+
+;; Central task scratchpad. `SPC X' (capture) drops a quick TODO under
+;; * Inbox; `SPC n t' jumps straight to the file for longer notes that
+;; include src blocks. Both flows file into the same place so nothing
+;; gets stranded in a project-local notes file.
+(setq +tasks-file (expand-file-name "tasks.org" org-directory))
+
+(after! org
+  (setq org-capture-templates
+        (append
+         (or (bound-and-true-p org-capture-templates) '())
+         `(("t" "Task note (Inbox)" entry
+            (file+headline ,+tasks-file "Inbox")
+            "* TODO %?\n  :PROPERTIES:\n  :CAPTURED: %U\n  :FROM:     %a\n  :END:\n"
+            :empty-lines 1)))))
+
+(defun +tasks/visit ()
+  "Open the central tasks.org for longer notes / src blocks."
+  (interactive)
+  (find-file +tasks-file))
+
+(map! :leader
+      :desc "Jump to tasks.org" "n t" #'+tasks/visit)
+
+(use-package! xclip
+  :unless (display-graphic-p)
+  :config (xclip-mode +1))
+
+(after! vterm
+  (set-popup-rule! "*doom:vterm-popup:main" :size 0.4 :vslot -4 :select t :quit nil :ttl 0 :side 'right))
+
+;; Force-load dired up front. Without this, invoking `dired-jump' from the
+;; dashboard (before any project/file has been opened) fails with
+;; "Symbol's function definition is void: dired-read-dir-and-switches"
+;; because dired.el hasn't been required yet.
+(require 'dired)
+
+;; Unified create in dired: trailing `/' makes a directory, otherwise an
+;; empty file. Nested paths (a/b/c.txt) get parent dirs created automatically.
+(defun +dired/create (name)
+  "Create file or directory in current dired dir.
+Trailing `/' means directory; otherwise empty file."
+  (interactive (list (read-string "Create (end with / for dir): ")))
+  (require 'dired)
+  (let ((path (expand-file-name name (dired-current-directory))))
+    (if (directory-name-p name)
+        (make-directory path t)
+      (make-directory (file-name-directory path) t)
+      (write-region "" nil path))
+    (revert-buffer)
+    (dired-goto-file (directory-file-name path))))
+
+(map! :after dired
+      :map dired-mode-map
+      :n "+" #'+dired/create)
+
+
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
