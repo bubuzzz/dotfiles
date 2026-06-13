@@ -240,8 +240,8 @@ screens = [
                 widget.GroupBox(
                     font="JetBrainsMono Nerd Font Mono",
                     fontsize=21,
-                    active=color["fg"],
-                    inactive=color["fg"],
+                    active=colors["fg"],
+                    inactive=colors["fg"],
                     highlight_method="block",
                     block_highlight_text_color=colors["fg"],
                     this_current_screen_border=colors["blue"],
