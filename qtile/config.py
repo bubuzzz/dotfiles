@@ -15,6 +15,25 @@ mod = "mod4"
 alt = "mod1"
 terminal = "xfce4-terminal -e tmux"
 
+layout_conf = {
+    "border_focus": "#83a59840",  # "#98971a80",
+    "border_normal": "#ebdbb280",
+    "border_width": 4,
+    "margin": [0, 3, 3, 3],  # [top, right, bottom, left] - no gap against the top bar
+    "border_on_single": True,
+}
+
+layouts = [
+    # First entry is the default layout for every workspace.
+    layout.Max(
+        border_focus="#83a59840",
+        border_normal="#83a59880",
+        border_width=4,
+        margin=[0, 3, 3, 3],  # [top, right, bottom, left] - no gap against the top bar
+        border_on_single=True,  # <-- Enable border in Max layout too
+    ),
+    layout.Columns(**layout_conf),
+]
 
 def minimize_all_windows(qtile):
     group = qtile.current_group
@@ -77,8 +96,8 @@ keys = [
     Key(
         [mod],
         "f",
-        lazy.window.toggle_fullscreen(),
-        desc="Toggle fullscreen on the focused window",
+        lazy.hide_show_bar("top"),
+        desc="Toggle fullscreen: cover the bar; window keeps its normal border",
     ),
     Key(
         [mod],
@@ -90,7 +109,7 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
     Key(
-        [alt],
+        [mod],
         "d",
         lazy.spawn("/home/bubuzzz/.config/rofi/scripts/launcher_simple"),
         desc="Launch Rofi app launcher",
@@ -167,25 +186,7 @@ for i in groups:
         ]
     )
 
-layout_conf = {
-    "border_focus": "#83a59840",  # "#98971a80",
-    "border_normal": "#ebdbb280",
-    "border_width": 4,
-    "margin": [0, 3, 3, 3],  # [top, right, bottom, left] - no gap against the top bar
-    "border_on_single": True,
-}
 
-layouts = [
-    # First entry is the default layout for every workspace.
-    layout.Max(
-        border_focus="#83a59840",
-        border_normal="#83a59880",
-        border_width=4,
-        margin=[0, 3, 3, 3],  # [top, right, bottom, left] - no gap against the top bar
-        border_on_single=True,  # <-- Enable border in Max layout too
-    ),
-    layout.Columns(**layout_conf),
-]
 
 # Icon/label widgets (logo, GroupBox, power) use the larger size;
 # general bar text uses the smaller widget_defaults size.
@@ -231,7 +232,7 @@ screens = [
         top=bar.Bar(
             [
                 widget.TextBox(
-                    text="   ",
+                    text="  ",
                     foreground=colors["active"],
                     background=colors["bg"],
                     fontsize=BAR_FONTSIZE,
@@ -239,9 +240,9 @@ screens = [
                 ),
                 widget.GroupBox(
                     font="JetBrainsMono Nerd Font Mono",
-                    fontsize=BAR_FONTSIZE,
-                    active=colors["inactive"],
-                    inactive=colors["inactive"],
+                    fontsize=21,
+                    active=colors["fg"],
+                    inactive=colors["fg"],
                     highlight_method="block",
                     block_highlight_text_color=colors["fg"],
                     this_current_screen_border=colors["blue"],
@@ -294,6 +295,9 @@ screens = [
                     padding=10,
                     decorations=block_decor(colors["blue"]),
                 ),
+                widget.Spacer(length=5, background=colors["bg"]),
+
+
                 # widget.PulseVolume(
                 #     step=5,
                 #     limit_max_volume=True,
@@ -318,12 +322,14 @@ screens = [
                     background=colors["bg"],
                     padding=3,
                 ),
-                widget.Clock(
-                    format="%Y-%m-%d %I:%M %p",
+                ewidget.Clock(
+                    format=" %Y-%m-%d %I:%M %p",
                     foreground=colors["fg"],
-                    background=colors["bg"],
-                    padding=8,
+                    # background=colors["bg"],
+                    padding=10,
+                    # decorations=block_decor(colors["active"]),
                 ),
+                # widget.Spacer(length=5, background=colors["bg"]),
                 widget.TextBox(
                     text=" ⏻ ",
                     foreground=colors["urgent"],
