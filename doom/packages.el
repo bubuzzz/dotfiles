@@ -62,4 +62,3 @@
 ;; Auto-activate the project's uv-managed .venv when opening files under
 ;; a pyproject.toml root. Needed for jupyter to find the right kernel.
 (package! pyvenv-auto)
-

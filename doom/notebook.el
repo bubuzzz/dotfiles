@@ -67,13 +67,28 @@
 ;; Force-load ob-jupyter when org loads and register the `jupyter-python'
 ;; language alias (which creates `org-babel-execute:jupyter-python').
 ;; Doom's contrib tries to lazy-load this but it doesn't always fire.
+;;
+;; Eager alias registration matters for *fontification*, not just execution:
+;; org-src-fontify-natively looks up the babel language to know which mode's
+;; font-lock to apply inside `#+begin_src jupyter-python` blocks. If the
+;; alias isn't registered when the buffer renders, the block stays plain.
 (after! org
+  (setq org-src-fontify-natively t)
   (require 'ob-jupyter nil t)
   (org-babel-do-load-languages
    'org-babel-load-languages
    (append org-babel-load-languages
            '((jupyter . t)
-             (python  . t)))))
+             (python  . t))))
+  ;; Register kernel aliases immediately if a jupyter is already on PATH
+  ;; (e.g. from a previously-activated venv or a global install). The
+  ;; pyvenv-auto advice below re-runs this once a project venv activates.
+  (when (fboundp 'org-babel-jupyter-aliases-from-kernelspecs)
+    (ignore-errors (org-babel-jupyter-aliases-from-kernelspecs)))
+  ;; Map `jupyter-python` blocks to python-mode for fontification even
+  ;; before the babel alias is registered. Belt-and-suspenders for the
+  ;; first-frame race where org renders the buffer before ob-jupyter loads.
+  (add-to-list 'org-src-lang-modes '("jupyter-python" . python)))
 
 ;; Kernel aliases need `jupyter' on `exec-path'. We don't install jupyter
 ;; globally — it lives in each project's .venv. So when an org file is
