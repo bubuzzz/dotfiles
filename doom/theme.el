@@ -22,8 +22,8 @@
 ;; ---------------------------------------------------------------------------
 ;; Treemacs appearance
 ;; ---------------------------------------------------------------------------
-;; (setq treemacs-position 'right)
-;; (setq doom-themes-treemacs-theme "doom-colors")
+(setq treemacs-position 'right)
+(setq doom-themes-treemacs-theme "doom-colors")
 
 ;; ---------------------------------------------------------------------------
 ;; Nerd-icons color overrides
@@ -60,8 +60,8 @@ hl-line faces that visibly diverge in TTY."
     (unless (display-graphic-p frame)
       (dolist (face '(default
                       fringe
-                      ;; treemacs-window-background-face
-                      ;; treemacs-hl-line-face
+                      treemacs-window-background-face
+                      treemacs-hl-line-face
                       hl-line
                       solaire-default-face
                       solaire-hl-line-face
