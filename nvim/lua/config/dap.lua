@@ -25,25 +25,6 @@ function M.setup()
 
   dapui.setup()
 
-  -- Configure coreclr adapter for C#
-  dap.adapters.coreclr = {
-    type = "executable",
-    command = "netcoredbg", -- mason-nvim-dap adds it to PATH
-    args = { "--interpreter=vscode" },
-  }
-
-  dap.configurations.cs = {
-    {
-      type = "coreclr",
-      name = "Launch - netcoredbg",
-      request = "launch",
-      program = function()
-        return vim.fn.input("Path to dll: ",
-          vim.fn.getcwd() .. "/bin/Debug/net8.0/YourApp.dll", "file")
-      end,
-    },
-  }
-
   -- Keymaps
   vim.keymap.set("n", "<F5>", dap.continue)
   vim.keymap.set("n", "<F10>", dap.step_over)

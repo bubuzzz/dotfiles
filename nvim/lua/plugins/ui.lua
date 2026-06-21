@@ -1,7 +1,22 @@
 return {
   --
-  { "ellisonleao/gruvbox.nvim", priority = 1000, config = true, },
-
+  {
+    "ellisonleao/gruvbox.nvim", priority = 1000, config = true,
+  },
+  --
+  {
+   "catppuccin/nvim", name = "catppuccin", priority = 1000 ,
+   config = function()
+      require("catppuccin").setup{
+        flavour = "mocha",
+        color_overrides = {
+          mocha = {
+            base = "#000000",
+          },
+        },
+      }
+    end
+  },
   -- 
   {
     'sainnhe/gruvbox-material',

@@ -37,8 +37,9 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- colorscheme gruvbox-material
 vim.cmd [[
-  colorscheme gruvbox-material
+  colorscheme catppuccin
   highlight NvimTreeNormal guibg=#1a1a1a
   highlight NvimTreeNormalNC guibg=#1a1a1a
   highlight NvimTreeWinSeparator guibg=NONE guifg=NONE
