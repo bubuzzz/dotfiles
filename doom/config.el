@@ -1,9 +1,5 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-;; Place your private configuration here! Remember, you do not need to run 'doom
-;; sync' after modifying this file!
-
-
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 ;; (setq user-full-name "John Doe"
@@ -67,6 +63,20 @@
 
 (after! vterm
   (set-popup-rule! "*doom:vterm-popup:main" :size 0.4 :vslot -4 :select t :quit nil :ttl 0 :side 'right))
+
+;; Org-capture on the RIGHT instead of the bottom. Doom's default rule
+;; (lang/org/config.el) gives the capture buffer no `:side', so it opens
+;; along the bottom and takes 42% of the frame *height* — which shrinks a
+;; PDF/book buffer you're reading from. Re-pointing it to the right side
+;; makes `:size' a *width* fraction, so the note sits beside the PDF.
+;; The `*Org Select*' template-chooser menu is moved too, so the whole
+;; flow stays on the right. Our config loads after Doom's, so these
+;; overrides win.
+(after! org
+  (set-popup-rule! "^\\*Capture\\*$\\|^CAPTURE-.*$"
+    :side 'right :size 0.4 :select t :quit nil :ttl 0 :autosave 'ignore)
+  (set-popup-rule! "^\\*Org Select"
+    :side 'right :size 0.4 :select t :ttl 0))
 
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
