@@ -22,8 +22,6 @@ function M.get_project_root(bufnr)
     "pyproject.toml",
     "Cargo.toml",
     "package.json",
-    "*.sln",
-    "*.csproj",
     "pom.xml",
     "build.gradle",
   }

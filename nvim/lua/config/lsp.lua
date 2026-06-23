@@ -2,39 +2,6 @@
 local M = {}
 
 -- ---------- helpers ----------
-local function exists(p)
-  local stat = vim.loop.fs_stat(p)
-  return stat and stat.type == "file"
-end
-
--- Find OmniSharp binary (from Mason or fallbacks)
-local function find_omnisharp()
-  local ok, mr = pcall(require, "mason-registry")
-  if ok and mr.has_package and mr.has_package("omnisharp") then
-    local pkg = mr.get_package("omnisharp")
-    if pkg and pkg.get_install_path then
-      local base = pkg:get_install_path()
-      for _, p in ipairs({
-        base .. "/OmniSharp",
-        base .. "/omnisharp/OmniSharp",
-        base .. "/run",
-        base .. "/OmniSharp.exe",
-      }) do
-        if exists(p) then return p end
-      end
-    end
-  end
-  local data = vim.fn.stdpath("data")
-  for _, p in ipairs({
-    data .. "/mason/packages/omnisharp/OmniSharp",
-    data .. "/mason/packages/omnisharp/omnisharp/OmniSharp",
-    data .. "/mason/bin/omnisharp", -- mason shim
-  }) do
-    if exists(p) then return p end
-  end
-  return nil
-end
-
 -- Get an executable from Mason's bin (fallback to PATH)
 local function mason_exe(bin)
   local p = vim.fn.stdpath("data") .. "/mason/bin/" .. bin
@@ -53,34 +20,12 @@ function M.setup()
 
   -- Auto-install LSP servers via Mason
   require("mason-lspconfig").setup({
-    ensure_installed = { "omnisharp", "pyright", "ruff", "svelte", "ts_ls" },
+    ensure_installed = { "pyright", "ruff", "svelte", "ts_ls" },
     automatic_installation = true,
   })
 
 
   local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-  ---------------------------------------------------------------------------
-  -- C# (OmniSharp) via vim.lsp.start
-  ---------------------------------------------------------------------------
-  do
-    local omnisharp_bin = find_omnisharp()
-    if not omnisharp_bin then
-      vim.notify("[OmniSharp] Could not find binary. Run :Mason and install omnisharp.", vim.log.levels.WARN)
-    else
-      local pid = vim.fn.getpid()
-      vim.lsp.start({
-        name = "omnisharp",
-        cmd = { omnisharp_bin, "--languageserver", "--hostPID", tostring(pid) },
-        root_dir = root_dir({ "*.sln", "*.csproj", ".git" }),
-        capabilities = capabilities,
-        handlers = {
-          -- some OmniSharp builds misbehave with full semantic tokens
-          ["textDocument/semanticTokens/full"] = function() end,
-        },
-      })
-    end
-  end
 
   ---------------------------------------------------------------------------
   -- Python (Pyright) via vim.lsp.start

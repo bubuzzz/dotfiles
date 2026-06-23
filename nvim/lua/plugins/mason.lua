@@ -57,8 +57,6 @@ return {
 
   { "jay-babu/mason-nvim-dap.nvim" },
 
-  { "nvim-neotest/neotest" },
-  { "Issafalcon/neotest-dotnet" },
   {
     "akinsho/flutter-tools.nvim",
     lazy = false,

@@ -204,7 +204,7 @@ for from, to in pairs(ts_links) do
   hi(from, { link = to })
 end
 
--- ---------- LSP semantic tokens (pyright/omnisharp emit these — this is what
+-- ---------- LSP semantic tokens (pyright emits these — this is what
 -- was coloring True/len/print blue before) ----------
 local lsp_links = {
   ["@lsp.type.keyword"]        = "Keyword",
