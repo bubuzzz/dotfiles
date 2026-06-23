@@ -37,12 +37,14 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- colorscheme gruvbox-material
-vim.cmd [[
-  colorscheme catppuccin
-  highlight NvimTreeNormal guibg=#1a1a1a
-  highlight NvimTreeNormalNC guibg=#1a1a1a
-  highlight NvimTreeWinSeparator guibg=NONE guifg=NONE
-  set fillchars+=vert:\ 
-]]
 
+-- colorscheme gruvbox-material
+-- colorscheme catppuccin
+-- colorscheme gruber-darker
+-- colorscheme accent
+
+-- doom-homage-black port (defined in colors/homage-black.lua). Owns all syntax,
+-- LSP semantic-token, and nvim-tree highlights, so no post-hoc `hi` overrides
+-- are needed here.
+vim.cmd.colorscheme("homage-black")
+vim.opt.fillchars:append({ vert = " " })

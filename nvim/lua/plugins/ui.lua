@@ -1,7 +1,21 @@
 return {
   --
+  { "blazkowolf/gruber-darker.nvim" },
+  { 'ntk148v/komau.vim' },
   {
     "ellisonleao/gruvbox.nvim", priority = 1000, config = true,
+  },
+
+  {'alligator/accent.vim', 
+    config = function()
+      vim.g.accent_colour = 'green'
+      vim.g.accent_darken = 1
+      vim.g.accent_no_bg = 1
+
+      -- @function / @variable bolding lives in config/theme.lua's ColorScheme
+      -- autocmd so it survives the colorscheme being re-applied.
+    end
+
   },
   --
   {
