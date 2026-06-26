@@ -1,1 +1,9 @@
-.DS_Store
+emacs/.local
+emacs/elpa
+emacs/tramp
+emacs/recentf
+emacs/history
+emacs/projects
+emacs/projectile-bookmarks.eld
+emacs/eln-cache
+emacs/auto-save-list
