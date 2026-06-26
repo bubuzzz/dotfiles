@@ -78,7 +78,26 @@ return {
   },
  
   --
-  { "mhinz/vim-startify" },
+  {
+    "mhinz/vim-startify",
+    config = function()
+      -- No MRU / file lists, and drop the <empty buffer>/<quit> special entries.
+      -- A single list whose type-function returns nothing renders zero lines but
+      -- keeps lists[0] valid, avoiding startify's E684 on the cursor-offset calc.
+      vim.g.startify_lists = { { type = function() return {} end } }
+      vim.g.startify_enable_special = 0
+
+      -- Keep only the cowsay fortune, centered horizontally and vertically.
+      local cow = vim.fn["startify#center"](vim.fn["startify#fortune#cowsay"]())
+      local pad = math.max(math.floor((vim.o.lines - #cow) / 2) - 1, 0)
+      local header = {}
+      for _ = 1, pad do
+        table.insert(header, "")
+      end
+      vim.list_extend(header, cow)
+      vim.g.startify_custom_header = header
+    end,
+  },
  
   --
   {
