@@ -55,6 +55,22 @@
 (use-package recentf  :ensure nil :init (recentf-mode 1))
 
 ;;; ----------------------------------------------------------------------------
+;;; System clipboard integration
+;;; ----------------------------------------------------------------------------
+;; Sync the kill-ring with the desktop clipboard (and X11 PRIMARY selection) so
+;; that yank/paste — including evil's y/p and "+y / "+p — talk to the system
+;; clipboard. This is the default in GUI Emacs; the settings are made explicit
+;; here so the same config also behaves in a terminal frame.
+(setq select-enable-clipboard t
+      select-enable-primary t
+      save-interprogram-paste-before-kill t)
+
+;; In a TTY frame (emacs -nw) Emacs has no native clipboard access, so bridge it
+;; through the `xclip' CLI (already installed). No-op / harmless under the GUI.
+(use-package xclip
+  :init (xclip-mode 1))
+
+;;; ----------------------------------------------------------------------------
 ;;; Theme
 ;;; ----------------------------------------------------------------------------
 ;; Font, doom theme, and the TTY background hack live in theme.el.
