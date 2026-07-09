@@ -21,8 +21,19 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.confirm = true
 vim.opt.number = true
 vim.g.rainbow_active = 1 -- from luochen1990/rainbow"
-vim.opt.statusline = "[%n] %f %m %= %l:%c"
 
+------------ statusline (homage-black palette) ----------
+local set_hl = vim.api.nvim_set_hl
+set_hl(0, "StAccent", { fg = "#000000", bg = "#98be65", bold = true })  -- green block
+set_hl(0, "StFile",   { fg = "#DFDFDF", bg = "#202328", bold = true })  -- base8 on base2
+set_hl(0, "StMid",    { fg = "#bbc2cf", bg = "#000000" })                -- fg on black
+
+vim.opt.statusline = table.concat({
+  "%#StAccent# [%n] ",   -- buffer number
+  "%#StFile# %f %m ",    -- filename + modified flag
+  "%#StMid# %=",         -- stretch middle
+  "%#StAccent# %l:%c ",  -- line:col, green block
+})
 -- Conform setup (for formatting)
 require("conform").setup({
   formatters_by_ft = {
