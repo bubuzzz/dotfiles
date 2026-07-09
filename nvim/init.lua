@@ -2,10 +2,9 @@ vim.pack.add({
   "https://github.com/bubuzzz/homage-black.git",
   "https://github.com/nvim-mini/mini.pairs",
   "https://github.com/nvim-mini/mini.pick",
-
   "https://github.com/luochen1990/rainbow",
   "https://github.com/neovim/nvim-lspconfig",
-  "https://github.com/nvim-tree/nvim-web-devicons",
+  -- "https://github.com/nvim-tree/nvim-web-devicons",
   "https://github.com/stevearc/conform.nvim",
 })
 
