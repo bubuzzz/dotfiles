@@ -4,7 +4,6 @@ vim.pack.add({
   "https://github.com/nvim-mini/mini.pick",
   "https://github.com/luochen1990/rainbow",
   "https://github.com/neovim/nvim-lspconfig",
-  -- "https://github.com/nvim-tree/nvim-web-devicons",
   "https://github.com/stevearc/conform.nvim",
 })
 
@@ -22,6 +21,7 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.confirm = true
 vim.opt.number = true
 vim.g.rainbow_active = 1 -- from luochen1990/rainbow"
+vim.opt.statusline = "[%n] %f %m %= %l:%c"
 
 -- Conform setup (for formatting)
 require("conform").setup({
@@ -60,9 +60,10 @@ vim.opt.autochdir = false
 
 -- Shortcuts
 vim.g.mapleader = " "
-vim.keymap.set("n", "<leader>b", ":ls<CR>:b ", {desc="List buffers, pick by number"}) -- list buffer and set to navigate to
-
-vim.keymap.set("n", "<leader>ff", ":Pick files<CR>", { desc = "Fuzzy find files" })
+vim.keymap.set("n", "<leader>fb", ":ls<CR>:b ", {desc="List buffers, pick by number"}) -- list buffer and set to navigate to
+vim.keymap.set("n", "<leader>ff", function() 
+    MiniPick.builtin.files()
+end)
 
 -- Override the floating pane to match with the theme 
 local set_hl = vim.api.nvim_set_hl
