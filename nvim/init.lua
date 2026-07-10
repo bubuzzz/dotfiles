@@ -72,8 +72,8 @@ set_hl(0, "MiniPickMatchCurrent", { bg = "#1c1f24" })                  -- base1,
 
 -- Status line
 local set_hl = vim.api.nvim_set_hl
-set_hl(0, "StAccent", { fg = "#000000", bg = "#98be65", bold = true })  -- green block
-set_hl(0, "StFile",   { fg = "#DFDFDF", bg = "#202328", bold = true })  -- base8 on base2
+set_hl(0, "StFile", { fg = "#000000", bg = "#98be65", bold = true })  -- green block
+set_hl(0, "StAccent",   { fg = "#DFDFDF", bg = "#202328", bold = true })  -- base8 on base2
 set_hl(0, "StMid",    { fg = "#bbc2cf", bg = "#000000" })               -- fg on black
 
 vim.opt.statusline = table.concat({
