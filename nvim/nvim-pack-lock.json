@@ -1,9 +1,5 @@
 {
   "plugins": {
-    "barbar.nvim": {
-      "rev": "337ecfadb8bf005050990bf2f624dc4fc828dabd",
-      "src": "https://github.com/romgrk/barbar.nvim"
-    },
     "conform.nvim": {
       "rev": "619363c30309d29ffa631e67c8183f2a72caa373",
       "src": "https://github.com/stevearc/conform.nvim"
@@ -12,21 +8,25 @@
       "rev": "c9279199d1682eb747b4c2af854cfc748759d709",
       "src": "https://github.com/bubuzzz/homage-black.git"
     },
+    "markview.nvim": {
+      "rev": "41ecde17c96941fb5b7c97995a10712738e85efe",
+      "src": "https://github.com/OXY2DEV/markview.nvim"
+    },
+    "mini.icons": {
+      "rev": "98faae31e9be1cc054ae63485e58ceb185efcad0",
+      "src": "https://github.com/nvim-mini/mini.icons"
+    },
     "mini.pairs": {
       "rev": "b1fd9df3bb4a41c8f45778a3859ee80ef6b367e3",
-      "src": "https://github.com/echasnovski/mini.pairs"
+      "src": "https://github.com/nvim-mini/mini.pairs"
     },
     "mini.pick": {
       "rev": "04e73ab07222508361095bb6e27621b315e6b9f1",
       "src": "https://github.com/nvim-mini/mini.pick"
     },
     "nvim-lspconfig": {
-      "rev": "d224a1920728ba129880efc700d4a0180ac4ecbb",
+      "rev": "d6ac7a0d46555d44bf21f4f9c65f5201f818b475",
       "src": "https://github.com/neovim/nvim-lspconfig"
-    },
-    "nvim-web-devicons": {
-      "rev": "dad71387de386a946b123079d0e53f23028f3abd",
-      "src": "https://github.com/nvim-tree/nvim-web-devicons"
     },
     "rainbow": {
       "rev": "76ca1a20aa42edb5c65c19029968aad4625790dc",
