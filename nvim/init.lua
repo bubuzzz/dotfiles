@@ -6,7 +6,7 @@ vim.pack.add({
   "https://github.com/luochen1990/rainbow",
   "https://github.com/neovim/nvim-lspconfig",
   "https://github.com/stevearc/conform.nvim",
-  "https://github.com/OXY2DEV/markview.nvim",
+  "https://github.com/nvim-treesitter/nvim-treesitter",
 })
 
 -- Theme
@@ -59,14 +59,17 @@ require("mini.pick").setup({
 })
 
 require("mini.pairs").setup({})
-require("markview").setup({
-    preview = { enable = false }
+require("nvim-treesitter").setup({})
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "elixir", "eelixir", "heex", "python", "odin" },
+  callback = function() vim.treesitter.start() end,
 })
 
 -- Lsp 
 vim.lsp.enable("basedpyright") -- python
 vim.lsp.enable("ols") -- odin
-
+vim.lsp.enable("elixirls")
 
 -- Shortcuts
 vim.g.mapleader = " "
@@ -79,11 +82,6 @@ end)
 ---- Explore
 vim.keymap.set("n", "<leader>ee", ":Ex<CR>", {desc="Open the current directory buffer"})
 
----- Markdown render
-vim.keymap.set("n", "<leader>mr", "<CMD>Markview splitToggle<CR>", {desc="Toggle the current markdown file to rendered mode"})
-
-
-
 -- Override the floating pane to match with the theme 
 local set_hl = vim.api.nvim_set_hl
 set_hl(0, "MiniPickNormal",       { fg = "#bbc2cf", bg = "#000000" })  -- fg, bg
@@ -92,7 +90,6 @@ set_hl(0, "MiniPickPrompt",       { fg = "#DFDFDF", bg = "#000000", bold = true 
 set_hl(0, "MiniPickMatchCurrent", { bg = "#1c1f24" })                  -- base1, the selected row
 
 -- Status line
-local set_hl = vim.api.nvim_set_hl
 set_hl(0, "StFile", { fg = "#000000", bg = "#98be65", bold = true })  -- green block
 set_hl(0, "StAccent",   { fg = "#DFDFDF", bg = "#202328", bold = true })  -- base8 on base2
 set_hl(0, "StMid",    { fg = "#bbc2cf", bg = "#000000" })               -- fg on black
