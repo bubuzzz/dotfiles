@@ -67,6 +67,15 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- Lsp 
+vim.lsp.config("basedpyright", {
+    settings = {
+        basedpyright = {
+            analysis = {
+                typeCheckingMode = "basic"
+            },
+        },
+    },
+})
 vim.lsp.enable("basedpyright") -- python
 vim.lsp.enable("ols") -- odin
 vim.lsp.enable("elixirls")
@@ -91,6 +100,8 @@ vim.keymap.set("n", "<leader>fb", ":ls<CR>:b ", {desc="List buffers, pick by num
 vim.keymap.set("n", "<leader>ff", function() 
     MiniPick.builtin.files()
 end)
+
+vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float)
 
 ---- Explore
 vim.keymap.set("n", "<leader>ee", ":Ex<CR>", {desc="Open the current directory buffer"})
