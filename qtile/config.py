@@ -35,6 +35,7 @@ layouts = [
     layout.Columns(**layout_conf),
 ]
 
+
 def minimize_all_windows(qtile):
     group = qtile.current_group
     for window in group.windows:
@@ -187,7 +188,6 @@ for i in groups:
     )
 
 
-
 # Icon/label widgets (logo, GroupBox, power) use the larger size;
 # general bar text uses the smaller widget_defaults size.
 BAR_FONTSIZE = 16
@@ -270,14 +270,6 @@ screens = [
                     width=bar.CALCULATED,
                 ),
                 widget.Spacer(background=colors["bg"]),
-                ewidget.Net(
-                    interface="wlp4s0",
-                    format=" {down} ↓↑ {up} ",
-                    foreground=colors["fg"],
-                    background=colors["bg"],
-                    padding=10,
-                    decorations=block_decor(colors["highlight"]),
-                ),
                 widget.Spacer(length=5, background=colors["bg"]),
                 ewidget.CPU(
                     format=" {load_percent}%",
@@ -296,8 +288,6 @@ screens = [
                     decorations=block_decor(colors["blue"]),
                 ),
                 widget.Spacer(length=5, background=colors["bg"]),
-
-
                 # widget.PulseVolume(
                 #     step=5,
                 #     limit_max_volume=True,
