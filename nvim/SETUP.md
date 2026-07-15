@@ -34,8 +34,7 @@ Requires the `tree-sitter` CLI (installed in step 1).
 
 ## 4. Odin projects need `ols.json`
 
-Put an `ols.json` at each Odin project root pointing at the mise Odin
-collections (path has the version in it — update after Odin upgrades):
+On Mac os, put an `ols.json` at each Odin project root pointing at the mise Odin collections (path has the version in it — update after Odin upgrades):
 
 ```json
 {
