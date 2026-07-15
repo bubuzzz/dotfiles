@@ -124,3 +124,4 @@ vim.opt.statusline = table.concat({
   "%#StMid# %=",         -- stretch middle
   "%#StAccent# %l:%c ",  -- line:col, green block
 })
+
