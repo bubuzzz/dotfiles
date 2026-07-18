@@ -7,10 +7,17 @@ vim.pack.add({
   "https://github.com/neovim/nvim-lspconfig",
   "https://github.com/stevearc/conform.nvim",
   "https://github.com/nvim-treesitter/nvim-treesitter",
+  "https://github.com/rebelot/kanagawa.nvim",
 })
 
 -- Theme
-vim.cmd.colorscheme("homage-black")
+local theme = "kanagawa-dragon"
+-- local theme = "homage-black"
+
+local config_theme = require("config_theme")
+config_theme.set(theme)
+
+---- patch theme
 
 -- Space and indentation
 vim.opt.tabstop = 4  
@@ -34,6 +41,7 @@ vim.opt.relativenumber = true
 require("conform").setup({
   formatters_by_ft = {
     python = { "ruff_fix", "ruff_format" },
+    elixir = { "mix" },
   },
   format_on_save = {
     timeout_ms = 500,
@@ -102,35 +110,17 @@ vim.keymap.set("n", "<leader>ff", function()
 end)
 
 vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float)
+vim.keymap.set("n", "<leader>co", ":copen<CR>")
+vim.keymap.set("n", "<leader>cc", ":cclose<CR>")
 
 ---- Explore
 vim.keymap.set("n", "<leader>ee", ":Ex<CR>", {desc="Open the current directory buffer"})
 
--- Override the floating pane to match with the theme 
-local set_hl = vim.api.nvim_set_hl
-set_hl(0, "MiniPickNormal",       { fg = "#bbc2cf", bg = "#000000" })  -- fg, bg
-set_hl(0, "MiniPickBorder",       { fg = "#3f444a", bg = "#000000" })  -- base4 border on black
-set_hl(0, "MiniPickPrompt",       { fg = "#DFDFDF", bg = "#000000", bold = true })
-set_hl(0, "MiniPickMatchCurrent", { bg = "#1c1f24" })                  -- base1, the selected row
-
--- Pull the scheme's green from Comment's fg so everything below follows the colorscheme.
-local green = vim.api.nvim_get_hl(0, { name = "Comment" }).fg or 0x98be65
-
--- Markdown headers: all levels green + bold
-for i = 1, 6 do
-  set_hl(0, "@markup.heading." .. i .. ".markdown", { fg = green, bold = true })
-end
-set_hl(0, "@markup.heading", { fg = green, bold = true })
 
 -- Status line
-set_hl(0, "StFile", { fg = "#000000", bg = green, bold = true })  -- green block
-set_hl(0, "StAccent",   { fg = "#DFDFDF", bg = "#202328", bold = true })  -- base8 on base2
-set_hl(0, "StMid",    { fg = "#bbc2cf", bg = "#000000" })               -- fg on black
-
 vim.opt.statusline = table.concat({
   "%#StAccent# [%n] ",   -- buffer number
   "%#StFile# %f %m ",    -- filename + modified flag
   "%#StMid# %=",         -- stretch middle
   "%#StAccent# %l:%c ",  -- line:col, green block
 })
-
