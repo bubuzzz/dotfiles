@@ -1,13 +1,14 @@
 vim.pack.add({
   "https://github.com/bubuzzz/homage-black.git",
+  "https://github.com/rebelot/kanagawa.nvim",
+
   "https://github.com/nvim-mini/mini.pairs",
   "https://github.com/nvim-mini/mini.pick",
   "https://github.com/nvim-mini/mini.icons",
   "https://github.com/luochen1990/rainbow",
-  "https://github.com/neovim/nvim-lspconfig",
   "https://github.com/stevearc/conform.nvim",
   "https://github.com/nvim-treesitter/nvim-treesitter",
-  "https://github.com/rebelot/kanagawa.nvim",
+  "https://github.com/neovim/nvim-lspconfig",
 })
 
 -- Space and indentation
@@ -44,10 +45,8 @@ vim.keymap.set("n", "<leader>cc", ":cclose<CR>")
 vim.keymap.set("n", "<leader>ee", ":Ex<CR>", {desc="Open the current directory buffer"})
 
 -- Status line
-local theme = "kanagawa-dragon"
--- local theme = "homage-black"
-
-require("config_theme").set(theme)
+local themes = {"kanagawa-dragon", "homage-black"}
+require("config_theme").set(themes[1])
 require("config_plugin").set()
 require("config_lsp").set()
 require("config_statusline").set()

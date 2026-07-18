@@ -1,7 +1,7 @@
 local M = {}
 
 function M.set() 
-    -- Conform setup (for formatting)
+    -- Formatting
     require("conform").setup({
       formatters_by_ft = {
         python = { "ruff_fix", "ruff_format" },
@@ -13,6 +13,7 @@ function M.set()
       }
     })
 
+    -- File picker
     require("mini.pick").setup({
       window = {
         config = function()
@@ -29,12 +30,13 @@ function M.set()
         end,
       },
     })
-
+    
+    -- Pair bracket
     require("mini.pairs").setup({})
+    
     require("nvim-treesitter").setup({})
-
     vim.api.nvim_create_autocmd("FileType", {
-      pattern = { "elixir", "eelixir", "heex", "python", "odin", "markdown" },
+      pattern = { "elixir", "eelixir", "heex", "python", "odin" },
       callback = function() vim.treesitter.start() end,
     })
 end

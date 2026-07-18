@@ -4,7 +4,7 @@ function M.set()
       "%#StAccent# [%n] ",   -- buffer number
       "%#StFile# %f %m ",    -- filename + modified flag
       "%#StMid# %=",         -- stretch middle
-      "%#StAccent# %l:%c ",  -- line:col, green block
+      "%#StAccent# %l:%c ",  -- line:col, accent block
     })
 end
 return M
