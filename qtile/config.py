@@ -13,7 +13,7 @@ import subprocess
 
 mod = "mod4"
 alt = "mod1"
-terminal = "xfce4-terminal -e tmux"
+terminal = "alacritty"
 
 layout_conf = {
     "border_focus": "#83a59840",  # "#98971a80",

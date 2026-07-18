@@ -10,15 +10,6 @@ vim.pack.add({
   "https://github.com/rebelot/kanagawa.nvim",
 })
 
--- Theme
-local theme = "kanagawa-dragon"
--- local theme = "homage-black"
-
-local config_theme = require("config_theme")
-config_theme.set(theme)
-
----- patch theme
-
 -- Space and indentation
 vim.opt.tabstop = 4  
 vim.opt.shiftwidth = 4  
@@ -37,70 +28,6 @@ vim.g.rainbow_active = 1 -- from luochen1990/rainbow"
 vim.opt.autochdir = false
 vim.opt.relativenumber = true
 
--- Conform setup (for formatting)
-require("conform").setup({
-  formatters_by_ft = {
-    python = { "ruff_fix", "ruff_format" },
-    elixir = { "mix" },
-  },
-  format_on_save = {
-    timeout_ms = 500,
-    lsp_format = "fallback",
-  }
-})
-
-require("mini.pick").setup({
-  window = {
-    config = function()
-      local height = math.floor(0.3 * vim.o.lines)
-      local width = vim.o.columns
-      return {
-        anchor = "NW",        
-        row = 0, 
-        col = 0,
-        height = height,
-        width = width,
-        border = "single",     
-      }
-    end,
-  },
-})
-
-require("mini.pairs").setup({})
-require("nvim-treesitter").setup({})
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "elixir", "eelixir", "heex", "python", "odin", "markdown" },
-  callback = function() vim.treesitter.start() end,
-})
-
--- Lsp 
-vim.lsp.config("basedpyright", {
-    settings = {
-        basedpyright = {
-            analysis = {
-                typeCheckingMode = "basic"
-            },
-        },
-    },
-})
-vim.lsp.enable("basedpyright") -- python
-vim.lsp.enable("ols") -- odin
-vim.lsp.enable("elixirls")
-
-vim.api.nvim_create_autocmd("LspAttach", {
-  callback = function(ev)
-    vim.lsp.completion.enable(true, ev.data.client_id, ev.data.bufnr, { autotrigger = true })
-  end,
-})
-
-vim.opt.completeopt = { "menuone", "noselect", "popup" }
-
-vim.keymap.set("i", "<Tab>", function()
-  return vim.fn.pumvisible() == 1 and "<C-n>" or "<Tab>"
-end, { expr = true })
-
-
 -- Shortcuts
 vim.g.mapleader = " "
 ---- Find files and buffers
@@ -116,11 +43,11 @@ vim.keymap.set("n", "<leader>cc", ":cclose<CR>")
 ---- Explore
 vim.keymap.set("n", "<leader>ee", ":Ex<CR>", {desc="Open the current directory buffer"})
 
-
 -- Status line
-vim.opt.statusline = table.concat({
-  "%#StAccent# [%n] ",   -- buffer number
-  "%#StFile# %f %m ",    -- filename + modified flag
-  "%#StMid# %=",         -- stretch middle
-  "%#StAccent# %l:%c ",  -- line:col, green block
-})
+local theme = "kanagawa-dragon"
+-- local theme = "homage-black"
+
+require("config_theme").set(theme)
+require("config_plugin").set()
+require("config_lsp").set()
+require("config_statusline").set()
