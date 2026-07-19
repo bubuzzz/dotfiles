@@ -44,9 +44,11 @@ vim.keymap.set("n", "<leader>cc", ":cclose<CR>")
 ---- Explore
 vim.keymap.set("n", "<leader>ee", ":Ex<CR>", {desc="Open the current directory buffer"})
 
--- Status line
+-- Configuration
 local themes = {"kanagawa-dragon", "homage-black"}
 require("config_theme").set(themes[1])
-require("config_plugin").set()
+require("config_plugin").set({
+    treesitter_pattern = { "elixir", "eelixir", "heex", "python", "odin" },
+})
 require("config_lsp").set()
 require("config_statusline").set()

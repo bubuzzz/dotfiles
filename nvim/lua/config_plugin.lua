@@ -1,6 +1,6 @@
 local M = {}
 
-function M.set() 
+function M.set(params) 
     -- Formatting
     require("conform").setup({
       formatters_by_ft = {
@@ -36,7 +36,7 @@ function M.set()
     
     require("nvim-treesitter").setup({})
     vim.api.nvim_create_autocmd("FileType", {
-      pattern = { "elixir", "eelixir", "heex", "python", "odin" },
+      pattern = params.treesitter_pattern,
       callback = function() vim.treesitter.start() end,
     })
 end
