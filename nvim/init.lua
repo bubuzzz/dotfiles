@@ -30,7 +30,28 @@ vim.opt.autochdir = false
 vim.opt.relativenumber = true
 
 -- Configuration
-require("config_shortcut").set()
+local shortcuts = {
+    {"n", "<leader>fb", ":ls<CR>:b ", {desc = "List buffers, pick by number"}},
+    {"n", "<leader>ff", function() MiniPick.builtin.files() end, {desc = "Find files (MiniPick)"}},
+    {"n", "<leader>d", vim.diagnostic.open_float, {desc = "Open floating diagnostic message"}},
+    {"n", "<leader>co", ":copen<CR>", {desc = "Open quickfix list"}},
+    {"n", "<leader>cc", ":cclose<CR>", {desc = "Close quickfix list"}},
+    {"n", "<leader>ee", ":Ex<CR>", {desc = "Open the current directory buffer"}},
+    {"n", "<leader>mm", 
+        function()
+            if _G.is_maximized then
+                vim.cmd("wincmd =")
+                _G.is_maximized = false
+            else
+                vim.cmd("wincmd |")
+                vim.cmd("wincmd _")
+                _G.is_maximized = true
+            end
+        end, 
+        {desc = "Toggle maximize current pane"}
+    }
+}
+require("config_shortcut").set(shortcuts)
 
 local themes = {"kanagawa-dragon", "homage-black"}
 require("config_theme").set(themes[1])
