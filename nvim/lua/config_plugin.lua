@@ -33,7 +33,6 @@ function M.set(params)
     
     -- Pair bracket
     require("mini.pairs").setup({})
-    
     require("nvim-treesitter").setup({})
     vim.api.nvim_create_autocmd("FileType", {
       pattern = params.treesitter_pattern,

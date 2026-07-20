@@ -29,24 +29,12 @@ vim.g.rainbow_active = 1 -- from luochen1990/rainbow"
 vim.opt.autochdir = false
 vim.opt.relativenumber = true
 
--- Shortcuts
-vim.g.mapleader = " "
----- Find files and buffers
-vim.keymap.set("n", "<leader>fb", ":ls<CR>:b ", {desc="List buffers, pick by number"}) -- list buffer and set to navigate to
-vim.keymap.set("n", "<leader>ff", function() 
-    MiniPick.builtin.files()
-end)
-
-vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float)
-vim.keymap.set("n", "<leader>co", ":copen<CR>")
-vim.keymap.set("n", "<leader>cc", ":cclose<CR>")
-
----- Explore
-vim.keymap.set("n", "<leader>ee", ":Ex<CR>", {desc="Open the current directory buffer"})
-
 -- Configuration
+require("config_shortcut").set()
+
 local themes = {"kanagawa-dragon", "homage-black"}
 require("config_theme").set(themes[1])
+
 require("config_plugin").set({
     treesitter_pattern = { "elixir", "eelixir", "heex", "python", "odin" },
 })
