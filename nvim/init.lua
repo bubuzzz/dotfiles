@@ -51,13 +51,14 @@ local shortcuts = {
         {desc = "Toggle maximize current pane"}
     }
 }
-require("config_shortcut").set(shortcuts)
-
 local themes = {"kanagawa-dragon", "homage-black"}
-require("config_theme").set(themes[1])
+local current_theme = themes[1]
+local treesitter_pattern = { "elixir", "eelixir", "heex", "python", "odin" }
 
+require("config_shortcut").set(shortcuts)
+require("config_theme").set(current_theme)
 require("config_plugin").set({
-    treesitter_pattern = { "elixir", "eelixir", "heex", "python", "odin" },
+    treesitter_pattern = treesitter_pattern 
 })
 require("config_lsp").set()
 require("config_statusline").set()
