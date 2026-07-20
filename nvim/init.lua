@@ -54,6 +54,11 @@ local shortcuts = {
 }
 local themes = {"kanagawa-dragon", "homage-black"}
 local current_theme = themes[1]
+local switch_theme_hour = 18
+if os.date("*t").hour >= switch_theme_hour then
+    current_theme = themes[2]
+end
+
 local treesitter_pattern = { "elixir", "eelixir", "heex", "python", "odin" }
 local copilot_keymaps = {
     accept_suggestion = "<C-l>",  -- <Tab> is taken by native completion (config_lsp)
