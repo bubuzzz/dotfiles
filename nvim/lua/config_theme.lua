@@ -5,6 +5,7 @@ local function patch_homage_black()
     local set_hl = vim.api.nvim_set_hl
 
     local green = vim.api.nvim_get_hl(0, { name = "Comment" }).fg
+    local purple = "#a9a1e1"
     local black = "#000000"
     local fg    = "#bbc2cf"
     local base1 = "#1c1f24"
@@ -25,7 +26,8 @@ local function patch_homage_black()
     set_hl(0, "@markup.heading", { fg = green, bold = true })
 
     -- Status line
-    set_hl(0, "StFile",   { fg = black, bg = green, bold = true })  -- green block
+    set_hl(0, "StFile",         { fg = black, bg = green,  bold = true })  -- green block (saved)
+    set_hl(0, "StFileModified", { fg = black, bg = purple, bold = true })  -- purple block (unsaved)
     set_hl(0, "StAccent", { fg = base8, bg = base2, bold = true })  -- base8 on base2
     set_hl(0, "StMid",    { fg = fg,    bg = black })               -- fg on black
 end
@@ -34,19 +36,20 @@ local function patch_kanagawa()
     local set_hl = vim.api.nvim_set_hl
 
     local green    = vim.api.nvim_get_hl(0, { name = "String" }).fg      -- dragon green accent
+    local purple   = "#957fb8"                                          -- kanagawa oniViolet
     local fg       = vim.api.nvim_get_hl(0, { name = "Normal" }).fg
     local bg       = vim.api.nvim_get_hl(0, { name = "Normal" }).bg
     local barbg    = vim.api.nvim_get_hl(0, { name = "StatusLine" }).bg
     local accentbg = vim.api.nvim_get_hl(0, { name = "CursorLine" }).bg
 
-    set_hl(0, "StFile",   { fg = bg, bg = green,    bold = true })  -- green block
+    set_hl(0, "StFile",         { fg = bg, bg = green,  bold = true })  -- green block (saved)
+    set_hl(0, "StFileModified", { fg = bg, bg = purple, bold = true })  -- purple block (unsaved)
     set_hl(0, "StAccent", { fg = fg, bg = accentbg, bold = true })
     set_hl(0, "StMid",    { fg = fg, bg = barbg })
 end
 
 function M.set(theme)
     vim.cmd.colorscheme(theme)
-
     if theme == "homage-black" then
         patch_homage_black()
     elseif theme == "kanagawa-dragon" then

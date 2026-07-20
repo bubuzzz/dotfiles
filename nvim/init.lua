@@ -9,6 +9,7 @@ vim.pack.add({
   "https://github.com/stevearc/conform.nvim",
   "https://github.com/nvim-treesitter/nvim-treesitter",
   "https://github.com/neovim/nvim-lspconfig",
+  "https://github.com/supermaven-inc/supermaven-nvim",
 })
 
 -- Space and indentation
@@ -54,11 +55,19 @@ local shortcuts = {
 local themes = {"kanagawa-dragon", "homage-black"}
 local current_theme = themes[1]
 local treesitter_pattern = { "elixir", "eelixir", "heex", "python", "odin" }
+local copilot_keymaps = {
+    accept_suggestion = "<C-l>",  -- <Tab> is taken by native completion (config_lsp)
+    clear_suggestion  = "<C-]>",
+    accept_word       = "<C-j>",
+}
 
+require("config_statusline").set()
 require("config_shortcut").set(shortcuts)
 require("config_theme").set(current_theme)
+require("config_lsp").set()
 require("config_plugin").set({
     treesitter_pattern = treesitter_pattern 
 })
-require("config_lsp").set()
-require("config_statusline").set()
+require("config_copilot").set({
+    keymaps = copilot_keymaps
+})
