@@ -30,7 +30,9 @@ vim.g.rainbow_active = 1 -- from luochen1990/rainbow"
 vim.opt.autochdir = false
 vim.opt.relativenumber = true
 
--- Configuration
+--------------------------------------------------- 
+------------------ Configuration ------------------ 
+--------------------------------------------------- 
 local shortcuts = {
     {"n", "<leader>fb", ":ls<CR>:b ", {desc = "List buffers, pick by number"}},
     {"n", "<leader>ff", function() MiniPick.builtin.files() end, {desc = "Find files (MiniPick)"}},
@@ -65,11 +67,25 @@ local copilot_keymaps = {
     clear_suggestion  = "<C-]>",
     accept_word       = "<C-j>",
 }
+ 
+local servers_conf = { 
+    {"basedpyright", {
+        settings = {
+            basedpyright = {
+                analysis = {
+                    typeCheckingMode = "basic"
+                },
+            },
+        },
+    }},   
+    {"ols", {}}, 
+    {"elixirls", {}}
+}
 
 require("config_statusline").set()
 require("config_shortcut").set(shortcuts)
 require("config_theme").set(current_theme)
-require("config_lsp").set()
+require("config_lsp").set(servers_conf)
 require("config_plugin").set({
     treesitter_pattern = treesitter_pattern 
 })

@@ -1,19 +1,14 @@
 -- Lsp 
 local M = {}
-function M.set() 
-    vim.lsp.config("basedpyright", {
-        settings = {
-            basedpyright = {
-                analysis = {
-                    typeCheckingMode = "basic"
-                },
-            },
-        },
-    })
-    vim.lsp.enable("basedpyright") -- python
-    vim.lsp.enable("ols") -- odin
-    vim.lsp.enable("elixirls")
 
+function M.set(servers_conf) 
+    for _, server in pairs(servers_conf) do
+        if #server[2] > 0 then
+            vim.lsp.config(server[1], server[2])
+        end
+        vim.lsp.enable(server[1])
+    end
+    
     vim.api.nvim_create_autocmd("LspAttach", {
       callback = function(ev)
         vim.lsp.completion.enable(true, ev.data.client_id, ev.data.bufnr, { autotrigger = true })
