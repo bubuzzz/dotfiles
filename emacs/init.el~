@@ -1,0 +1,213 @@
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize)
+
+(unless package-archive-contents 
+  (package-refresh-contents))
+
+(unless (package-installed-p 'use-package) (package-install 'use-package))
+
+(require 'use-package)
+(setq use-package-always-ensure t)
+
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(setq display-line-numbers-type 'relative)
+(setq dired-kill-when-opening-new-buffer t)
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
+(add-hook 'text-mode-hook #'display-line-numbers-mode)
+
+;; Evil mode and shortcut binding
+(use-package evil 
+             :init 
+             (setq evil-want-keybinding nil) 
+             :config 
+             (evil-mode 1))
+
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+
+(use-package general 
+  :config 
+  (general-evil-setup)
+
+  (general-create-definer my-local-leader
+    :states '(normal visual motion)
+    :keymaps 'override
+    :prefix "SPC"
+    :global-prefix "C-SPC") 
+
+  (my-local-leader
+    ""    '(nil :which-key "General bindings")
+
+    "e"   '(:ignore t :which-key "explorer")
+    "ee"  '(dired-jump :which-key "open project directory")
+
+    "f"   '(:ignore t :which-key "files")
+    "ff"  '(find-file :which-key "find file")
+    "fs"  '(save-buffer :which-key "save file")
+    
+    "b"   '(:ignore t :which-key "buffers")
+    "bb"  '(switch-to-buffer :which-key "switch buffer")
+    "bd"  '(kill-current-buffer :which-key "kill buffer")
+
+    "v"   '(:ignore t :which-key "venv")
+    "va"  '(pyvenv-activate :which-key "activate venv")
+    "vd"  '(pyvenv-deactivate :which-key "deactivate venv")
+    
+    "q"   '(save-buffers-kill-terminal :which-key "quit emacs")))
+
+;; Enable clipboard with evil mode
+(setq select-enable-clipboard t)
+(setq select-enable-primary t)
+
+(with-eval-after-load 'evil
+  (setq evil-interprogram-cut-function 'gui-select-text)
+  (setq evil-interprogram-paste-function 'gui-selection-value)
+  (setq evil-visual-update-x-selection nil)
+  (setq evil-kill-on-visual-paste nil))
+
+(unless (display-graphic-p)
+  (use-package xclip
+    :ensure t
+    :config
+    (xclip-mode 1)))
+
+;; Redirect Emacs-generated customization code to a separate file
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
+
+;; Themes
+(use-package doom-themes
+  :ensure t
+  :config
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t)
+  (doom-themes-org-config))
+(use-package kanagawa-themes
+  :ensure t)
+
+(load-theme 'kanagawa-dragon t)
+
+(defun my/toggle-theme ()
+  "Toggle seamlessly between doom-homage and kanagawa-dragon."
+  (interactive)
+  (if (member 'doom-homage-black custom-enabled-themes)
+      (progn
+        (mapc #'disable-theme custom-enabled-themes)
+        (load-theme 'kanagawa-dragon t)
+        (message "Switched to Kanagawa Dragon"))
+    (progn
+      (mapc #'disable-theme custom-enabled-themes)
+      (load-theme 'doom-homage-black t)
+      (message "Switched to Doom Homage Black"))))
+
+(keymap-global-set "<f5>" 'my/toggle-theme)
+
+;; Org mode setting
+(use-package org
+  :ensure t
+  :defer t
+  :config
+  (setq 
+        org-hide-emphasis-markers t
+        org-auto-align-tags t
+        org-hide-leading-stars t
+        org-pretty-entities t
+        org-catch-invisible-edits 'show-and-error
+        org-startup-truncated nil)
+
+  (custom-set-faces
+   '(org-level-1 ((t (:inherit outline-1 :height 1.3 :weight bold))))
+   '(org-level-2 ((t (:inherit outline-2 :height 1.15 :weight bold))))
+   '(org-level-3 ((t (:inherit outline-3 :height 1.05 :weight bold))))
+   '(org-level-4 ((t (:inherit outline-4 :height 1.0 :weight bold))))
+   '(org-document-title ((t (:height 1.5 :weight bold :underline t))))))
+
+(use-package org-superstar
+  :ensure t
+  :after org
+  :hook (org-mode . org-superstar-mode)
+  :config
+  (setq org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "♦")
+        org-superstar-item-bullet-alist '((?+ . "•")
+                                         (?- . "◦")
+                                         (?* . "•"))))
+
+(use-package evil-org
+  :ensure t
+  :after (evil org)
+  :hook (org-mode . evil-org-mode)
+  :config
+  (evil-org-set-key-theme '(navigation insert textobjects additional calendar)))
+
+;; LSP
+(use-package eglot
+  :ensure nil 
+  :hook ((python-mode python-ts-mode) . eglot-ensure)
+  :config
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '((python-mode python-ts-mode)
+                   . ("basedpyright-langserver" "--stdio"))))
+
+  (with-eval-after-load 'evil
+    (define-key evil-normal-state-map (kbd "g d") 'xref-find-definitions)
+    (define-key evil-normal-state-map (kbd "g r") 'xref-find-references)
+    (define-key evil-normal-state-map (kbd "K")   'eldoc) ; Show documentation
+    (define-key evil-normal-state-map (kbd "C-c r") 'eglot-rename)
+    (define-key evil-normal-state-map (kbd "C-c a") 'eglot-code-actions)))
+
+(use-package pyvenv
+  :ensure t
+  :config
+  (pyvenv-mode 1)
+  
+  (add-hook 'pyvenv-post-activate-hook 
+            (lambda () 
+              (when (bound-and-true-p eglot--managed-mode)
+                (eglot-reconnect)))))
+
+;; Status line
+(defface my/mode-line-unsaved-face
+  '((t :foreground "purple" :weight bold))
+  "Face for unsaved file components in the mode-line."
+  :group 'mode-line-faces)
+
+(defun my/mode-line-file-info ()
+  "Return the formatted path and filename with dynamic theme colors."
+  (let* ((file-path (buffer-file-name))
+         (is-modified (and file-path (buffer-modified-p)))
+         (path-face (if is-modified 'my/mode-line-unsaved-face 'mode-line-inactive))
+         (name-face (if is-modified 'my/mode-line-unsaved-face 'font-lock-keyword-face)))
+    
+    (if file-path
+        (let ((dir (file-name-directory file-path))
+              (name (file-name-nondirectory file-path)))
+          (concat
+           (propertize (abbreviate-file-name dir) 'face path-face)
+           (propertize name 'face name-face)))
+      (propertize "%b" 'face 'font-lock-string-face))))
+
+(line-number-mode 1)
+(column-number-mode 1)
+
+(setq-default mode-line-format
+  '((:eval
+     (concat
+      (propertize " [%b] " 'face 'font-lock-type-face)
+      (my/mode-line-file-info)
+      " "
+      (propertize 
+       (make-string (max 1 (- (window-total-width)
+                              (length (buffer-name))
+                              (length (or (buffer-file-name) ""))
+                              25)) ? )
+       'face 'mode-line)
+      
+      (propertize " Ln %l, Col %c " 'face 'mode-line-inactive)))))
+

@@ -1,0 +1,1 @@
+("~/Projects/github/algo/" "~/Projects/github/dotfiles/" "~/Projects/github/TradingResearch/" "~/.config/emacs/elpa/zmq-20241006.1857/")
