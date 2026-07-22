@@ -18,6 +18,8 @@ lisp/           behavior, one concern per module
 | `config-ui` | frame, line numbers, font |
 | `config-evil` | evil, evil-collection, clipboard, xclip |
 | `config-shortcut` | general leader bindings |
+| `config-completion` | vertico + vertico-directory path editing |
+| `config-project` | project.el roots, remembered project list |
 | `config-theme` | colorscheme ring + toggle |
 | `config-statusline` | `mode-line-format` |
 | `config-lsp` | eglot servers, keys, pyvenv |
@@ -42,12 +44,33 @@ is a table entry, not a code change, and `init.el` alone describes the whole edi
 | add a mode-local key | entry under the keymap in `my/mode-shortcuts` |
 | add an LSP server | one entry in `my/lsp-servers`; the hooks are derived from the modes |
 | add a theme | append to `my/themes`; `<f5>` cycles the list |
+| add a completion key | entry in `my/completion-keys` (bound in `vertico-map`) |
+| change list height | `my/completion-count` |
 | add a new concern | new `lisp/config-X.el` with `config-X-set`, then require + call it |
+
+## Projects
+
+Built-in `project.el`, no projectile. `SPC pa` drops a `.project` file in the current directory
+and remembers it — that file is the root marker, so **you** decide what a project is, not git.
+It wins over an enclosing git root, so marking a subdirectory of a repo makes that subdirectory
+the project (and therefore the eglot workspace root for files under it).
+
+`SPC pp` switches between remembered projects and goes straight to the file finder.
+`my/project-switch-command` controls that; setting it back to a list restores project.el's
+default action menu, where `e` is Eshell.
+
+The list lives at `~/.cache/emacs/projects`, outside this directory.
+To forget one: `M-x project-forget-project`.
 
 ## Gotchas
 
 - **`M-x package-quickstart-refresh` after removing or upgrading a package.** Adding one is
   handled automatically; the other two leave stale autoloads and things break at startup.
+- **Never install packages from `emacs --batch`.** `--batch` implies `--no-init-file`, so
+  `early-init.el` never runs, `package-quickstart` reads as nil, and package.el *deletes*
+  `package-quickstart.el` on exit. Startup silently falls back to the slow scan (~0.33s) with
+  nothing to indicate why. Install from a normal session, or pass `(setq package-quickstart t)`
+  explicitly in the batch form.
 - **Don't add `(package-initialize)` back unguarded.** Emacs already activates packages before
   `init.el`; calling it again discards the quickstart file and doubles startup. The
   `(unless package-activated-list ...)` guard exists so `--batch`, which skips activation

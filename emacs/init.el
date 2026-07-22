@@ -10,6 +10,7 @@
     general
     doom-themes
     kanagawa-themes
+    vertico
     org-superstar
     evil-org
     pyvenv
@@ -45,6 +46,12 @@
     "fs" save-buffer
     "bb" switch-to-buffer
     "bd" kill-current-buffer
+    "pp" project-switch-project
+    "pf" project-find-file
+    "pb" project-switch-to-buffer
+    "pd" project-dired
+    "pa" config-project-add-current
+    "pr" config-project-forget
     "va" pyvenv-activate
     "vd" pyvenv-deactivate
     "q"  save-buffers-kill-terminal))
@@ -52,6 +59,17 @@
 (defvar my/mode-shortcuts
   '((org-mode-map
      "oj" my/org-insert-jupyter-python-block)))
+
+(defvar my/completion-count 15)
+
+(defvar my/completion-keys
+  '(("DEL"   . vertico-directory-delete-char)
+    ("M-DEL" . vertico-directory-delete-word)
+    ("RET"   . vertico-directory-enter)))
+
+(defvar my/project-list-file (expand-file-name "projects" my/cache-dir))
+(defvar my/project-markers '(".project"))
+(defvar my/project-switch-command 'project-find-file)
 
 (defvar my/themes '(kanagawa-dragon doom-homage-black))
 (defvar my/theme-toggle-key "<f5>")
@@ -91,6 +109,8 @@
                   config-ui
                   config-evil
                   config-shortcut
+                  config-completion
+                  config-project
                   config-theme
                   config-statusline
                   config-lsp
@@ -102,6 +122,8 @@
 (config-ui-set my/font)
 (config-evil-set)
 (config-shortcut-set my/leader my/shortcuts my/mode-shortcuts)
+(config-completion-set my/completion-count my/completion-keys)
+(config-project-set my/project-list-file my/project-markers my/project-switch-command)
 (config-theme-set my/themes my/theme-toggle-key)
 (config-statusline-set)
 (config-lsp-set my/lsp-servers my/lsp-keys)
