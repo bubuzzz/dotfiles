@@ -15,7 +15,8 @@
     evil-org
     pyvenv
     jupyter
-    xclip))
+    xclip
+    dashboard))
 
 (dolist (pkg my/packages)
   (unless (package-installed-p pkg)
@@ -103,9 +104,14 @@
 
 (defvar my/jupyter-resource-dir "./.ob-jupyter/")
 
+(defvar my/dashboard-banner (locate-user-emacs-file "banner.txt"))
+
+(defvar my/dashboard-items nil)
+
 ;;; ---------------------------------------------------
 
 (dolist (module '(config-backup
+                  config-dashboard
                   config-ui
                   config-evil
                   config-shortcut
@@ -121,6 +127,7 @@
 (config-backup-set my/cache-dir)
 (config-ui-set my/font)
 (config-evil-set)
+(config-dashboard-set my/dashboard-banner my/dashboard-items)
 (config-shortcut-set my/leader my/shortcuts my/mode-shortcuts)
 (config-completion-set my/completion-count my/completion-keys)
 (config-project-set my/project-list-file my/project-markers my/project-switch-command)

@@ -1,0 +1,25 @@
+;;; config-dashboard.el --- -*- lexical-binding: t -*-
+
+(defun config-dashboard-set (banner items)
+  "Show the dashboard on startup with BANNER (a text-file path) and ITEMS.
+ITEMS is a `dashboard-items' alist like ((recents . 5) (projects . 5))."
+  (require 'dashboard)
+  (setq dashboard-startup-banner   banner
+        dashboard-center-content   t
+        dashboard-vertically-center-content t
+        dashboard-items            items
+        dashboard-projects-backend 'project-el
+        dashboard-set-heading-icons nil
+        dashboard-set-file-icons   nil
+        initial-buffer-choice      #'dashboard-open)
+
+  ;; No line-number gutter on the dashboard.
+  (add-hook 'dashboard-mode-hook
+            (lambda () (display-line-numbers-mode -1)))
+
+  ;; Also show it for emacsclient frames.
+  (add-hook 'server-after-make-frame-hook #'dashboard-open)
+
+  (dashboard-setup-startup-hook))
+
+(provide 'config-dashboard)
