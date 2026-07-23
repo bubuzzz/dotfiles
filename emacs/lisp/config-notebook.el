@@ -13,6 +13,10 @@
     (forward-line -2)
     (move-to-column col)))
 
+(defun config-notebook--when-jupyter (orig &rest args)
+  (when (executable-find "jupyter")
+    (apply orig args)))
+
 (defun config-notebook-set (header-args resource-dir)
   (when (and (fboundp 'native-comp-available-p) (native-comp-available-p))
     (require 'comp-run nil t)
@@ -29,6 +33,7 @@
      '((emacs-lisp . t)
        (python . t)
        (jupyter . t)))
+    (advice-add 'jupyter-kernelspecs :around #'config-notebook--when-jupyter)
     (setq org-babel-default-header-args:jupyter-python header-args
           org-confirm-babel-evaluate nil
           org-src-fontify-natively t)

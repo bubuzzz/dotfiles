@@ -1,5 +1,9 @@
 ;;; config-lsp.el --- -*- lexical-binding: t -*-
 
+(defun config-lsp--ensure-in-project ()
+  (when (project-current)
+    (eglot-ensure)))
+
 (defun config-lsp-set (servers keys)
   (with-eval-after-load 'eglot
     (dolist (server servers)
@@ -7,7 +11,7 @@
 
   (dolist (server servers)
     (dolist (mode (ensure-list (car server)))
-      (add-hook (intern (format "%s-hook" mode)) #'eglot-ensure)))
+      (add-hook (intern (format "%s-hook" mode)) #'config-lsp--ensure-in-project)))
 
   (with-eval-after-load 'evil
     (dolist (key keys)

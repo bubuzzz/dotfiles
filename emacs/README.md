@@ -29,6 +29,7 @@ folder can be copied into a dotfiles repo as-is. See [State](#state).
 | `config-lsp` | eglot servers, keys, pyvenv |
 | `config-org` | org, org-superstar, evil-org |
 | `config-notebook` | jupyter / org-babel |
+| `config-latex` | org → PDF export engine (`org-latex-pdf-process`) |
 
 ## The pattern
 
@@ -58,6 +59,12 @@ Built-in `project.el`, no projectile. `SPC pa` drops a `.project` file in the cu
 and remembers it — that file is the root marker, so **you** decide what a project is, not git.
 It wins over an enclosing git root, so marking a subdirectory of a repo makes that subdirectory
 the project (and therefore the eglot workspace root for files under it).
+
+**Eglot only starts inside a project** (`config-lsp--ensure-in-project` guards `eglot-ensure` on
+`project-current`). Open a Python file that is in no project and no git repo — a loose file in
+`~`, say — and eglot stays off. Without this, eglot roots the transient workspace at the file's
+own directory, so a file in `~` makes basedpyright index the whole home tree and pin a CPU core.
+To get LSP on such a file, mark its directory with `SPC pa`.
 
 `SPC pp` switches between remembered projects and goes straight to the file finder.
 `my/project-switch-command` controls that; setting it back to a list restores project.el's
@@ -122,6 +129,16 @@ Deleting `~/.cache/emacs/` loses nothing but time: the next start reinstalls pac
   entirely, still works.
 - **Keep things deferred.** `pyvenv`, `eglot`, `org`, `jupyter` must not load at startup —
   use `with-eval-after-load` or an autoloaded command, not `require`.
+- **`ob-jupyter` shells out to `jupyter`, and errors when it is absent.** It calls
+  `jupyter-kernelspecs` (which runs the `jupyter` program) from an `org-mode-hook` — so opening any
+  org file with no venv active prints `Error retrieving kernelspecs` — and again from an
+  `org-export-before-processing-functions` hook, where the error is *not* demoted and aborts
+  `C-c C-e l p` before LaTeX runs. There is no `defcustom` to disable either. `config-notebook`
+  guards the single choke point instead: an `:around` advice on `jupyter-kernelspecs`
+  (`config-notebook--when-jupyter`) runs the real function only `(when (executable-find "jupyter"))`
+  and returns nil otherwise, so both the open and export paths are silent with no jupyter, and a
+  jupyter-capable venv works normally. One advice covers every caller and depends on no ob-jupyter
+  hook symbols.
 - **Don't set `frame-inhibit-implied-resize`.** `dashboard-vertically-center-content` measures
   `window-pixel-height` and `line-pixel-height` once and inserts that many literal newlines, then
   never recomputes. Anything that changes frame geometry or font metrics after that render leaves
@@ -133,12 +150,19 @@ Deleting `~/.cache/emacs/` loses nothing but time: the next start reinstalls pac
   afterwards by `config-ui`. Colours are only applied when `initial-window-system` is non-nil, so
   `emacs -nw` keeps the terminal's own background. Reorder `my/themes` and this needs updating —
   read the new value with `(face-attribute 'default :background)`.
-- **`initial-major-mode` is `fundamental-mode` on purpose.** `*scratch*` is displayed until
-  `initial-buffer-choice` swaps in the dashboard, and Emacs sets its major mode *after* init.el has
-  loaded. Leave it as `lisp-interaction-mode` and it inherits `prog-mode-hook`, so the line-number
-  gutter switches on for the one frame `*scratch*` is visible and then vanishes with the buffer —
-  a flash on every start. `config-dashboard` sets it. `dashboard-mode` itself derives from
-  `special-mode` and already disables line numbers, so it needs no hook of its own.
+- **Don't force the dashboard with `initial-buffer-choice`.** `dashboard-setup-startup-hook`
+  already shows the dashboard, but only `(when (< (length command-line-args) 2))` — i.e. when no
+  file was passed, which is exactly what you want. Setting `initial-buffer-choice #'dashboard-open`
+  overrides that guard and prepends the dashboard unconditionally; with a file argument Emacs then
+  has two buffers to show and splits the frame (dashboard on one side, file on the other). The
+  emacsclient/daemon case is covered separately by `server-after-make-frame-hook`. (`-nw` is
+  stripped from `command-line-args`, so bare `emacs -nw` still counts as no-file and shows it.)
+- **`initial-major-mode` is `fundamental-mode` on purpose.** `*scratch*` exists until the dashboard
+  startup hook swaps it out, and Emacs sets its major mode *after* init.el has loaded. Leave it as
+  `lisp-interaction-mode` and it inherits `prog-mode-hook`, so the line-number gutter switches on
+  for the frame `*scratch*` is briefly current and then vanishes with the buffer — a flash on every
+  start. `config-dashboard` sets it. `dashboard-mode` itself derives from `special-mode` and
+  already disables line numbers, so it needs no hook of its own.
 - **A copied `elpa/` can carry stale `.elc` files.** Copying between machines rewrites mtimes, so
   Emacs may decide a `.elc` is older than its `.el` and silently load the slower source
   (`Source file ... newer than byte-compiled file`). Fix with `M-x package-recompile-all`.
@@ -163,3 +187,9 @@ first frame is shown, so it cannot be deferred.
 ## External deps
 
 `basedpyright-langserver` and `jupyter` on `PATH` (per venv for jupyter), JetBrainsMono Nerd Font.
+
+Org → PDF export (`C-c C-e l p`) needs a LaTeX engine. This config uses **tectonic** (`pacman -S
+tectonic`, ~15 MiB, not the multi-GB TeX Live) via `my/latex-pdf-process` in `init.el`; it pulls
+the packages a document needs on demand into `~/.cache`. Without it, export to `.tex` still works
+but the PDF step fails. For code-block syntax highlighting via minted, add `-Z shell-escape` to
+`my/latex-pdf-process` and set `org-latex-src-block-backend` to `minted`.

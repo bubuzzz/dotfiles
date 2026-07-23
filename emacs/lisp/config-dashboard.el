@@ -12,8 +12,7 @@ ITEMS is a `dashboard-items' alist like ((recents . 5) (projects . 5))."
         dashboard-set-heading-icons nil
         dashboard-set-file-icons   nil
         initial-major-mode         'fundamental-mode
-        initial-scratch-message    nil
-        initial-buffer-choice      #'dashboard-open)
+        initial-scratch-message    nil)
 
   (add-hook 'server-after-make-frame-hook #'dashboard-open)
 

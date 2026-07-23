@@ -101,6 +101,8 @@
 
 (defvar my/jupyter-resource-dir "./.ob-jupyter/")
 
+(defvar my/latex-pdf-process '("tectonic -X compile %f --outdir %o"))
+
 (defvar my/dashboard-banner (locate-user-emacs-file "banner.txt"))
 
 (defvar my/dashboard-items nil)
@@ -118,7 +120,8 @@
                   config-statusline
                   config-lsp
                   config-org
-                  config-notebook))
+                  config-notebook
+                  config-latex))
   (require module))
 
 (config-cache-set my/cache-dir)
@@ -133,3 +136,4 @@
 (config-lsp-set my/lsp-servers my/lsp-keys)
 (config-org-set my/org-headline-bullets my/org-item-bullets my/org-key-theme)
 (config-notebook-set my/jupyter-header-args my/jupyter-resource-dir)
+(config-latex-set my/latex-pdf-process)

@@ -3,7 +3,7 @@ local M = {}
 
 function M.set(servers_conf) 
     for _, server in pairs(servers_conf) do
-        if #server[2] > 0 then
+        if next(server[2] ) ~= nil then
             vim.lsp.config(server[1], server[2])
         end
         vim.lsp.enable(server[1])

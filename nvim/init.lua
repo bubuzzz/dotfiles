@@ -5,6 +5,7 @@ vim.pack.add({
   "https://github.com/nvim-mini/mini.pairs",
   "https://github.com/nvim-mini/mini.pick",
   "https://github.com/nvim-mini/mini.icons",
+  'https://github.com/MeanderingProgrammer/render-markdown.nvim',
   "https://github.com/luochen1990/rainbow",
   "https://github.com/stevearc/conform.nvim",
   "https://github.com/nvim-treesitter/nvim-treesitter",
@@ -40,6 +41,7 @@ local shortcuts = {
     {"n", "<leader>co", ":copen<CR>", {desc = "Open quickfix list"}},
     {"n", "<leader>cc", ":cclose<CR>", {desc = "Close quickfix list"}},
     {"n", "<leader>ee", ":Ex<CR>", {desc = "Open the current directory buffer"}},
+    {"n", "<leader>mr", ":RenderMarkdown buf_toggle<CR>", {desc = "Toggle markdown rendering (this buffer)"}},
     {"n", "<leader>mm", 
         function()
             if _G.is_maximized then

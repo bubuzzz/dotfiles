@@ -31,16 +31,31 @@ function M.set(params)
       },
     })
     
+    -- Markdown rendering
+    require("render-markdown").setup({
+        enabled = false,
+        anti_conceal = { enabled = false },
+    })
+
+    vim.api.nvim_create_autocmd("InsertEnter", {
+        desc = "Turn off markdown rendering until explicitly toggled back on",
+        callback = function(ev)
+            local state = require("render-markdown.state")
+            if not vim.tbl_contains(state.file_types, vim.bo[ev.buf].filetype) then
+                return
+            end
+            if state.get(ev.buf).enabled then
+                require("render-markdown.api").buf_disable()
+            end
+        end,
+    })
+
     -- Pair bracket
     require("mini.pairs").setup({})
     require("nvim-treesitter").setup({})
     vim.api.nvim_create_autocmd("FileType", {
       pattern = params.treesitter_pattern,
       callback = function() vim.treesitter.start() end,
-    })
-
-    require('render-markdown').setup({
-        enabled = false,
     })
 end
 
