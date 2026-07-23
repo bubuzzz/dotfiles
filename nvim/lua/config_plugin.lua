@@ -38,6 +38,10 @@ function M.set(params)
       pattern = params.treesitter_pattern,
       callback = function() vim.treesitter.start() end,
     })
+
+    require('render-markdown').setup({
+        enabled = false,
+    })
 end
 
 return M

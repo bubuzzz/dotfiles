@@ -6,15 +6,19 @@ Shared between Arch (X11) and macOS; runs in the terminal (`emacs -nw` / `emacsc
 ## Layout
 
 ```
-early-init.el   package-quickstart switch (must be here, runs before package activation)
+early-init.el   cache redirects, package-quickstart, first-frame appearance (runs before init)
 init.el         packages -> data -> wiring. The only file edited day to day.
 custom.el       Customize-generated, loaded silently
 lisp/           behavior, one concern per module
+banner.txt      dashboard splash
 ```
+
+This directory is **source only** — nothing Emacs writes at runtime lands here, so the whole
+folder can be copied into a dotfiles repo as-is. See [State](#state).
 
 | module | owns |
 |---|---|
-| `config-backup` | backups / auto-saves / lockfiles -> `~/.cache/emacs/` |
+| `config-cache` | every runtime-written file -> `~/.cache/emacs/` |
 | `config-ui` | frame, line numbers, font |
 | `config-evil` | evil, evil-collection, clipboard, xclip |
 | `config-shortcut` | general leader bindings |
@@ -62,6 +66,37 @@ default action menu, where `e` is Eshell.
 The list lives at `~/.cache/emacs/projects`, outside this directory.
 To forget one: `M-x project-forget-project`.
 
+## State
+
+Everything Emacs writes lives in `~/.cache/emacs/` (`$XDG_CACHE_HOME/emacs/`), never in this
+directory. `my/cache-dir` is defined in `early-init.el` and reused by `init.el`.
+
+| goes to `~/.cache/emacs/` | set by | variable |
+|---|---|---|
+| `elpa/` | `early-init.el` | `package-user-dir` |
+| `eln-cache/` | `early-init.el` | `startup-redirect-eln-cache` |
+| `package-quickstart.el` | `early-init.el` | `package-quickstart-file` |
+| `backup/`, `auto-save/`, `lock/` | `config-cache` | `backup-directory-alist` and friends |
+| `auto-save-list/` | `config-cache` | `auto-save-list-file-prefix` |
+| `history`, `recentf` | `config-cache` | `savehist-file`, `recentf-save-file` |
+| `eshell/`, `tramp`, `url/` | `config-cache` | `eshell-directory-name`, … |
+| `transient/` | `config-cache` | `transient-history-file`, … |
+| `projects` | `config-project` | `project-list-file` |
+
+The three in `early-init.el` **cannot** move to a module: packages are activated and the
+quickstart file is loaded before `init.el` is read, and the eln cache must be redirected before
+anything is natively compiled.
+
+`config-cache` sets its variables with plain `setq` while the owning libraries are still unloaded.
+That is deliberate — `defcustom` does not overwrite an already-bound value, so the redirect wins
+without forcing a `require` at startup.
+
+To relocate the cache, change `my/cache-dir` in `early-init.el`, move the old directory to the new
+path, and run `M-x package-quickstart-refresh`.
+
+Deleting `~/.cache/emacs/` loses nothing but time: the next start reinstalls packages from
+`my/packages` and recompiles. Only the `.el` sources here are irreplaceable.
+
 ## Gotchas
 
 - **`M-x package-quickstart-refresh` after removing or upgrading a package.** Adding one is
@@ -71,18 +106,49 @@ To forget one: `M-x project-forget-project`.
   `package-quickstart.el` on exit. Startup silently falls back to the slow scan (~0.33s) with
   nothing to indicate why. Install from a normal session, or pass `(setq package-quickstart t)`
   explicitly in the batch form.
+- **Never sync `package-quickstart.el`, `elpa/` or `eln-cache/` between machines.** They are
+  generated caches of *absolute* paths; living in `~/.cache/emacs/` now keeps them out of the way,
+  so this only bites if one is ever copied back by hand. A quickstart file made on the Mac points
+  `load-path` at `/Users/...` directories that don't exist on Arch, *and* sets
+  `package-activated-list` — which suppresses the `package-initialize` guard below (so the real
+  `elpa/` is never activated) and makes `package-installed-p` take its quickstart fast-path, so
+  every package reports as installed and the install loop in `init.el` does nothing. Startup then
+  dies on the first `require` with a bare `Cannot open load file: evil`. Recovery: delete
+  `package-quickstart.el` and `.elc`, start Emacs (the guard fires, local packages activate,
+  anything missing installs), then `M-x package-quickstart-refresh`.
 - **Don't add `(package-initialize)` back unguarded.** Emacs already activates packages before
   `init.el`; calling it again discards the quickstart file and doubles startup. The
   `(unless package-activated-list ...)` guard exists so `--batch`, which skips activation
   entirely, still works.
 - **Keep things deferred.** `pyvenv`, `eglot`, `org`, `jupyter` must not load at startup —
   use `with-eval-after-load` or an autoloaded command, not `require`.
+- **Don't set `frame-inhibit-implied-resize`.** `dashboard-vertically-center-content` measures
+  `window-pixel-height` and `line-pixel-height` once and inserts that many literal newlines, then
+  never recomputes. Anything that changes frame geometry or font metrics after that render leaves
+  the padding wrong for good — too much of it drops the banner to the bottom of the frame.
+- **`my/startup-background` must match the first theme in `my/themes`.** On a GUI the frame is
+  created and painted before `init.el` runs, so without it Emacs shows a white frame until the
+  theme loads. `early-init.el` pre-paints the frame via `default-frame-alist`, and the menu bar,
+  tool bar and scroll bars are set to zero there too so they are never drawn rather than removed
+  afterwards by `config-ui`. Colours are only applied when `initial-window-system` is non-nil, so
+  `emacs -nw` keeps the terminal's own background. Reorder `my/themes` and this needs updating —
+  read the new value with `(face-attribute 'default :background)`.
+- **`initial-major-mode` is `fundamental-mode` on purpose.** `*scratch*` is displayed until
+  `initial-buffer-choice` swaps in the dashboard, and Emacs sets its major mode *after* init.el has
+  loaded. Leave it as `lisp-interaction-mode` and it inherits `prog-mode-hook`, so the line-number
+  gutter switches on for the one frame `*scratch*` is visible and then vanishes with the buffer —
+  a flash on every start. `config-dashboard` sets it. `dashboard-mode` itself derives from
+  `special-mode` and already disables line numbers, so it needs no hook of its own.
+- **A copied `elpa/` can carry stale `.elc` files.** Copying between machines rewrites mtimes, so
+  Emacs may decide a `.elc` is older than its `.el` and silently load the slower source
+  (`Source file ... newer than byte-compiled file`). Fix with `M-x package-recompile-all`.
 - **No `:which-key`.** Deliberately not installed; shortcut data is bare `"key" command` pairs.
-- **Not a git repo.** No backups of this config exist anywhere.
+- **Not a git repo.** This folder is copied into a separate dotfiles repo by hand; since it is
+  source-only, copying all of it is safe. Nothing here is backed up until that copy happens.
 
 ## Startup
 
-~0.20s. Check with `M-x emacs-init-time`, or from a shell:
+~0.25s on Arch. Check with `M-x emacs-init-time`, or from a shell:
 
 ```sh
 emacs -nw --eval '(progn (princ (emacs-init-time) #'\''external-debugging-output) (kill-emacs))'
@@ -91,6 +157,8 @@ emacs -nw --eval '(progn (princ (emacs-init-time) #'\''external-debugging-output
 (`message` here would print to the echo area and be wiped when Emacs restores the terminal.)
 
 If it regresses, the usual suspects are an eager `require` in a module, or a stale quickstart file.
+`config-dashboard` is the one deliberate eager `require` — the dashboard has to be built before the
+first frame is shown, so it cannot be deferred.
 
 ## External deps
 

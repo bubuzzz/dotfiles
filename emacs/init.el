@@ -34,9 +34,6 @@
 ;;; ------------------ Configuration ------------------
 ;;; ---------------------------------------------------
 
-(defvar my/cache-dir
-  (expand-file-name "emacs/" (or (getenv "XDG_CACHE_HOME") "~/.cache/")))
-
 (defvar my/font "JetBrainsMono Nerd Font-14")
 
 (defvar my/leader "SPC")
@@ -110,7 +107,7 @@
 
 ;;; ---------------------------------------------------
 
-(dolist (module '(config-backup
+(dolist (module '(config-cache
                   config-dashboard
                   config-ui
                   config-evil
@@ -124,7 +121,7 @@
                   config-notebook))
   (require module))
 
-(config-backup-set my/cache-dir)
+(config-cache-set my/cache-dir)
 (config-ui-set my/font)
 (config-evil-set)
 (config-dashboard-set my/dashboard-banner my/dashboard-items)

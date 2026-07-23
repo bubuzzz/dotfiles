@@ -11,13 +11,10 @@ ITEMS is a `dashboard-items' alist like ((recents . 5) (projects . 5))."
         dashboard-projects-backend 'project-el
         dashboard-set-heading-icons nil
         dashboard-set-file-icons   nil
+        initial-major-mode         'fundamental-mode
+        initial-scratch-message    nil
         initial-buffer-choice      #'dashboard-open)
 
-  ;; No line-number gutter on the dashboard.
-  (add-hook 'dashboard-mode-hook
-            (lambda () (display-line-numbers-mode -1)))
-
-  ;; Also show it for emacsclient frames.
   (add-hook 'server-after-make-frame-hook #'dashboard-open)
 
   (dashboard-setup-startup-hook))
