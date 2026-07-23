@@ -16,6 +16,7 @@
     pyvenv
     jupyter
     xclip
+    denote
     dashboard))
 
 (dolist (pkg my/packages)
@@ -52,6 +53,12 @@
     "pr" config-project-forget
     "va" pyvenv-activate
     "vd" pyvenv-deactivate
+    "ns" my/notes-scratch
+    "nn" denote
+    "nf" denote-open-or-create
+    "ni" denote-link
+    "nb" denote-backlinks
+    "nd" denote-dired
     "q"  save-buffers-kill-terminal))
 
 (defvar my/mode-shortcuts
@@ -103,6 +110,9 @@
 
 (defvar my/latex-pdf-process '("tectonic -X compile %f --outdir %o"))
 
+(defvar my/notes-dir "/Users/thaitran/Projects/notes/")
+(defvar my/notes-keywords '("scratch" "idea" "project" "reference"))
+
 (defvar my/dashboard-banner (locate-user-emacs-file "banner.txt"))
 
 (defvar my/dashboard-items nil)
@@ -120,6 +130,7 @@
                   config-statusline
                   config-lsp
                   config-org
+                  config-notes
                   config-notebook
                   config-latex))
   (require module))
@@ -135,5 +146,6 @@
 (config-statusline-set)
 (config-lsp-set my/lsp-servers my/lsp-keys)
 (config-org-set my/org-headline-bullets my/org-item-bullets my/org-key-theme)
+(config-notes-set my/notes-dir my/notes-keywords)
 (config-notebook-set my/jupyter-header-args my/jupyter-resource-dir)
 (config-latex-set my/latex-pdf-process)

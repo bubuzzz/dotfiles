@@ -13,7 +13,9 @@
 (setq package-quickstart t
       package-quickstart-file (expand-file-name "package-quickstart.el" my/cache-dir))
 
-(when (fboundp 'startup-redirect-eln-cache)
+(when (and (fboundp 'startup-redirect-eln-cache)
+           (fboundp 'native-comp-available-p)
+           (native-comp-available-p))
   (startup-redirect-eln-cache (expand-file-name "eln-cache/" my/cache-dir)))
 
 (push '(menu-bar-lines . 0) default-frame-alist)

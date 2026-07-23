@@ -4,6 +4,12 @@
   (add-hook 'org-mode-hook #'org-superstar-mode)
   (add-hook 'org-mode-hook #'evil-org-mode)
 
+  ;; Org is a large package; loading it lazily makes the first org file of a
+  ;; session (e.g. via `SPC n s') take ~1s.  Warm it during idle time after
+  ;; startup so the first real open is instant.
+  (run-with-idle-timer
+   1 nil (lambda () (require 'org) (require 'org-superstar) (require 'evil-org)))
+
   (with-eval-after-load 'org
     (setq org-hide-emphasis-markers t
           org-auto-align-tags t
