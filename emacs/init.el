@@ -32,6 +32,13 @@
 (when (file-exists-p custom-file) (load custom-file nil t))
 
 ;;; ---------------------------------------------------
+;;; ------------------ Machine-local ------------------
+;;; ---------------------------------------------------
+
+(defvar my/local-file (locate-user-emacs-file "local.el"))
+(when (file-exists-p my/local-file) (load my/local-file nil t))
+
+;;; ---------------------------------------------------
 ;;; ------------------ Configuration ------------------
 ;;; ---------------------------------------------------
 
@@ -55,6 +62,7 @@
     "vd" pyvenv-deactivate
     "ns" my/notes-scratch
     "nn" denote
+    "nc" denote-subdirectory
     "nf" denote-open-or-create
     "ni" denote-link
     "nb" denote-backlinks
@@ -110,12 +118,25 @@
 
 (defvar my/latex-pdf-process '("tectonic -X compile %f --outdir %o"))
 
-(defvar my/notes-dir "/Users/thaitran/Projects/notes/")
-(defvar my/notes-keywords '("scratch" "idea" "project" "reference"))
-
-(defvar my/dashboard-banner (locate-user-emacs-file "banner.txt"))
+(defvar my/notes-dir "~/notes/")
+(defvar my/notes-keywords
+  '("scratch"
+    "blog"
+    "programming"
+    "project-management"
+    "task"))
 
 (defvar my/dashboard-items nil)
+
+(defvar my/dashboard-widgets
+  '(dashboard-insert-newline
+    dashboard-insert-newline
+    dashboard-insert-banner-title
+    dashboard-insert-newline
+    dashboard-insert-init-info
+    dashboard-insert-items
+    dashboard-insert-newline
+    dashboard-insert-footer))
 
 ;;; ---------------------------------------------------
 
@@ -138,7 +159,7 @@
 (config-cache-set my/cache-dir)
 (config-ui-set my/font)
 (config-evil-set)
-(config-dashboard-set my/dashboard-banner my/dashboard-items)
+(config-dashboard-set my/dashboard-items my/dashboard-widgets)
 (config-shortcut-set my/leader my/shortcuts my/mode-shortcuts)
 (config-completion-set my/completion-count my/completion-keys)
 (config-project-set my/project-list-file my/project-markers my/project-switch-command)

@@ -1,0 +1,8 @@
+;;; local.el --- machine-local overrides -*- lexical-binding: t -*-
+
+;; Copy to local.el on each machine.  Loaded before the Configuration block
+;; in init.el, so any `my/*' value set here wins over the default.
+
+(setq my/notes-dir "~/notes/")
+
+(provide 'local)

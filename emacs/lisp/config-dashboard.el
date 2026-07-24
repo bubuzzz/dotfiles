@@ -1,10 +1,11 @@
 ;;; config-dashboard.el --- -*- lexical-binding: t -*-
 
-(defun config-dashboard-set (banner items)
-  "Show the dashboard on startup with BANNER (a text-file path) and ITEMS.
-ITEMS is a `dashboard-items' alist like ((recents . 5) (projects . 5))."
+(defun config-dashboard-set (items widgets)
+  "Show the dashboard on startup with ITEMS and WIDGETS.
+ITEMS is a `dashboard-items' alist like ((recents . 5) (projects . 5)).
+WIDGETS is a `dashboard-startupify-list' of insert functions."
   (require 'dashboard)
-  (setq dashboard-startup-banner   banner
+  (setq dashboard-startupify-list  widgets
         dashboard-center-content   t
         dashboard-vertically-center-content t
         dashboard-items            items

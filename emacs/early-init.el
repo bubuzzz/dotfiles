@@ -1,5 +1,15 @@
 ;;; early-init.el --- -*- lexical-binding: t -*-
 
+(defvar my/gc-runtime-threshold (* 32 1024 1024))
+
+(setq gc-cons-threshold most-positive-fixnum
+      gc-cons-percentage 0.6)
+
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq gc-cons-threshold my/gc-runtime-threshold
+                  gc-cons-percentage 0.1)))
+
 (defvar my/cache-dir
   (expand-file-name "emacs/" (or (getenv "XDG_CACHE_HOME") "~/.cache/")))
 
