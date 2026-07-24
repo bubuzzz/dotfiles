@@ -47,7 +47,8 @@
 (defvar my/leader "SPC")
 
 (defvar my/shortcuts
-  '("ee" dired-jump
+  '("h"  config-shortcut-show
+    "ee" dired-jump
     "ff" find-file
     "fs" save-buffer
     "bb" switch-to-buffer
@@ -64,7 +65,8 @@
     "ls" config-llm-summary
     "lx" config-llm-explain
     "lp" config-llm-say
-    "ns" my/notes-scratch
+    "ns" config-notes-scratch
+    "nt" config-notes-task
     "nn" denote
     "nc" denote-subdirectory
     "nf" denote-open-or-create
@@ -130,6 +132,10 @@
     "project-management"
     "task"))
 
+(defvar my/notes-quick
+  '(("scratch" :daily t)
+    ("task" :daily t)))
+
 (defvar my/llm-endpoint "http://localhost:11434/api/chat")
 (defvar my/llm-model "qwen2.5:7b")
 (defvar my/llm-options '((temperature . 0.2) (num_ctx . 8192)))
@@ -194,7 +200,7 @@
 (config-statusline-set)
 (config-lsp-set my/lsp-servers my/lsp-keys)
 (config-org-set my/org-headline-bullets my/org-item-bullets my/org-key-theme)
-(config-notes-set my/notes-dir my/notes-keywords)
+(config-notes-set my/notes-dir my/notes-keywords my/notes-quick)
 (config-notebook-set my/jupyter-header-args my/jupyter-resource-dir)
 (config-latex-set my/latex-pdf-process)
 (config-llm-set my/llm-endpoint my/llm-model my/llm-options my/llm-actions my/llm-say-command)
