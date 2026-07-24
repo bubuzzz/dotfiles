@@ -4,5 +4,6 @@
 ;; in init.el, so any `my/*' value set here wins over the default.
 
 (setq my/notes-dir "~/notes/")
+(setq my/llm-model "qwen2.5:7b")   ; must be pulled: `ollama list'
 
 (provide 'local)

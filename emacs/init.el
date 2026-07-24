@@ -60,6 +60,10 @@
     "pr" config-project-forget
     "va" pyvenv-activate
     "vd" pyvenv-deactivate
+    "le" config-llm-enhance
+    "ls" config-llm-summary
+    "lx" config-llm-explain
+    "lp" config-llm-say
     "ns" my/notes-scratch
     "nn" denote
     "nc" denote-subdirectory
@@ -126,6 +130,28 @@
     "project-management"
     "task"))
 
+(defvar my/llm-endpoint "http://localhost:11434/api/chat")
+(defvar my/llm-model "qwen2.5:7b")
+(defvar my/llm-options '((temperature . 0.2) (num_ctx . 8192)))
+(defvar my/llm-say-command '("espeak"))
+
+(defvar my/llm-actions
+  '((enhance
+     :header "=== Enhanced ==="
+     :system "You are a careful editing assistant. Improve clarity, grammar, and flow while preserving meaning and formatting. Keep code blocks intact."
+     :prefix "Improve the following text:\n\n")
+    (summary
+     :header "=== Summary ==="
+     :system "You are a world-class summarizer."
+     :prefix "Summarize the following text into clear, concise bullet points. Use '-' bullets, no intro line:\n\n"
+     :max-words 120)
+    (explain
+     :header "=== Explain ==="
+     :system "You are a world-class English teacher."
+     :prefix "Explain the following words into a clear, simple English sentence to a 5 years old little girl who does not know English very well:\n\n"
+     :cword t
+     :max-words 120)))
+
 (defvar my/dashboard-items nil)
 
 (defvar my/dashboard-widgets
@@ -153,7 +179,8 @@
                   config-org
                   config-notes
                   config-notebook
-                  config-latex))
+                  config-latex
+                  config-llm))
   (require module))
 
 (config-cache-set my/cache-dir)
@@ -170,3 +197,4 @@
 (config-notes-set my/notes-dir my/notes-keywords)
 (config-notebook-set my/jupyter-header-args my/jupyter-resource-dir)
 (config-latex-set my/latex-pdf-process)
+(config-llm-set my/llm-endpoint my/llm-model my/llm-options my/llm-actions my/llm-say-command)

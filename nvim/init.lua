@@ -70,7 +70,40 @@ local copilot_keymaps = {
     accept_word       = "<C-j>",
 }
  
-local servers_conf = { 
+local llm_conf = {
+    endpoint = "http://localhost:11434/api/chat",
+    model = "qwen2.5:7b",
+    options = { temperature = 0.2, num_ctx = 8192 },
+    say_command = { "espeak" },
+    keymaps = {
+        enhance = "<leader>le",
+        summary = "<leader>ls",
+        explain = "<leader>lx",
+        say     = "<leader>lp",
+    },
+    actions = {
+        enhance = {
+            header = "=== Enhanced ===",
+            system = "You are a careful editing assistant. Improve clarity, grammar, and flow while preserving meaning and formatting. Keep code blocks intact.",
+            prefix = "Improve the following text:\n\n",
+        },
+        summary = {
+            header = "=== Summary ===",
+            system = "You are a world-class summarizer.",
+            prefix = "Summarize the following text into clear, concise bullet points. Use '-' bullets, no intro line:\n\n",
+            max_words = 120,
+        },
+        explain = {
+            header = "=== Explain ===",
+            system = "You are a world-class English teacher.",
+            prefix = "Explain the following words into a clear, simple English sentence to a 5 years old little girl who does not know English very well:\n\n",
+            cword = true,
+            max_words = 120,
+        },
+    },
+}
+
+local servers_conf = {
     {"basedpyright", {
         settings = {
             basedpyright = {
@@ -94,3 +127,4 @@ require("config_plugin").set({
 require("config_copilot").set({
     keymaps = copilot_keymaps
 })
+require("config_customs").set(llm_conf)
