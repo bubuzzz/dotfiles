@@ -35,6 +35,7 @@ vim.opt.relativenumber = true
 ------------------ Configuration ------------------ 
 --------------------------------------------------- 
 local shortcuts = {
+    {"n", "U", "gUiw", {desc = "Uppercase current word"}},
     {"n", "<leader>fb", ":ls<CR>:b ", {desc = "List buffers, pick by number"}},
     {"n", "<leader>ff", function() MiniPick.builtin.files() end, {desc = "Find files (MiniPick)"}},
     {"n", "<leader>d", vim.diagnostic.open_float, {desc = "Open floating diagnostic message"}},
@@ -54,7 +55,9 @@ local shortcuts = {
             end
         end, 
         {desc = "Toggle maximize current pane"}
-    }
+    },
+    {"n", "<leader>va", ":VenvActivate<CR>", {desc = "Activate venv"}},
+    {"n", "<leader>vd", ":VenvDeactivate<CR>", {desc = "Deactivate venv"}},
 }
 local themes = {"kanagawa-dragon", "homage-black"}
 local current_theme = themes[1]
@@ -118,7 +121,7 @@ local servers_conf = {
 }
 
 require("config_statusline").set()
-require("config_shortcut").set(shortcuts)
+require("config_venv").set()
 require("config_theme").set(current_theme)
 require("config_lsp").set(servers_conf)
 require("config_netrw").set()
@@ -129,3 +132,4 @@ require("config_copilot").set({
     keymaps = copilot_keymaps
 })
 require("config_customs").set(llm_conf)
+require("config_shortcut").set(shortcuts)
