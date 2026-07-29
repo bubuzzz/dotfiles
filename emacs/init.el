@@ -175,6 +175,7 @@
 (dolist (module '(config-cache
                   config-dashboard
                   config-ui
+                  config-dired
                   config-evil
                   config-shortcut
                   config-completion
@@ -191,6 +192,7 @@
 
 (config-cache-set my/cache-dir)
 (config-ui-set my/font)
+(config-dired-set)
 (config-evil-set)
 (config-dashboard-set my/dashboard-items my/dashboard-widgets)
 (config-shortcut-set my/leader my/shortcuts my/mode-shortcuts)
@@ -204,3 +206,4 @@
 (config-notebook-set my/jupyter-header-args my/jupyter-resource-dir)
 (config-latex-set my/latex-pdf-process)
 (config-llm-set my/llm-endpoint my/llm-model my/llm-options my/llm-actions my/llm-say-command)
+(put 'dired-find-alternate-file 'disabled nil)
