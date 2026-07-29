@@ -121,6 +121,7 @@ require("config_statusline").set()
 require("config_shortcut").set(shortcuts)
 require("config_theme").set(current_theme)
 require("config_lsp").set(servers_conf)
+require("config_netrw").set()
 require("config_plugin").set({
     treesitter_pattern = treesitter_pattern 
 })
