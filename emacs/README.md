@@ -106,21 +106,37 @@ Deleting `~/.cache/emacs/` loses nothing but time: the next start reinstalls pac
 
 ## Gotchas
 
-- **Blank/vanilla Emacs after copying from dotfiles? The SOURCE has runtime junk — clean it.**
-  This is the recurring one. The dotfiles copy (`~/Projects/github/dotfiles/emacs/`) is supposed
-  to be *source only* (see top of this file), but if Emacs was ever run from inside it, it grows a
-  committed `elpa/`, `auto-save-list/`, `recentf`, `tramp`, `package-quickstart.el`. Copying that
-  into `~/.config/emacs/` drags a **stale `elpa/`** along. On startup Emacs activates that stale
-  `elpa/` before `early-init.el`'s cache redirect takes hold → `package-activated-list` fills from
-  it → the `(unless package-activated-list (package-initialize))` guard skips and every package
-  reports installed, so the install loop does nothing → the first `(require 'evil)` fails against
-  packages that were never really activated → init aborts → default Emacs. (`~/.emacs.d/` then
-  appears as a *symptom* of that fallback, not the cause — don't chase it.)
-  **Fix: delete the runtime junk from the dotfiles source, then copy.** Keep only the `.el`
-  sources, `lisp/`, `custom.el`, `local.el.example`, `README.md`, `.project`. Remove:
-  `elpa/  auto-save-list/  recentf  tramp  package-quickstart.el*  backup/  lock/  url/`.
-  The rule this enforces is the one at the top: **nothing Emacs writes at runtime belongs in the
-  source** — it all lives in `~/.cache/emacs/`.
+- **Blank/vanilla Emacs on the Mac after re-deploying this config? The Emacs DAEMON created an
+  `~/.emacs.d/` that now shadows this config.** This is THE recurring macOS trap, and it is *not* a
+  cache or a config bug — the config loads clean; it just never gets loaded. Emacs 30 uses
+  `~/.config/emacs/` **only when `~/.emacs.d/` does not exist**. The Mac auto-starts an Emacs
+  **daemon at login via launchd** (`~/Library/LaunchAgents/org.gnu.emacs.plist`, running
+  `/Applications/Emacs.app/.../Emacs --fg-daemon`, with `KeepAlive` so it respawns). If that daemon
+  ever starts while `~/.config/emacs/` is momentarily absent — e.g. during the window when you've
+  removed the old copy but not finished copying the new one — it falls back to defaults and
+  **creates an empty `~/.emacs.d/`**. From then on every start (the daemon *and* every interactive
+  `emacs -nw` / `emacsclient`) resolves to `~/.emacs.d/` and comes up blank. Deleting `~/.emacs.d/`
+  alone doesn't stick, because the `KeepAlive` daemon respawns and recreates it. (Arch never hits
+  this — no such daemon there.)
+  **Diagnose — must be a REAL start; `emacs --batch`/`--script` always report `~/.emacs.d/` and are
+  useless here:**
+  `emacs -nw --eval '(with-temp-file "/tmp/p" (insert (format "%s %s %s" user-init-file user-emacs-directory (featurep (quote evil)))))'`
+  then read `/tmp/p`. `dir=~/.emacs.d/` → shadowed. Check the daemon with `ps ax | grep fg-daemon`.
+  **Fix (order matters — stop the daemon FIRST so it can't recreate the dir):**
+  1. `launchctl bootout gui/$(id -u)/org.gnu.emacs` (or `brew services stop emacs` if the Homebrew
+     build's daemon is the one running — check with `ps`).
+  2. `rmdir ~/.emacs.d`
+  3. `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/org.gnu.emacs.plist` (or just start
+     Emacs) — it now finds `~/.config/emacs/`.
+  Working state: `dir=~/.config/emacs/`, `evil=t`. **When re-deploying this config, stop the daemon
+  before you delete the old copy**, so there is never a gap for it to fall back into.
+  Historically two daemons were installed (Homebrew `/opt/homebrew/opt/emacs` *and* Emacs.app) and
+  fought; keep only one.
+- **Keep the dotfiles source clean.** This dir must stay *source only* (see top of this file). If
+  Emacs is ever run from inside the dotfiles copy it grows `elpa/`, `auto-save-list/`, `recentf`,
+  `tramp`, `package-quickstart.el`; `.gitignore` excludes them, but delete any that appear before
+  copying so a stale `elpa/` never rides along. Nothing Emacs writes at runtime belongs here — it
+  all lives in `~/.cache/emacs/`.
 - **`M-x package-quickstart-refresh` after removing or upgrading a package.** Adding one is
   handled automatically; the other two leave stale autoloads and things break at startup.
 - **Never install packages from `emacs --batch`.** `--batch` implies `--no-init-file`, so
