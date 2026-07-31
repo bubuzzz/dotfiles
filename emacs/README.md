@@ -106,6 +106,21 @@ Deleting `~/.cache/emacs/` loses nothing but time: the next start reinstalls pac
 
 ## Gotchas
 
+- **Blank/vanilla Emacs after copying from dotfiles? The SOURCE has runtime junk — clean it.**
+  This is the recurring one. The dotfiles copy (`~/Projects/github/dotfiles/emacs/`) is supposed
+  to be *source only* (see top of this file), but if Emacs was ever run from inside it, it grows a
+  committed `elpa/`, `auto-save-list/`, `recentf`, `tramp`, `package-quickstart.el`. Copying that
+  into `~/.config/emacs/` drags a **stale `elpa/`** along. On startup Emacs activates that stale
+  `elpa/` before `early-init.el`'s cache redirect takes hold → `package-activated-list` fills from
+  it → the `(unless package-activated-list (package-initialize))` guard skips and every package
+  reports installed, so the install loop does nothing → the first `(require 'evil)` fails against
+  packages that were never really activated → init aborts → default Emacs. (`~/.emacs.d/` then
+  appears as a *symptom* of that fallback, not the cause — don't chase it.)
+  **Fix: delete the runtime junk from the dotfiles source, then copy.** Keep only the `.el`
+  sources, `lisp/`, `custom.el`, `local.el.example`, `README.md`, `.project`. Remove:
+  `elpa/  auto-save-list/  recentf  tramp  package-quickstart.el*  backup/  lock/  url/`.
+  The rule this enforces is the one at the top: **nothing Emacs writes at runtime belongs in the
+  source** — it all lives in `~/.cache/emacs/`.
 - **`M-x package-quickstart-refresh` after removing or upgrading a package.** Adding one is
   handled automatically; the other two leave stale autoloads and things break at startup.
 - **Never install packages from `emacs --batch`.** `--batch` implies `--no-init-file`, so
