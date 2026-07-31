@@ -133,9 +133,9 @@ require("config_netrw").set()
 require("config_plugin").set({
     treesitter_pattern = treesitter_pattern 
 })
--- require("config_copilot").set({
---     keymaps = copilot_keymaps
--- })
+require("config_copilot").set({
+    keymaps = copilot_keymaps
+})
 require("config_customs").set(llm_conf)
 require("config_indent").set(indent_conf)
 
