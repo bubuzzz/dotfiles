@@ -6,6 +6,9 @@ function M.set(params)
       formatters_by_ft = {
         python = { "ruff_fix", "ruff_format" },
         elixir = { "mix" },
+        typescript = { "prettier" },
+        typescriptreact = { "prettier" },
+        json = { "prettier" },
       },
       format_on_save = {
         timeout_ms = 500,
@@ -50,13 +53,15 @@ function M.set(params)
         end,
     })
 
-    -- Pair bracket
     require("mini.pairs").setup({})
+    -- Pair bracket
     require("nvim-treesitter").setup({})
     vim.api.nvim_create_autocmd("FileType", {
       pattern = params.treesitter_pattern,
       callback = function() vim.treesitter.start() end,
     })
+
+    require("nvim-ts-autotag").setup({})
 end
 
 return M

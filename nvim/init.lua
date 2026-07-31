@@ -11,6 +11,7 @@ vim.pack.add({
   "https://github.com/nvim-treesitter/nvim-treesitter",
   "https://github.com/neovim/nvim-lspconfig",
   "https://github.com/supermaven-inc/supermaven-nvim",
+  "https://github.com/windwp/nvim-ts-autotag"
 })
 
 -- Space and indentation
@@ -66,7 +67,7 @@ if os.date("*t").hour >= switch_theme_hour then
     current_theme = themes[2]
 end
 
-local treesitter_pattern = { "elixir", "eelixir", "heex", "python", "odin" }
+local treesitter_pattern = { "elixir", "eelixir", "heex", "python", "odin" , "typescript", "typescriptreact", "javascript", "javascriptreact", "html" }
 local copilot_keymaps = {
     accept_suggestion = "<C-l>",  -- <Tab> is taken by native completion (config_lsp)
     clear_suggestion  = "<C-]>",
@@ -128,8 +129,8 @@ require("config_netrw").set()
 require("config_plugin").set({
     treesitter_pattern = treesitter_pattern 
 })
-require("config_copilot").set({
-    keymaps = copilot_keymaps
-})
+-- require("config_copilot").set({
+--     keymaps = copilot_keymaps
+-- })
 require("config_customs").set(llm_conf)
 require("config_shortcut").set(shortcuts)
