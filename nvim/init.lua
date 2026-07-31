@@ -121,6 +121,10 @@ local servers_conf = {
     {"elixirls", {}}
 }
 
+local indent_conf = {
+    {{"typescript", "typescriptreact", "javascript", "javascriptreact", "json"}, 2}
+}
+
 require("config_statusline").set()
 require("config_venv").set()
 require("config_theme").set(current_theme)
@@ -133,4 +137,7 @@ require("config_plugin").set({
 --     keymaps = copilot_keymaps
 -- })
 require("config_customs").set(llm_conf)
+require("config_indent").set(indent_conf)
+
+
 require("config_shortcut").set(shortcuts)
