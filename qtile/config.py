@@ -1,15 +1,12 @@
 import os
-
+import subprocess
 
 import libqtile.resources
-from libqtile import bar, layout, qtile, widget
-from libqtile.config import Click, Drag, Group, Key, Match, Screen, Rule
+from libqtile import bar, hook, layout, qtile, widget
+from libqtile.config import Click, Drag, Group, Key, Match, Rule, Screen
 from libqtile.lazy import lazy
 from qtile_extras import widget as ewidget
 from qtile_extras.widget.decorations import RectDecoration
-from libqtile import hook
-import subprocess
-
 
 mod = "mod4"
 alt = "mod1"
@@ -288,26 +285,6 @@ screens = [
                     decorations=block_decor(colors["blue"]),
                 ),
                 widget.Spacer(length=5, background=colors["bg"]),
-                # widget.PulseVolume(
-                #     step=5,
-                #     limit_max_volume=True,
-                #     fmt=" {}%",
-                #     foreground=colors["highlight"],
-                #     background=colors["bg"],
-                #     padding=6,
-                #     mouse_callbacks={
-                #         "Button1": lazy.spawn("pavucontrol"),
-                #         "Button3": lazy.spawn(
-                #             "pactl set-sink-mute @DEFAULT_SINK@ toggle"
-                #         ),
-                #         "Button4": lazy.spawn(
-                #             "pactl set-sink-volume @DEFAULT_SINK@ +5%"
-                #         ),
-                #         "Button5": lazy.spawn(
-                #             "pactl set-sink-volume @DEFAULT_SINK@ -5%"
-                #         ),
-                #     },
-                # ),
                 widget.Systray(
                     background=colors["bg"],
                     padding=3,
@@ -339,42 +316,6 @@ screens = [
         )
     )
 ]
-
-# screens = [
-#     Screen(
-#         bottom=bar.Bar(
-#             [
-#                 widget.CurrentLayout(),
-#                 widget.GroupBox(),
-#                 widget.Prompt(),
-#                 widget.WindowName(),
-#                 widget.Chord(
-#                     chords_colors={
-#                         "launch": ("#ff0000", "#ffffff"),
-#                     },
-#                     name_transform=lambda name: name.upper(),
-#                 ),
-#                 widget.TextBox("default config", name="default"),
-#                 widget.TextBox("Press &lt;M-r&gt; to spawn", foreground="#d75f5f"),
-#                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
-#                 # widget.StatusNotifier(),
-#                 widget.Systray(),
-#                 widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
-#                 widget.QuickExit(),
-#             ],
-#             24,
-#             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
-#             # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
-#         ),
-#         background="#000000",
-#         wallpaper=logo,
-#         wallpaper_mode="center",
-#         # You can uncomment this variable if you see that on X11 floating resize/moving is laggy
-#         # By default we handle these events delayed to already improve performance, however your system might still be struggling
-#         # This variable is set to None (no cap) by default, but you can set it to 60 to indicate that you limit it to 60 events per second
-#         # x11_drag_polling_rate = 60,
-#     ),
-# ]
 
 # Drag floating layouts.
 mouse = [
