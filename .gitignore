@@ -8,3 +8,9 @@ emacs/local.el
 emacs/projectile-bookmarks.eld
 emacs/eln-cache
 emacs/auto-save-list
+emacs/package-quickstart.el
+emacs/package-quickstart.elc
+emacs/backup
+emacs/lock
+emacs/url
+emacs/transient
