@@ -3,15 +3,14 @@
 (defun config-evil-set ()
   (setq evil-want-keybinding nil)
   (require 'evil)
+  (setopt evil-undo-system 'undo-redo)
   (evil-mode 1)
   (require 'evil-collection)
   (evil-collection-init)
 
   (setq select-enable-clipboard t
         select-enable-primary t
-        evil-interprogram-cut-function #'gui-select-text
-        evil-interprogram-paste-function #'gui-selection-value
-        evil-visual-update-x-selection nil
+        evil-visual-update-x-selection-p nil
         evil-kill-on-visual-paste nil)
 
   (unless (display-graphic-p)

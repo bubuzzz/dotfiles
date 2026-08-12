@@ -1,0 +1,70 @@
+#+TITLE: Tech debt
+#+STARTUP: overview
+
+From the config review on <2026-08-12 Wed>.  Everything here is known and
+unfixed; the redo/undo, phantom evil variables and dead startup colours were
+fixed the same day and are not listed.
+
+* Accepted for now
+** xclip is always on
+=lisp/config-evil.el= — =(display-graphic-p)= is nil during daemon init, so
+=xclip-mode= is enabled for GUI frames too.  Left deliberately.
+** Dashboard content is not vertically centred
+=dashboard-vertically-center= needs real window geometry, which a frame created
+by =server-after-make-frame-hook= does not have yet.  Wanted as is.
+** Banner title only centres exactly at =:height 1.0=
+Dashboard rounds line width up to whole character cells, so any scaled title
+drifts (~12px at 2.0).  A bigger title needs a custom centring widget.
+
+* Dead or misleading config
+** savehist and recentf never enabled
+=lisp/config-cache.el= sets =savehist-file= and =recentf-save-file=, but neither
+mode is turned on — no history is persisted.  Enable them or drop the settings.
+** transient paths without transient
+=lisp/config-cache.el= configures =transient-*-file=; the package is not installed.
+** =package-selected-packages= is nil
+=custom.el= — =M-x package-autoremove= would offer to delete every package.  Set
+it from =my/packages= instead.  The four duplicate =(native-compiler)= entries in
+=warning-suppress-log-types= are cruft too.
+** local.el loads before the data block
+=init.el= — it works only because =defvar= will not overwrite a bound variable, so
+the file reads back to front.  Load it after the defvars.  Its =my/llm-model=
+also just restates the default.
+
+* Structure
+** Misfiled setting
+=dired-kill-when-opening-new-buffer= lives in =config-ui=, belongs in =config-dired=.
+** Bars disabled twice
+=early-init.el= suppresses them via =default-frame-alist=, =config-ui= calls the
+modes again.
+** Naming
+=my/org-insert-jupyter-python-block= is the only =my/= command inside a =config-*=
+module.
+** Anonymous hook functions
+The =pyvenv-post-activate-hooks= lambdas in =config-lsp= and =config-org= cannot be
+removed and stack up when =init.el= is re-evaluated.
+** =set= on undeclared symbols
+=config-org-diagram-set= would warn if =lisp/= were ever byte-compiled.
+
+* Behaviour worth revisiting
+** LSP keys are global
+=my/lsp-keys= go into =evil-normal-state-map=, so =K= is =eldoc= and =g d= / =g r= are
+xref in every buffer, not just eglot ones.  =eglot-mode-map= would scope them.
+** Mode line drops =mode-line-misc-info=
+No pyvenv venv name, no eglot status, no evil state tag.
+** Mode line padding is off under $HOME
+=config-statusline= subtracts the absolute =buffer-file-name= length but displays
+=abbreviate-file-name=, so the Ln/Col segment drifts ~12 columns.  The trailing
+=25= is a magic number.
+** No fuzzy completion
+=completion-styles= is still =(basic partial-completion emacs22)= — vertico without
+flex or orderless.
+** Babel runs without confirmation
+=org-confirm-babel-evaluate= is nil for every org file opened, mermaid blocks
+included.
+** Dashboard opens on every new frame
+=server-after-make-frame-hook= replaces whatever the new frame would have shown.
+** =SPC q= is =save-buffers-kill-terminal=
+Fine for client frames, exits Emacs outright when not running as a daemon.
+** Hardcoded face colour
+=config-statusline-modified-face= is "purple" regardless of the active theme.

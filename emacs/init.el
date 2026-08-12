@@ -13,6 +13,8 @@
     vertico
     org-superstar
     evil-org
+    olivetti
+    markdown-mode
     pyvenv
     jupyter
     xclip
@@ -43,6 +45,9 @@
 ;;; ---------------------------------------------------
 
 (defvar my/font "JetBrainsMono Nerd Font-14")
+
+(defvar my/document-modes '(org-mode markdown-mode))
+(defvar my/document-body-width 90)
 
 (defvar my/leader "SPC")
 
@@ -122,6 +127,9 @@
 
 (defvar my/jupyter-resource-dir "./.ob-jupyter/")
 
+(defvar my/diagram-backends
+  '(("mermaid" "mmdc" "-t" "dark" "-b" "transparent" "-i" input "-o" output)))
+
 (defvar my/latex-pdf-process '("tectonic -X compile %f --outdir %o"))
 
 (defvar my/notes-dir "~/notes/")
@@ -160,15 +168,15 @@
 
 (defvar my/dashboard-items nil)
 
+(defvar my/dashboard-title-height 1.0)
+
 (defvar my/dashboard-widgets
   '(dashboard-insert-newline
     dashboard-insert-newline
     dashboard-insert-banner-title
     dashboard-insert-newline
     dashboard-insert-init-info
-    dashboard-insert-items
-    dashboard-insert-newline
-    dashboard-insert-footer))
+    dashboard-insert-items))
 
 ;;; ---------------------------------------------------
 
@@ -185,16 +193,16 @@
                   config-lsp
                   config-org
                   config-notes
-                  config-notebook
                   config-latex
                   config-llm))
   (require module))
 
 (config-cache-set my/cache-dir)
 (config-ui-set my/font)
+(config-ui-document-set my/document-modes my/document-body-width)
 (config-dired-set)
 (config-evil-set)
-(config-dashboard-set my/dashboard-items my/dashboard-widgets)
+(config-dashboard-set my/dashboard-items my/dashboard-widgets my/dashboard-title-height)
 (config-shortcut-set my/leader my/shortcuts my/mode-shortcuts)
 (config-completion-set my/completion-count my/completion-keys)
 (config-project-set my/project-list-file my/project-markers my/project-switch-command)
@@ -202,8 +210,9 @@
 (config-statusline-set)
 (config-lsp-set my/lsp-servers my/lsp-keys)
 (config-org-set my/org-headline-bullets my/org-item-bullets my/org-key-theme)
+(config-org-notebook-set my/jupyter-header-args my/jupyter-resource-dir)
+(config-org-diagram-set my/diagram-backends)
 (config-notes-set my/notes-dir my/notes-keywords my/notes-quick)
-(config-notebook-set my/jupyter-header-args my/jupyter-resource-dir)
 (config-latex-set my/latex-pdf-process)
 (config-llm-set my/llm-endpoint my/llm-model my/llm-options my/llm-actions my/llm-say-command)
 (put 'dired-find-alternate-file 'disabled nil)
