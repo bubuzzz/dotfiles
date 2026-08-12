@@ -52,10 +52,6 @@ removed and stack up when =init.el= is re-evaluated.
 xref in every buffer, not just eglot ones.  =eglot-mode-map= would scope them.
 ** Mode line drops =mode-line-misc-info=
 No pyvenv venv name, no eglot status, no evil state tag.
-** Mode line padding is off under $HOME
-=config-statusline= subtracts the absolute =buffer-file-name= length but displays
-=abbreviate-file-name=, so the Ln/Col segment drifts ~12 columns.  The trailing
-=25= is a magic number.
 ** No fuzzy completion
 =completion-styles= is still =(basic partial-completion emacs22)= — vertico without
 flex or orderless.
@@ -66,5 +62,3 @@ included.
 =server-after-make-frame-hook= replaces whatever the new frame would have shown.
 ** =SPC q= is =save-buffers-kill-terminal=
 Fine for client frames, exits Emacs outright when not running as a daemon.
-** Hardcoded face colour
-=config-statusline-modified-face= is "purple" regardless of the active theme.

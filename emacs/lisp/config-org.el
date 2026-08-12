@@ -71,12 +71,15 @@ THEMES entry matching the appearance of the theme in use."
           org-use-sub-superscripts '{}
           org-catch-invisible-edits 'show-and-error
           org-startup-truncated nil
-          org-startup-with-inline-images t)
+          org-startup-with-inline-images t
+          org-fontify-whole-heading-line t)
     (add-hook 'org-babel-after-execute-hook #'config-org--refresh-inline-images)
     (dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4
                     org-level-5 org-level-6 org-level-7 org-level-8
                     org-document-title))
-      (face-spec-set face '((t (:height 1.0))) 'face-override-spec)))
+      (face-spec-set face '((t (:height 1.0 :extend t))) 'face-override-spec))
+    (dolist (face '(org-block-begin-line org-block-end-line))
+      (face-spec-set face '((t (:extend t))) 'face-override-spec)))
 
   (with-eval-after-load 'org-superstar
     (setq org-superstar-headline-bullets-list headline-bullets

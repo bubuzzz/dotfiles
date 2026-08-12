@@ -95,7 +95,7 @@
 (defvar my/themes
   '((kanagawa-dragon   . dark)
     (doom-homage-black . dark)
-    (doom-nord-light   . light)))
+    (leuven            . light)))
 
 (defvar my/lsp-servers
   '(((python-mode python-ts-mode) . ("basedpyright-langserver" "--stdio"))))
