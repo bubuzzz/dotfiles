@@ -66,10 +66,7 @@
     "pr" config-project-forget
     "va" pyvenv-activate
     "vd" pyvenv-deactivate
-    "le" config-llm-enhance
-    "ls" config-llm-summary
-    "lx" config-llm-explain
-    "lp" config-llm-say
+    "tc" config-theme-toggle
     "ns" config-notes-scratch
     "nt" config-notes-task
     "nn" denote
@@ -95,8 +92,10 @@
 (defvar my/project-markers '(".project"))
 (defvar my/project-switch-command 'project-find-file)
 
-(defvar my/themes '(kanagawa-dragon doom-homage-black))
-(defvar my/theme-toggle-key "<f5>")
+(defvar my/themes
+  '((kanagawa-dragon   . dark)
+    (doom-homage-black . dark)
+    (doom-nord-light   . light)))
 
 (defvar my/lsp-servers
   '(((python-mode python-ts-mode) . ("basedpyright-langserver" "--stdio"))))
@@ -128,7 +127,9 @@
 (defvar my/jupyter-resource-dir "./.ob-jupyter/")
 
 (defvar my/diagram-backends
-  '(("mermaid" "mmdc" "-t" "dark" "-b" "transparent" "-i" input "-o" output)))
+  '(("mermaid"
+     :command ("mmdc" "-t" theme "-b" "transparent" "-i" input "-o" output)
+     :themes ((dark . "dark") (light . "default")))))
 
 (defvar my/latex-pdf-process '("tectonic -X compile %f --outdir %o"))
 
@@ -147,19 +148,22 @@
 (defvar my/llm-endpoint "http://localhost:11434/api/chat")
 (defvar my/llm-model "qwen2.5:7b")
 (defvar my/llm-options '((temperature . 0.2) (num_ctx . 8192)))
-(defvar my/llm-say-command '("espeak"))
+(defvar my/llm-say '(:ex "say" :command ("espeak")))
 
 (defvar my/llm-actions
   '((enhance
+     :ex "enh[ance]"
      :header "=== Enhanced ==="
      :system "You are a careful editing assistant. Improve clarity, grammar, and flow while preserving meaning and formatting. Keep code blocks intact."
      :prefix "Improve the following text:\n\n")
     (summary
+     :ex "sum[mary]"
      :header "=== Summary ==="
      :system "You are a world-class summarizer."
      :prefix "Summarize the following text into clear, concise bullet points. Use '-' bullets, no intro line:\n\n"
      :max-words 120)
     (explain
+     :ex "exp[lain]"
      :header "=== Explain ==="
      :system "You are a world-class English teacher."
      :prefix "Explain the following words into a clear, simple English sentence to a 5 years old little girl who does not know English very well:\n\n"
@@ -206,13 +210,13 @@
 (config-shortcut-set my/leader my/shortcuts my/mode-shortcuts)
 (config-completion-set my/completion-count my/completion-keys)
 (config-project-set my/project-list-file my/project-markers my/project-switch-command)
-(config-theme-set my/themes my/theme-toggle-key)
+(config-theme-set my/themes)
 (config-statusline-set)
 (config-lsp-set my/lsp-servers my/lsp-keys)
 (config-org-set my/org-headline-bullets my/org-item-bullets my/org-key-theme)
 (config-org-notebook-set my/jupyter-header-args my/jupyter-resource-dir)
-(config-org-diagram-set my/diagram-backends)
+(config-org-diagram-set my/diagram-backends #'config-theme-appearance)
 (config-notes-set my/notes-dir my/notes-keywords my/notes-quick)
 (config-latex-set my/latex-pdf-process)
-(config-llm-set my/llm-endpoint my/llm-model my/llm-options my/llm-actions my/llm-say-command)
+(config-llm-set my/llm-endpoint my/llm-model my/llm-options my/llm-actions my/llm-say)
 (put 'dired-find-alternate-file 'disabled nil)

@@ -23,20 +23,27 @@
   (when (executable-find "jupyter")
     (apply orig args)))
 
-(defun config-org--diagram-render (argv body params)
+(defvar config-org--diagram-appearance nil)
+
+(defun config-org--diagram-render (argv themes body params)
   "Write BODY through ARGV to the `:file' named in PARAMS.
 ARGV is a command line where the symbols `input' and `output' stand for
-the temporary source file and the target image."
+the temporary source file and the target image, and `theme' for the
+THEMES entry matching the appearance of the theme in use."
   (let* ((out (or (cdr (assq :file params))
                   (user-error "[diagram] :file is required")))
          (dir (file-name-directory out))
          (in (org-babel-temp-file "diagram-" ".txt"))
+         (appearance (and config-org--diagram-appearance
+                          (funcall config-org--diagram-appearance)))
+         (theme (or (alist-get appearance themes) (cdar themes)))
          (log (generate-new-buffer " *diagram*")))
     (when dir (make-directory dir t))
     (with-temp-file in (insert body))
     (unwind-protect
         (let* ((args (mapcar (lambda (a)
-                               (pcase a ('input in) ('output out) (_ a)))
+                               (pcase a ('input in) ('output out)
+                                      ('theme theme) (_ a)))
                              argv))
                (code (apply #'call-process (car args) nil log nil (cdr args))))
           (unless (eq code 0)
@@ -106,16 +113,20 @@ the temporary source file and the target image."
                 (when (fboundp 'org-babel-jupyter-aliases-from-kernelspecs)
                   (org-babel-jupyter-aliases-from-kernelspecs t))))))
 
-(defun config-org-diagram-set (backends)
+(defun config-org-diagram-set (backends appearance-function)
   "Define an org-babel backend per entry in BACKENDS.
-Each entry is (LANG . ARGV); see `config-org--diagram-render' for ARGV."
+Each entry is (LANG :command ARGV :themes ALIST); see
+`config-org--diagram-render' for ARGV.  APPEARANCE-FUNCTION returns the
+key into ALIST for the theme in use."
+  (setq config-org--diagram-appearance appearance-function)
   (dolist (backend backends)
     (let ((lang (car backend))
-          (argv (cdr backend)))
+          (argv (plist-get (cdr backend) :command))
+          (themes (plist-get (cdr backend) :themes)))
       (set (intern (format "org-babel-default-header-args:%s" lang))
            '((:results . "file") (:exports . "results")))
       (defalias (intern (format "org-babel-execute:%s" lang))
-        (lambda (body params) (config-org--diagram-render argv body params))
+        (lambda (body params) (config-org--diagram-render argv themes body params))
         (format "Render a %s block to its :file." lang)))))
 
 (provide 'config-org)

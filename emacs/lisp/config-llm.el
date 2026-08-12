@@ -9,18 +9,30 @@
 (defvar config-llm--actions nil)
 (defvar config-llm--say-command nil)
 
+(defun config-llm--bounds ()
+  "Return (BEG . END) of the ex range or the active region.
+An ex range leaves point and mark around the text but no active region."
+  (when (or (use-region-p) (bound-and-true-p evil-ex-range))
+    (cons (region-beginning) (region-end))))
+
 (defun config-llm--input (cword)
-  "Return (TEXT MARKER) from the region, or the word at point when CWORD."
-  (cond
-   ((use-region-p)
-    (let ((text (buffer-substring-no-properties (region-beginning) (region-end)))
-          (marker (save-excursion (goto-char (region-end))
-                                  (copy-marker (line-end-position)))))
-      (deactivate-mark)
-      (list text marker)))
-   (cword
-    (let ((word (thing-at-point 'word t)))
-      (when word (list word (copy-marker (line-end-position))))))))
+  "Return (TEXT MARKER) from the ex range or region, or the word at point when CWORD."
+  (let ((bounds (config-llm--bounds)))
+    (cond
+     (bounds
+      (let* ((beg (car bounds))
+             (end (cdr bounds))
+             (text (buffer-substring-no-properties beg end))
+             (marker (save-excursion
+                       (goto-char end)
+                       ;; an ex range ends at the start of the line after the last
+                       (when (and (bolp) (> end beg)) (forward-char -1))
+                       (copy-marker (line-end-position)))))
+        (deactivate-mark)
+        (list text marker)))
+     (cword
+      (let ((word (thing-at-point 'word t)))
+        (when word (list word (copy-marker (line-end-position)))))))))
 
 (defun config-llm--insert (buffer marker header content)
   (when (buffer-live-p buffer)
@@ -82,29 +94,41 @@
          (message "[llm] %s done" name))))))
 
 (defun config-llm-say ()
-  "Pronounce the region, or the word at point."
+  "Pronounce the ex range or region, or the word at point."
   (interactive)
-  (let ((text (if (use-region-p)
-                  (buffer-substring-no-properties (region-beginning) (region-end))
-                (thing-at-point 'word t))))
+  (let* ((bounds (config-llm--bounds))
+         (text (if bounds
+                   (buffer-substring-no-properties (car bounds) (cdr bounds))
+                 (thing-at-point 'word t))))
     (unless text (user-error "[llm] no word at point"))
     (deactivate-mark)
     (apply #'start-process "config-llm-say" nil
            (car config-llm--say-command)
            (append (cdr config-llm--say-command) (list text)))))
 
-(defun config-llm-set (endpoint model options actions say-command)
+(defun config-llm-set (endpoint model options actions say)
+  "Configure the LLM actions.
+SAY is a plist of :command, the argv used to pronounce text, and :ex,
+the evil ex command bound to `config-llm-say'."
   (setq config-llm--endpoint endpoint
         config-llm--model model
         config-llm--options options
         config-llm--actions actions
-        config-llm--say-command say-command)
+        config-llm--say-command (plist-get say :command))
   (dolist (action actions)
-    (let ((name (car action)))
-      (defalias (intern (format "config-llm-%s" name))
+    (let* ((name (car action))
+           (ex (plist-get (cdr action) :ex))
+           (command (intern (format "config-llm-%s" name))))
+      (defalias command
         (lambda ()
           (interactive)
           (config-llm--run name))
-        (plist-get (cdr action) :header)))))
+        (plist-get (cdr action) :header))
+      (when ex
+        (with-eval-after-load 'evil
+          (evil-ex-define-cmd ex command)))))
+  (when-let* ((ex (plist-get say :ex)))
+    (with-eval-after-load 'evil
+      (evil-ex-define-cmd ex #'config-llm-say))))
 
 (provide 'config-llm)
