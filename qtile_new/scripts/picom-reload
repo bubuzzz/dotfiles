@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Start (or restart) picom using the active theme's compositor config.
+#
+# Each theme may ship themes/assets/<theme>/picom.conf; if it does not, the
+# standalone ~/.config/picom/picom.conf is used as the fallback.
+set -euo pipefail
+
+CONFIG_DIR="$HOME/.config/qtile"
+STATE="$CONFIG_DIR/current_theme"
+
+if [ -r "$STATE" ]; then
+    theme="$(cat "$STATE")"
+else
+    theme="$(sed -n 's/^DEFAULT_THEME = "\(.*\)"/\1/p' "$CONFIG_DIR/theme.py")"
+fi
+
+conf="$CONFIG_DIR/themes/assets/$theme/picom.conf"
+[ -r "$conf" ] || conf="$HOME/.config/picom/picom.conf"
+
+pkill -x picom 2>/dev/null || true
+# picom needs a moment to release the composite selection before the next one
+# can claim it, otherwise the new instance exits with "already running".
+for _ in $(seq 20); do
+    pgrep -x picom >/dev/null || break
+    sleep 0.1
+done
+
+# Fully detached: inheriting the caller's stdout makes anything that waits on
+# output (a script, an editor's task runner) hang until picom exits, and take
+# picom down with it if that caller is killed.
+setsid picom --config "$conf" >/dev/null 2>&1 < /dev/null &
+disown 2>/dev/null || true
+echo "picom <- $conf"

@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+# Switch the qtile theme and restart qtile in place.
+#   theme-switch            -> print the available themes and the active one
+#   theme-switch cozy       -> activate the cozy theme
+set -euo pipefail
+
+CONFIG_DIR="$HOME/.config/qtile"
+STATE="$CONFIG_DIR/current_theme"
+
+available() {
+    # Leading-underscore modules are shared helpers (_cozytile), not themes.
+    find "$CONFIG_DIR/themes" -maxdepth 1 -name '*.py' ! -name '_*' \
+        -printf '%f\n' | sed 's/\.py$//' | sort
+}
+
+current() {
+    [ -r "$STATE" ] && cat "$STATE" || sed -n 's/^DEFAULT_THEME = "\(.*\)"/\1/p' "$CONFIG_DIR/theme.py"
+}
+
+if [ $# -eq 0 ]; then
+    echo "active: $(current)"
+    echo "available:"
+    available | sed 's/^/  /'
+    exit 0
+fi
+
+theme="$1"
+if ! available | grep -qx "$theme"; then
+    echo "unknown theme '$theme'; available: $(available | paste -sd, -)" >&2
+    exit 1
+fi
+
+# Validate before committing, so a broken theme can never take the bar down.
+if ! QTILE_THEME="$theme" qtile check -c "$CONFIG_DIR/config.py" >/dev/null 2>&1; then
+    echo "theme '$theme' does not load cleanly; leaving '$(current)' active" >&2
+    QTILE_THEME="$theme" qtile check -c "$CONFIG_DIR/config.py" >&2 || true
+    exit 1
+fi
+
+echo "$theme" > "$STATE"
+echo "theme -> $theme"
+
+# The compositor is half the look: shadows, corner radius and blur are what
+# let a theme like cozy get away with thin (or no) window borders.
+"$CONFIG_DIR/scripts/picom-reload"
+
+if qtile cmd-obj -o cmd -f restart >/dev/null 2>&1; then
+    echo "qtile restarted"
+else
+    echo "qtile is not running; the theme applies on next start"
+fi
