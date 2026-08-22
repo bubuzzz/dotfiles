@@ -195,7 +195,9 @@
                   config-theme
                   config-statusline
                   config-lsp
+                  config-diagram
                   config-org
+                  config-markdown
                   config-notes
                   config-latex
                   config-llm))
@@ -215,7 +217,9 @@
 (config-lsp-set my/lsp-servers my/lsp-keys)
 (config-org-set my/org-headline-bullets my/org-item-bullets my/org-key-theme)
 (config-org-notebook-set my/jupyter-header-args my/jupyter-resource-dir)
-(config-org-diagram-set my/diagram-backends #'config-theme-appearance)
+(config-diagram-set my/diagram-backends #'config-theme-appearance)
+(config-org-diagram-set)
+(config-markdown-set)
 (config-notes-set my/notes-dir my/notes-keywords my/notes-quick)
 (config-latex-set my/latex-pdf-process)
 (config-llm-set my/llm-endpoint my/llm-model my/llm-options my/llm-actions my/llm-say)
