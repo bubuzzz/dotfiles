@@ -236,18 +236,3 @@
 (config-latex-set my/latex-pdf-process)
 (config-llm-set my/llm-endpoint my/llm-model my/llm-options my/llm-actions my/llm-say)
 (put 'dired-find-alternate-file 'disabled nil)
-
-;; Wide org tables: truncate rather than wrap, so column shrinking works
-;; (C-c C-c on a table with a <n> width cookie; C-c TAB toggles a column).
-;; olivetti-mode centres the text but also switches on visual-line-mode,
-;; which wraps table rows mid-cell — so undo just the wrapping part,
-;; after olivetti has run.  org-startup-truncated is t in config-org.el.
-(setq org-startup-align-all-tables t)
-
-(defun my/org-no-wrap ()
-  "Keep olivetti's centring, drop its line wrapping."
-  (visual-line-mode -1)
-  (setq-local truncate-lines t
-              word-wrap nil))
-
-(add-hook 'org-mode-hook #'my/org-no-wrap 90)

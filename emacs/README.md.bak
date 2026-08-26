@@ -170,20 +170,6 @@ Deleting `~/.cache/emacs/` loses nothing but time: the next start reinstalls pac
 - **Not a git repo.** This folder is copied into a separate dotfiles repo by hand; since it is
   source-only, copying all of it is safe. Nothing here is backed up until that copy happens.
 
-- **`olivetti-mode` wraps org tables mid-cell.** `config-ui-document-set` puts olivetti on every
-  mode in `my/document-modes` (currently just `org-mode`) to centre the body text — but olivetti
-  also switches on `visual-line-mode`. A table row wider than the window then wraps, scattering the
-  `|` separators through the text and destroying the structure, and org's column shrinking cannot
-  work. Setting `org-startup-truncated t` in `config-org.el` is *not* enough on its own: olivetti's
-  hook runs later and wins. The fix in `init.el` is `my/org-no-wrap`, added to `org-mode-hook` at
-  **depth 90** so it runs after olivetti and undoes only the wrapping, keeping the centring. Wide
-  rows then truncate with a `$` marker instead of wrapping.
-
-  With that in place, a `<n>` cookie in a table's header cell (e.g. `| Role<22> |`) makes `C-c C-c`
-  display that column at *n* characters with an ellipsis; `C-c TAB` toggles one column between
-  shrunk and full, `C-u C-c TAB` expands all of them. Shrinking is display-only — the file keeps
-  the full cell text. Needs Org 9.4+.
-
 ## Startup
 
 ~0.25s on Arch. Check with `M-x emacs-init-time`, or from a shell:

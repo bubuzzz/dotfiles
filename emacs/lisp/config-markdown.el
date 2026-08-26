@@ -86,4 +86,58 @@ closing fence line."
   (with-eval-after-load 'markdown-mode
     (define-key markdown-mode-map (kbd "C-c C-c") #'config-markdown-execute)))
 
+;;; ----------------------- Viewing -----------------------
+
+(defvar config-markdown--fixed-pitch-faces
+  '(markdown-table-face
+    markdown-pre-face
+    markdown-code-face
+    markdown-inline-code-face
+    markdown-language-keyword-face)
+  "Faces that must stay monospaced for table pipes to line up.")
+
+(defun config-markdown--fix-pitch (font)
+  "Pin FONT on the faces that tables and code depend on."
+  (dolist (face config-markdown--fixed-pitch-faces)
+    (when (facep face)
+      (set-face-attribute face nil :family (font-get (font-spec :name font) :family)
+                          :height 'unspecified :width 'normal))))
+
+(defun config-markdown--align-buffer ()
+  "Align every table in the buffer."
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward markdown-table-line-regexp nil t)
+      (when (markdown-table-at-point-p)
+        (markdown-table-align)
+        (goto-char (markdown-table-end)))
+      (forward-line 1))))
+
+(defun config-markdown-align ()
+  "Align the table at point, or every table when point is outside one."
+  (interactive)
+  (if (markdown-table-at-point-p)
+      (markdown-table-align)
+    (config-markdown--align-buffer)))
+
+(defun config-markdown--view-setup ()
+  "Make the current markdown buffer readable: no wrap, aligned tables."
+  ;; both modes kill the local truncate-lines and word-wrap on exit, so they
+  ;; have to go off before those values are set
+  (when (bound-and-true-p visual-line-mode) (visual-line-mode -1))
+  (when (bound-and-true-p olivetti-mode) (olivetti-mode -1))
+  (setq-local truncate-lines t
+              word-wrap nil)
+  (add-hook 'before-save-hook #'config-markdown--align-buffer nil t))
+
+(defun config-markdown-view-set (font)
+  "Set up markdown viewing with FONT pinned on code and table faces."
+  (with-eval-after-load 'markdown-mode
+    (setq markdown-table-align-p t
+          markdown-fontify-code-blocks-natively t
+          markdown-hide-urls t)
+    (config-markdown--fix-pitch font)
+    (define-key markdown-mode-map (kbd "C-c C-t") #'config-markdown-align))
+  (add-hook 'markdown-mode-hook #'config-markdown--view-setup))
+
 (provide 'config-markdown)
