@@ -16,15 +16,37 @@
     (forward-line -2)
     (move-to-column col)))
 
+(defun config-org--center-inline-images (&rest _)
+  "Centre each inline image by padding its overlay from the left.
+See README.md, \"Centred inline images\"."
+  (when (display-graphic-p)
+    (let ((window-width (window-body-width nil t)))
+      (dolist (overlay (overlays-in (point-min) (point-max)))
+        (when (eq (overlay-get overlay 'org-image-overlay) t)
+          (let* ((image (overlay-get overlay 'display))
+                 (image-width (and image (car (image-size image t))))
+                 (left-padding (and image-width
+                                    (/ (- window-width image-width) 2))))
+            (when image-width
+              (overlay-put overlay 'line-prefix
+                           (when (> left-padding 0)
+                             `((space :width (,left-padding))))))))))))
+
+(defun config-org--recenter-images-on-resize ()
+  "Re-centre inline images in this buffer whenever the window width changes."
+  (add-hook 'window-configuration-change-hook
+            #'config-org--center-inline-images nil t))
+
 (defun config-org--refresh-inline-images ()
   "Redisplay inline images, discarding the cached copy of each file."
-  (org-display-inline-images nil t))
+  (org-display-inline-images nil t)
+  (config-org--center-inline-images))
 
 (defun config-org--when-jupyter (orig &rest args)
   (when (executable-find "jupyter")
     (apply orig args)))
 
-(defun config-org-set (headline-bullets item-bullets key-theme)
+(defun config-org-set (headline-bullets item-bullets key-theme image-width)
   (add-hook 'org-mode-hook #'org-superstar-mode)
   (add-hook 'org-mode-hook #'evil-org-mode)
 
@@ -44,8 +66,14 @@
           org-catch-invisible-edits 'show-and-error
           org-startup-truncated t   ; wide tables truncate instead of wrapping
           org-startup-with-inline-images t
+          ;; Display images at a fixed width rather than their actual pixel
+          ;; size, so the extra pixels from a scaled render (see
+          ;; `my/diagram-scale') land as sharpness instead of a bigger image.
+          org-image-actual-width image-width
           org-fontify-whole-heading-line t)
     (add-hook 'org-babel-after-execute-hook #'config-org--refresh-inline-images)
+    (advice-add 'org-display-inline-images :after #'config-org--center-inline-images)
+    (add-hook 'org-mode-hook #'config-org--recenter-images-on-resize)
     (dolist (face '(org-level-1 org-level-2 org-level-3 org-level-4
                     org-level-5 org-level-6 org-level-7 org-level-8
                     org-document-title))

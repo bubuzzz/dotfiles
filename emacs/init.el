@@ -4,8 +4,7 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (unless package-activated-list (package-initialize))
 
-(defvar my/packages
-  '(evil
+(defvar my/packages '(evil
     evil-collection
     general
     doom-themes
@@ -53,7 +52,7 @@
     "/usr/local/bin")
   "Directories to add to `exec-path'.  Nonexistent ones are ignored.")
 
-(defvar my/font "JetBrainsMono Nerd Font-18")
+(defvar my/font "JetBrainsMono Nerd Font-16")
 
 (defvar my/document-modes '(org-mode))
 (defvar my/document-body-width 90)
@@ -65,6 +64,8 @@
     "ee" dired-jump
     "ff" find-file
     "fs" save-buffer
+    "fd" config-sync-diff
+    "fD" config-sync-diff-plain
     "bb" switch-to-buffer
     "bd" kill-current-buffer
     "pp" project-switch-project
@@ -99,12 +100,12 @@
 
 (defvar my/project-list-file (expand-file-name "projects" my/cache-dir))
 (defvar my/project-markers '(".project"))
-(defvar my/project-switch-command 'project-find-file)
+(defvar my/project-switch-command 'project-dired)
 
 (defvar my/themes
-  '((kanagawa-dragon   . dark)
+  '((doom-tomorrow-day . light)
     (doom-homage-black . dark)
-    (leuven            . light)))
+    (kanagawa-dragon   . dark)))
 
 (defvar my/lsp-servers
   '(((python-mode python-ts-mode) . ("basedpyright-langserver" "--stdio"))))
@@ -115,6 +116,9 @@
     ("K"     . eldoc)
     ("C-c r" . eglot-rename)
     ("C-c a" . eglot-code-actions)))
+
+(defvar my/org-image-width 600
+  "On-screen width, in pixels, for inline images in org buffers.")
 
 (defvar my/org-headline-bullets '("◉" "○" "✸" "✿" "♦"))
 
@@ -135,10 +139,29 @@
 
 (defvar my/jupyter-resource-dir "./.ob-jupyter/")
 
+(defvar my/diagram-scale "3"
+  "Puppeteer device-pixel-ratio for raster diagram output.
+Multiplies the rendered pixel dimensions without changing the on-screen
+size, which is capped by `org-image-actual-width' in config-org.")
+
+(defvar my/mermaid-config-file
+  (expand-file-name "mermaid-config.json" user-emacs-directory)
+  "Mermaid theme config applied to every diagram.
+Holds the defaults that would otherwise be repeated as a `%%{init:}%%'
+directive at the top of each chart — currently note and box padding for
+sequence diagrams. A per-chart directive still overrides it.")
+
 (defvar my/diagram-backends
-  '(("mermaid"
-     :command ("mmdc" "-t" theme "-b" "transparent" "-i" input "-o" output)
+  `(("mermaid"
+     :command ("mmdc" "-t" theme "-b" "transparent" "-s" ,my/diagram-scale
+               "-c" ,my/mermaid-config-file
+               "-i" input "-o" output)
      :themes ((dark . "dark") (light . "default")))))
+
+(defvar my/external-open-extensions
+  '("png" "jpg" "jpeg" "gif" "svg" "webp")
+  "File extensions whose org links open in the desktop image viewer.
+PDFs are deliberately absent: they stay in Emacs.")
 
 (defvar my/latex-pdf-process '("tectonic -X compile %f --outdir %o"))
 
@@ -206,6 +229,8 @@
                   config-statusline
                   config-lsp
                   config-diagram
+                  config-open
+                  config-sync
                   config-org
                   config-markdown
                   config-notes
@@ -226,9 +251,12 @@
 (config-theme-set my/themes)
 (config-statusline-set)
 (config-lsp-set my/lsp-servers my/lsp-keys)
-(config-org-set my/org-headline-bullets my/org-item-bullets my/org-key-theme)
+(config-org-set my/org-headline-bullets my/org-item-bullets my/org-key-theme
+                my/org-image-width)
 (config-org-notebook-set my/jupyter-header-args my/jupyter-resource-dir)
 (config-diagram-set my/diagram-backends #'config-theme-appearance)
+(config-open-set my/external-open-extensions)
+(config-sync-set)
 (config-org-diagram-set)
 (config-markdown-set)
 (config-markdown-view-set my/font)

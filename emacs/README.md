@@ -29,6 +29,8 @@ folder can be copied into a dotfiles repo as-is. See [State](#state).
 | `config-lsp` | eglot servers, keys, pyvenv |
 | `config-org` | org, org-superstar, evil-org |
 | `config-notebook` | jupyter / org-babel |
+| `config-sync` | auto-revert for clean buffers, ediff merge when they diverge |
+| `config-open` | file links that open in the desktop viewer instead of a buffer |
 | `config-latex` | org → PDF export engine (`org-latex-pdf-process`) |
 
 ## The pattern
@@ -106,6 +108,15 @@ Deleting `~/.cache/emacs/` loses nothing but time: the next start reinstalls pac
 
 ## Gotchas
 
+- **Centred inline images are an overlay hack, not a setting.** Org has no alignment option for
+  inline images, so `config-org--center-inline-images` pads each image overlay from the left with
+  a `line-prefix` of half the slack between the image and the window. Three things to know if it
+  ever stops working. The overlays are found by the `org-image-overlay` property Org sets on each
+  one — if a future Org release renames it, the function silently does nothing rather than erroring.
+  The padding is a *pixel* width, `(space :width (N))`, because image and window widths are both in
+  pixels; a bare `(space :width N)` would be read as columns and centre wrongly. And the width comes
+  from the window, so it is recomputed on `window-configuration-change-hook` — an image wider than
+  the window gets no prefix rather than a negative one.
 - **`M-x package-quickstart-refresh` after removing or upgrading a package.** Adding one is
   handled automatically; the other two leave stale autoloads and things break at startup.
 - **Never install packages from `emacs --batch`.** `--batch` implies `--no-init-file`, so
