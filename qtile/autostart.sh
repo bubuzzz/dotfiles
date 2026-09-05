@@ -9,5 +9,6 @@
 
 nm-applet &
 nitrogen --restore &
-picom --config ~/.config/picom/picom.conf &
+# picom config follows the active qtile theme; see scripts/picom-reload
+~/.config/qtile/scripts/picom-reload &
 xfsettingsd & 
