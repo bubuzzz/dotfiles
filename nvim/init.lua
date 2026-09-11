@@ -67,7 +67,12 @@ if os.date("*t").hour >= switch_theme_hour then
     current_theme = themes[2]
 end
 
-local treesitter_pattern = { "elixir", "eelixir", "heex", "python", "odin" , "typescript", "typescriptreact", "javascript", "javascriptreact", "html" }
+local treesitter_pattern = { 
+    "elixir", "eelixir", "heex", "python", "odin" , 
+    "typescript", "typescriptreact", "javascript", 
+    "javascriptreact", "html" 
+}
+
 local copilot_keymaps = {
     accept_suggestion = "<C-l>",  -- <Tab> is taken by native completion (config_lsp)
     clear_suggestion  = "<C-]>",
@@ -122,7 +127,7 @@ local servers_conf = {
 }
 
 local indent_conf = {
-    {{"typescript", "typescriptreact", "javascript", "javascriptreact", "json"}, 2}
+    {{"typescript", "typescriptreact", "javascript", "javascriptreact", "json", "mdx"}, 2}
 }
 
 require("config_statusline").set()
@@ -130,6 +135,7 @@ require("config_venv").set()
 require("config_theme").set(current_theme)
 require("config_lsp").set(servers_conf)
 require("config_netrw").set()
+require("config_mdx").set()
 require("config_plugin").set({
     treesitter_pattern = treesitter_pattern 
 })

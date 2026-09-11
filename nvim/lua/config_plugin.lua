@@ -38,6 +38,7 @@ function M.set(params)
     require("render-markdown").setup({
         enabled = false,
         anti_conceal = { enabled = false },
+        file_types = { "markdown", "mdx" },
     })
 
     vim.api.nvim_create_autocmd("InsertEnter", {

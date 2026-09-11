@@ -49,6 +49,21 @@ On Mac os, put an `ols.json` at each Odin project root pointing at the mise Odin
 }
 ```
 
+## MDX
+
+`.mdx` files work out of the box — no per-machine parser install.
+
+- Filetype detection and setup live in `lua/config_mdx.lua`.
+- They parse with the stock **markdown** parser (`vim.treesitter.language.register`),
+  so fenced code blocks still get python/js/etc. injected and JSX highlights as HTML.
+- `<leader>mr` toggles render-markdown on mdx exactly like markdown.
+- Indent is 2 spaces (grouped with the JS/TS family in `indent_conf`).
+
+A dedicated `tree-sitter-mdx` grammar exists but was deliberately **not** used:
+upstream issue #10 mis-parses fenced code blocks whenever a paragraph precedes a
+block-level JSX element, and the breakage cascades silently to end of file. The
+two most common docs shapes both trigger it. Revisit if that issue is fixed.
+
 ## Notes
 
 - Other LSPs (`basedpyright`, `elixirls`) must also be installed & on PATH.
