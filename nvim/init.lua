@@ -5,7 +5,8 @@ vim.pack.add({
   "https://github.com/nvim-mini/mini.pairs",
   "https://github.com/nvim-mini/mini.pick",
   "https://github.com/nvim-mini/mini.icons",
-  'https://github.com/MeanderingProgrammer/render-markdown.nvim',
+  'https://github.com/MeanderingProgrammer/render-markdown.nvim', 
+  "https://github.com/nvim-tree/nvim-tree.lua",
   "https://github.com/luochen1990/rainbow",
   "https://github.com/stevearc/conform.nvim",
   "https://github.com/nvim-treesitter/nvim-treesitter",
@@ -43,6 +44,7 @@ local shortcuts = {
     {"n", "<leader>co", ":copen<CR>", {desc = "Open quickfix list"}},
     {"n", "<leader>cc", ":cclose<CR>", {desc = "Close quickfix list"}},
     {"n", "<leader>ee", ":Ex<CR>", {desc = "Open the current directory buffer"}},
+    {"n", "<leader>et", ":NvimTreeToggle<CR>", {desc = "Toggle the current directory buffer"}},
     {"n", "<leader>mr", ":RenderMarkdown buf_toggle<CR>", {desc = "Toggle markdown rendering (this buffer)"}},
     {"n", "<leader>mm", 
         function()
@@ -67,12 +69,7 @@ if os.date("*t").hour >= switch_theme_hour then
     current_theme = themes[2]
 end
 
-local treesitter_pattern = { 
-    "elixir", "eelixir", "heex", "python", "odin" , 
-    "typescript", "typescriptreact", "javascript", 
-    "javascriptreact", "html" 
-}
-
+local treesitter_pattern = { "elixir", "eelixir", "heex", "python", "odin" , "typescript", "typescriptreact", "javascript", "javascriptreact", "html" }
 local copilot_keymaps = {
     accept_suggestion = "<C-l>",  -- <Tab> is taken by native completion (config_lsp)
     clear_suggestion  = "<C-]>",
@@ -127,7 +124,7 @@ local servers_conf = {
 }
 
 local indent_conf = {
-    {{"typescript", "typescriptreact", "javascript", "javascriptreact", "json", "mdx"}, 2}
+    {{"typescript", "typescriptreact", "javascript", "javascriptreact", "json"}, 2}
 }
 
 require("config_statusline").set()
@@ -135,7 +132,6 @@ require("config_venv").set()
 require("config_theme").set(current_theme)
 require("config_lsp").set(servers_conf)
 require("config_netrw").set()
-require("config_mdx").set()
 require("config_plugin").set({
     treesitter_pattern = treesitter_pattern 
 })
