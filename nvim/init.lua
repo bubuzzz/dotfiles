@@ -45,6 +45,8 @@ local shortcuts = {
     {"n", "<leader>cc", ":cclose<CR>", {desc = "Close quickfix list"}},
     {"n", "<leader>ee", ":Ex<CR>", {desc = "Open the current directory buffer"}},
     {"n", "<leader>et", ":NvimTreeToggle<CR>", {desc = "Toggle the current directory buffer"}},
+    {"n", "<leader>el", function() require("nvim-tree.api").tree.resize({ relative = 50 }) end, {desc = "Expand the current tree view"}},
+    {"n", "<leader>eh", function() require("nvim-tree.api").tree.resize() end, {desc = "Reset the current tree view"}},
     {"n", "<leader>mr", ":RenderMarkdown buf_toggle<CR>", {desc = "Toggle markdown rendering (this buffer)"}},
     {"n", "<leader>mm", 
         function()

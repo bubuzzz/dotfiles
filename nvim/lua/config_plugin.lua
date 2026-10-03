@@ -62,7 +62,6 @@ function M.set(params)
     })
 
     require("nvim-ts-autotag").setup({})
-
     require("nvim-tree").setup({})
 end
 
