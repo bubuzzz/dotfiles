@@ -85,6 +85,8 @@
     "ni" denote-link
     "nb" denote-backlinks
     "nd" denote-dired
+    "na" config-agenda-pending
+    "nT" config-agenda-tasks
     "q"  save-buffers-kill-terminal))
 
 (defvar my/mode-shortcuts
@@ -103,8 +105,8 @@
 (defvar my/project-switch-command 'project-dired)
 
 (defvar my/themes
-  '((doom-tomorrow-day . light)
-    (doom-homage-black . dark)
+  '((doom-homage-black . dark)
+    (doom-tomorrow-day . light)
     (kanagawa-dragon   . dark)))
 
 (defvar my/lsp-servers
@@ -153,10 +155,10 @@ sequence diagrams. A per-chart directive still overrides it.")
 
 (defvar my/diagram-backends
   `(("mermaid"
-     :command ("mmdc" "-t" theme "-b" "transparent" "-s" ,my/diagram-scale
+     :command ("mmdc" "-t" theme "-b" "white" "-s" ,my/diagram-scale
                "-c" ,my/mermaid-config-file
                "-i" input "-o" output)
-     :themes ((dark . "dark") (light . "default")))))
+     :themes ((dark . "default") (light . "default")))))
 
 (defvar my/external-open-extensions
   '("png" "jpg" "jpeg" "gif" "svg" "webp")
@@ -176,6 +178,9 @@ PDFs are deliberately absent: they stay in Emacs.")
 (defvar my/notes-quick
   '(("scratch" :daily t)
     ("task" :daily t)))
+
+(defvar my/task-dir "task/"
+  "Subdirectory of `my/notes-dir' holding the task notes.")
 
 (defvar my/llm-endpoint "http://localhost:11434/api/chat")
 (defvar my/llm-model "qwen2.5:7b")
@@ -234,6 +239,7 @@ PDFs are deliberately absent: they stay in Emacs.")
                   config-org
                   config-markdown
                   config-notes
+                  config-agenda
                   config-latex
                   config-llm))
   (require module))
@@ -261,6 +267,7 @@ PDFs are deliberately absent: they stay in Emacs.")
 (config-markdown-set)
 (config-markdown-view-set my/font)
 (config-notes-set my/notes-dir my/notes-keywords my/notes-quick)
+(config-agenda-set (expand-file-name my/task-dir my/notes-dir))
 (config-latex-set my/latex-pdf-process)
 (config-llm-set my/llm-endpoint my/llm-model my/llm-options my/llm-actions my/llm-say)
 (put 'dired-find-alternate-file 'disabled nil)
