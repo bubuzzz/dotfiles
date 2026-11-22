@@ -24,7 +24,7 @@ c.fonts.tabs.selected = "bold default_size default_family"
 c.fonts.tabs.unselected = "default_size default_family"
 
 # Tabs: extra top/bottom gap around the title
-c.tabs.padding = {"top": 7, "bottom": 7, "left": 10, "right": 10}
+c.tabs.padding = {"top": 5, "bottom": 5, "left": 10, "right": 10}
 c.tabs.indicator.width = 0
 c.tabs.favicons.show = "never"
 c.tabs.title.format = "{audio}{index}  {current_title}"
