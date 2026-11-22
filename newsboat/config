@@ -1,3 +1,2 @@
-browser "rdrview -B w3m %u"
-macro r set browser "w3m %u" ; open-in-browser ; set browser "rdrview -B w3m %u"
+browser "reader %u"
 

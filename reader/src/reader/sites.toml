@@ -1,0 +1,24 @@
+# Per-site content selectors. The key is matched against the end of the host
+# name, so "github.com" also matches "www.github.com".
+# `content` is a CSS selector for the main block (first match wins).
+# `drop` is an optional list of extra CSS selectors removed inside it.
+
+["news.ycombinator.com"]
+content = "#bigbox, table.fatitem"
+drop = [".reply", ".togg", ".navs", "td.votelinks"]
+
+["github.com"]
+content = "article.markdown-body, .markdown-body"
+
+["lobste.rs"]
+content = ".story_text, .comments, main"
+drop = [".voters", ".byline .flagger", ".comment_parent_tree_line"]
+
+["wikipedia.org"]
+content = "#mw-content-text"
+drop = [".mw-editsection", ".navbox", ".reflist", ".infobox", "#toc", ".hatnote",
+        "sup.reference", "sup.noprint", ".mw-references-wrap", ".sistersitebox", ".metadata"]
+
+["stackoverflow.com"]
+content = "#mainbar"
+drop = [".js-vote-count", ".js-post-menu", ".comments-link", "aside"]
