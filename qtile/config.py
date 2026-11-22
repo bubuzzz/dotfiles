@@ -573,6 +573,7 @@ floating_layout = layout.Floating(
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
+        Match(wm_class="feh"),  # image viewer: a centred float, not a tile
     ],
 )
 auto_fullscreen = True
@@ -600,3 +601,10 @@ wl_xcursor_size = 24
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
+
+
+@hook.subscribe.client_managed
+def _center_image_viewer(client):
+    """Open feh centred on the screen (it asks for the top-left corner)."""
+    if "feh" in (client.get_wm_class() or []):
+        client.center()

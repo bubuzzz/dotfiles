@@ -1,6 +1,7 @@
 ;;; config-markdown.el --- -*- lexical-binding: t -*-
 
 (require 'config-diagram)
+(require 'config-open)
 
 (defvar config-markdown--fence-regexp
   "^[ \t]*\\(?:```\\|~~~\\)[ \t]*\\([^ \t\n]+\\)?\\(.*\\)$")
@@ -82,9 +83,23 @@ closing fence line."
       (config-markdown-render)
     (set-transient-map markdown-mode-command-map nil nil "C-c C-c-")))
 
+(defun config-markdown-open (&optional arg)
+  "Open the link at point; images go to the desktop viewer.
+markdown-mode would `find-file' them, which shows raw bytes in a
+terminal frame.  Other links keep the normal behaviour."
+  (interactive "P")
+  (let ((url (ignore-errors (markdown-link-url))))
+    (if (and url
+             (not (string-match-p "\\`[a-z]+://" url))
+             (config-open-external-p url)
+             (file-exists-p (expand-file-name url)))
+        (config-open-file (expand-file-name url))
+      (markdown-follow-thing-at-point arg))))
+
 (defun config-markdown-set ()
   (with-eval-after-load 'markdown-mode
-    (define-key markdown-mode-map (kbd "C-c C-c") #'config-markdown-execute)))
+    (define-key markdown-mode-map (kbd "C-c C-c") #'config-markdown-execute)
+    (define-key markdown-mode-map (kbd "C-c C-o") #'config-markdown-open)))
 
 ;;; ----------------------- Viewing -----------------------
 

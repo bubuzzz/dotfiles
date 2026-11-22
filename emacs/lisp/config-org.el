@@ -38,9 +38,13 @@ See README.md, \"Centred inline images\"."
             #'config-org--center-inline-images nil t))
 
 (defun config-org--refresh-inline-images ()
-  "Redisplay inline images, discarding the cached copy of each file."
-  (org-display-inline-images nil t)
-  (config-org--center-inline-images))
+  "Redisplay inline images, discarding the cached copy of each file.
+Only when images are already shown (toggled on with \\[org-toggle-inline-images]):
+by default they stay hidden and open externally with C-c C-o."
+  (when (seq-some (lambda (o) (overlay-get o 'org-image-overlay))
+                  (overlays-in (point-min) (point-max)))
+    (org-display-inline-images nil t)
+    (config-org--center-inline-images)))
 
 (defun config-org--when-jupyter (orig &rest args)
   (when (executable-find "jupyter")
@@ -65,7 +69,9 @@ See README.md, \"Centred inline images\"."
           org-use-sub-superscripts '{}
           org-catch-invisible-edits 'show-and-error
           org-startup-truncated t   ; wide tables truncate instead of wrapping
-          org-startup-with-inline-images t
+          ;; Images are opened in an external viewer (C-c C-o), not inline.
+          ;; C-c C-x C-v still toggles them in a buffer when wanted.
+          org-startup-with-inline-images nil
           ;; Display images at a fixed width rather than their actual pixel
           ;; size, so the extra pixels from a scaled render (see
           ;; `my/diagram-scale') land as sharpness instead of a bigger image.
