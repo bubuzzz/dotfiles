@@ -94,3 +94,11 @@ c.colors.downloads.bar.bg = outer
 
 # Blank/new tabs follow the dark theme
 c.colors.webpage.bg = outer
+
+# Google rejects QtWebEngine's user agent on its sign-in page
+# ("This browser or app may not be secure"). Use a Firefox UA there only.
+config.set(
+    "content.headers.user_agent",
+    "Mozilla/5.0 ({os_info}; rv:140.0) Gecko/20100101 Firefox/140.0",
+    "https://accounts.google.com/*",
+)
