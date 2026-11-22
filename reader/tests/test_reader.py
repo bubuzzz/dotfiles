@@ -29,3 +29,21 @@ def test_hacker_news_thread():
     # the reply is nested one level
     assert "> **airstrike** ·" in md
     assert "vote?id=" not in md
+
+
+def test_content_type_detection():
+    import pytest
+    from reader.fetch import UnsupportedContent, _kind
+
+    assert _kind("application/pdf", b"") == "pdf"
+    assert _kind("application/octet-stream", b"%PDF-1.7 ...") == "pdf"
+    assert _kind("text/html; charset=utf-8", b"<html>") == "html"
+    with pytest.raises(UnsupportedContent):
+        _kind("image/png", b"\x89PNG")
+
+
+def test_pdf_reflow():
+    from reader.pdf import _reflow
+
+    text = "First line of a para-\ngraph that wraps\n•\nnext line\n\nSecond para"
+    assert _reflow(text) == "First line of a paragraph that wraps next line\n\nSecond para"

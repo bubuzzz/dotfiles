@@ -8,7 +8,10 @@ Design: `DESIGN.md`. Usage: `README.md`.
 ## Layout (src/reader/)
 
 - `cli.py`      argparse; entry point is `run()` (handles BrokenPipe/Ctrl-C)
-- `fetch.py`    URL / file / stdin -> (html, final_url)
+- `fetch.py`    URL / file / stdin -> `Document(kind=html|pdf, url, text|data)`;
+                other content types raise `UnsupportedContent`
+- `pdf.py`      PDF -> Markdown via poppler `pdftotext` + `pdfinfo`, with
+                hard-wrapped lines reflowed into paragraphs
 - `pipeline.py` `page_to_markdown(html, base_url)`: site handler first, else
                 generic extract + convert
 - `extract.py`  generic: `sites.toml` selector -> `<article>`/`<main>` ->
@@ -23,6 +26,9 @@ Design: `DESIGN.md`. Usage: `README.md`.
 
 ## Decisions / gotchas
 
+- Links in feeds are not always HTML (e.g. a Lobsters story was a PDF and
+  showed as garbage). Type is detected from Content-Type and `%PDF-` magic.
+  pdftotext puts bullet glyphs on their own lines; those lines are dropped.
 - **User agent is honest (`reader/0.1`).** HN returns 419 for a spoofed
   Firefox UA coming from python-requests (TLS fingerprint mismatch). Don't
   switch back to a browser UA.

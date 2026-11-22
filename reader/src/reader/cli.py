@@ -5,7 +5,8 @@ import sys
 
 import requests
 
-from reader.fetch import load
+from reader.fetch import UnsupportedContent, load
+from reader.pdf import PdfError, pdf_to_markdown
 from reader.pipeline import page_to_markdown
 from reader.render import show
 
@@ -27,12 +28,15 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
 
     try:
-        html, base_url = load(args.source)
-    except (requests.RequestException, OSError) as e:
+        doc = load(args.source)
+        if doc.kind == "pdf":
+            md = pdf_to_markdown(doc.data, doc.url)
+        else:
+            md = page_to_markdown(doc.text, doc.url)
+    except (requests.RequestException, OSError, UnsupportedContent, PdfError) as e:
         print(f"reader: {e}", file=sys.stderr)
         return 1
 
-    md = page_to_markdown(html, base_url or (args.source if "://" in args.source else ""))
     if args.output:
         with open(args.output, "w") as f:
             f.write(md)
