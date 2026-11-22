@@ -33,10 +33,10 @@ c.colors.tabs.odd.bg = outer
 c.colors.tabs.even.bg = outer
 c.colors.tabs.odd.fg = fg
 c.colors.tabs.even.fg = fg
-c.colors.tabs.selected.odd.bg = accent
-c.colors.tabs.selected.even.bg = accent
-c.colors.tabs.selected.odd.fg = outer
-c.colors.tabs.selected.even.fg = outer
+c.colors.tabs.selected.odd.bg = island
+c.colors.tabs.selected.even.bg = island
+c.colors.tabs.selected.odd.fg = accent
+c.colors.tabs.selected.even.fg = accent
 c.colors.tabs.pinned.odd.bg = island
 c.colors.tabs.pinned.even.bg = island
 
@@ -102,3 +102,14 @@ config.set(
     "Mozilla/5.0 ({os_info}; rv:140.0) Gecko/20100101 Firefox/140.0",
     "https://accounts.google.com/*",
 )
+
+# ---- Dark mode ----
+# Ask sites for their own dark theme when they have one (best looking).
+c.colors.webpage.preferred_color_scheme = "dark"
+# Force-darken every other page with Chromium's built-in dark mode.
+# On/off is NOT set here on purpose: ,d saves it to autoconfig.yml, and
+# setting it in this file would override the toggle on every restart.
+c.colors.webpage.darkmode.policy.images = "never"  # don't invert photos
+# Toggle with ,d. Chromium only applies this at startup, so it restarts
+# qutebrowser; your tabs are restored.
+config.bind(",d", "config-cycle colors.webpage.darkmode.enabled ;; restart")
