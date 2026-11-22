@@ -1,3 +1,5 @@
+import sys
+
 config.load_autoconfig()
 
 c.content.blocking.enabled = True
@@ -97,9 +99,15 @@ c.colors.webpage.bg = outer
 
 # Google rejects QtWebEngine's user agent on its sign-in page
 # ("This browser or app may not be secure"). Use a Firefox UA there only.
+# Don't use {os_info}: on macOS it expands Chrome-style ("10_15_7"), which
+# real Firefox never sends ("10.15"), and Google rejects the mismatch.
+if sys.platform == "darwin":
+    firefox_os = "Macintosh; Intel Mac OS X 10.15"
+else:
+    firefox_os = "X11; Linux x86_64"
 config.set(
     "content.headers.user_agent",
-    "Mozilla/5.0 ({os_info}; rv:140.0) Gecko/20100101 Firefox/140.0",
+    f"Mozilla/5.0 ({firefox_os}; rv:140.0) Gecko/20100101 Firefox/140.0",
     "https://accounts.google.com/*",
 )
 
