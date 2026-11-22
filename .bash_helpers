@@ -1,0 +1,28 @@
+alias gp="git pull"
+alias gpu="git push"
+alias gf="git fetch"
+alias ga="git add"
+alias gc="git commit -m"
+
+export WWW_HOME="https://lite.duckduckgo.com/lite/"
+
+export EDITOR="nvim"
+alias em="emacs -nw"
+
+alias ls="eza --icons --color=always --group-directories-first"
+copimg() {
+    if [ -z "$1" ]; then
+        echo "Error: Please provide an image path."
+        echo "Usage: copyimg /path/to/image.png"
+        return 1
+    fi
+    xclip -selection clipboard -t image/png "$1" && echo "Image copied to clipboard!"
+}
+
+pwdc() {
+    pwd | xclip -selection clipboard -t text/plain
+}
+
+ddg() { w3m "https://lite.duckduckgo.com/lite/?q=${(j:+:)@}"; }
+
+[[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
