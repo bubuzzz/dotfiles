@@ -431,6 +431,12 @@ keys = [
         desc="Launch Rofi app launcher",
     ),
     Key(
+        [mod],
+        "s",
+        lazy.spawn(themes.ROFI_WINDOWS),
+        desc="List windows on all workspaces and jump to one",
+    ),
+    Key(
         [],
         "F11",
         lazy.function(minimize_all_windows),

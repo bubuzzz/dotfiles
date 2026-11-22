@@ -28,6 +28,9 @@ ROFI_LAUNCHER = os.path.normpath(ROFI_LAUNCHER)
 ROFI_POWER = os.path.normpath(
     os.path.join(CONFIG_DIR, "..", "rofi", "scripts", "power")
 )
+ROFI_WINDOWS = os.path.normpath(
+    os.path.join(CONFIG_DIR, "..", "rofi", "scripts", "windows")
+)
 FIND_CURSOR = "xfce4-find-cursor --color #3b82f6 --circle-size 10"
 
 

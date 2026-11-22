@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# List every open window on every workspace; Enter jumps to it.
+
+dir="$HOME/.config/rofi/settings/launcher"
+
+rofi \
+    -show window \
+    -window-format "{w}   {c}   {t}" \
+    -theme "${dir}/gruvbox.rasi"
